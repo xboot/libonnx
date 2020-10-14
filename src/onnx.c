@@ -665,19 +665,6 @@ static void resolver_solve_operator(struct resolver_t * r, struct onnx_node_t * 
 	}
 }
 
-static Onnx__TensorProto * onnx_get_initializer(struct onnx_context_t * ctx, const char * name)
-{
-	Onnx__TensorProto ** initializer = ctx->model->graph->initializer;
-	int i;
-
-	for(i = 0; i < ctx->model->graph->n_initializer; i++)
-	{
-		if(strcmp(initializer[i]->name, name) == 0)
-			return initializer[i];
-	}
-	return NULL;
-}
-
 static void hmap_entry_callback(struct hmap_entry_t * e)
 {
 	if(e && e->value)
@@ -693,7 +680,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 {
 	struct onnx_context_t * ctx;
 	struct onnx_node_t * n;
-	Onnx__TensorProto * t, * initial;
+	Onnx__TensorProto * t;
 	Onnx__ValueInfoProto * v;
 	char * name;
 	int i, j;
@@ -738,10 +725,12 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			t = onnx_tensor_alloc(v);
 			if(t)
 			{
-				initial = onnx_get_initializer(ctx, t->name);
-				if(initial)
+				for(j = 0; j < ctx->model->graph->n_initializer; j++)
 				{
-					//TODO Copy from initializer.
+					if(strcmp(ctx->model->graph->initializer[i]->name, name) == 0)
+					{
+						//TODO Copy from ctx->model->graph->initializer[i]
+					}
 				}
 				hmap_add(ctx->map, t->name, t);
 			}
