@@ -12,6 +12,8 @@ struct onnx_context_t;
 struct onnx_node_t;
 
 struct resolver_t {
+	const char * name;
+
 	void (*relu)(struct onnx_node_t *);
 };
 
@@ -34,15 +36,15 @@ struct onnx_node_t {
 	void (*operator)(struct onnx_node_t * node);
 };
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, int len);
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename);
+struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct resolver_t * r);
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r);
 void onnx_context_free(struct onnx_context_t * ctx);
 
 Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v);
 void onnx_tensor_free(Onnx__TensorProto * t);
 Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
 
-void onnx_solve(struct onnx_context_t * ctx);
+void onnx_run(struct onnx_context_t * ctx);
 
 void onnx_dump_model(struct onnx_context_t * ctx);
 void onnx_dump_tensor(Onnx__TensorProto * t);

@@ -2216,13 +2216,13 @@ int main(int argc, char * argv[])
 	if(argc > 1)
 		filename = argv[1];
 	if(filename)
-		ctx = onnx_context_alloc_from_file(filename);
+		ctx = onnx_context_alloc_from_file(filename, NULL);
 	else
-		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx));
+		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL);
 	if(ctx)
 	{
 		onnx_dump_model(ctx);
-		onnx_solve(ctx);
+		onnx_run(ctx);
 		onnx_context_free(ctx);
 	}
 	return 0;

@@ -111,7 +111,7 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 		onnx_tensor_free(t);
 }
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, int len)
+struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct resolver_t * r)
 {
 	struct onnx_context_t * ctx;
 	Onnx__TensorProto * t, * initial;
@@ -266,7 +266,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len)
 	return ctx;
 }
 
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename)
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r)
 {
 	struct onnx_context_t * ctx;
 	FILE * fp;
@@ -290,7 +290,7 @@ struct onnx_context_t * onnx_context_alloc_from_file(const char * filename)
 	len = fread(buf, 1, len, fp);
 	fclose(fp);
 
-	ctx = onnx_context_alloc(buf, len);
+	ctx = onnx_context_alloc(buf, len, r);
 	free(buf);
 	return ctx;
 }
@@ -566,7 +566,7 @@ Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char *
 	return NULL;
 }
 
-void onnx_solve(struct onnx_context_t * ctx)
+void onnx_run(struct onnx_context_t * ctx)
 {
 	struct onnx_node_t * node;
 	int i;
