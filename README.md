@@ -26,7 +26,7 @@ When the input tensor has been setting, you can run inference engine using `onnx
 onnx_run(ctx);
 ```
 
-Finally, you must free `struct onnx_context_t`using `onnx_context_free` function.
+Finally, you must free `struct onnx_context_t` using `onnx_context_free` function.
 
 ```c
 onnx_context_free(ctx);
@@ -47,8 +47,8 @@ TBD.
 
 ## Links
 
-* [The onnx spec repo](https://github.com/onnx/onnx).
-* [The free pre-trained onnx models](https://github.com/onnx/models)
+* [The onnx spec repo](https://github.com/onnx/onnx)
+* [The pre-trained onnx models](https://github.com/onnx/models)
 * [The onnx official website](https://onnx.ai)
 
 ## License
