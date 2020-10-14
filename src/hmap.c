@@ -5,6 +5,27 @@
 	(sizeof(array) / sizeof((array)[0]))
 #endif
 
+static inline int fls_generic(unsigned int word)
+{
+	int bit = 32;
+
+	if(!word) bit -= 1;
+	if(!(word & 0xffff0000)) { word <<= 16; bit -= 16; }
+	if(!(word & 0xff000000)) { word <<= 8; bit -= 8; }
+	if(!(word & 0xf0000000)) { word <<= 4; bit -= 4; }
+	if(!(word & 0xc0000000)) { word <<= 2; bit -= 2; }
+	if(!(word & 0x80000000)) { word <<= 1; bit -= 1; }
+
+	return bit;
+}
+
+static inline unsigned int roundup_pow_of_two(unsigned int x)
+{
+	if(x > 0)
+		return (1ul << fls_generic(x - 1));
+	return 1;
+}
+
 struct hmap_t * hmap_alloc(unsigned int size)
 {
 	struct hmap_t * m;
