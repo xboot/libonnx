@@ -33,15 +33,15 @@ COBJS		:= $(patsubst %, %, $(CFILES:.c=.o))
 CPPOBJS		:= $(patsubst %, %, $(CPPFILES:.cpp=.o)) 
 OBJS		:= $(SOBJS) $(COBJS) $(CPPOBJS)
 
-NAME		:= libonnx
+NAME		:= libonnx.a
 
 .PHONY: all clean
 
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	@echo [AR] Archiving $@.a
-	@$(AR) -rcs $@.a $(OBJS)
+	@echo [AR] Archiving $@
+	@$(AR) -rcs $@ $(OBJS)
 
 $(SOBJS) : %.o : %.S
 	@echo [AS] $<
@@ -59,6 +59,6 @@ $(CPPOBJS) : %.o : %.cpp
 	@$(CXX) $(CXXFLAGS) -MD -MP -MF $@.d $(INCDIRS) -c $< -o $@
 
 clean:
-	@$(RM) $(DEPS) $(OBJS) $(NAME).a
+	@$(RM) $(DEPS) $(OBJS) $(NAME)
 
 sinclude $(DEPS)

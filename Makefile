@@ -5,9 +5,9 @@
 .PHONY: all clean
 
 all:
-	@$(MAKE) -s -C src all
-	@$(MAKE) -s -C examples/hello all
+	@$(MAKE) -C src all
+	@$(MAKE) -C examples/hello all
 
 clean:
-	@$(MAKE) -s -C src clean
-	@$(MAKE) -s -C examples/hello clean
+	@$(MAKE) -C src clean
+	@$(MAKE) -C examples/hello clean
