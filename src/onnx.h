@@ -19,8 +19,6 @@ struct onnx_context_t {
 	struct onnx_node_t * nodes;
 	int nlen;
 	struct hmap_t * map;
-/*	struct resolver_t * r;
-	void * rctx;*/
 };
 
 struct onnx_node_t {
@@ -39,9 +37,6 @@ struct onnx_node_t {
 
 struct resolver_t {
 	const char * name;
-
-	void * (*create)(struct resolver_t * r);
-	void (*destroy)(void * rctx);
 
 	void (*op_Abs)(struct onnx_node_t * n);
 	void (*op_Acos)(struct onnx_node_t * n);
