@@ -55,17 +55,14 @@ $(NAME) : $(OBJS)
 
 $(SOBJS) : %.o : %.S
 	@echo [AS] $<
-	@$(AS) $(ASFLAGS) $(INCDIRS) -c $< -o $@
 	@$(AS) $(ASFLAGS) -MD -MP -MF $@.d $(INCDIRS) -c $< -o $@
 
 $(COBJS) : %.o : %.c
 	@echo [CC] $<
-	@$(CC) $(CFLAGS) $(INCDIRS) -c $< -o $@
 	@$(CC) $(CFLAGS) -MD -MP -MF $@.d $(INCDIRS) -c $< -o $@
 
 $(CPPOBJS) : %.o : %.cpp
 	@echo [CXX] $<
-	@$(CXX) $(CXXFLAGS) $(INCDIRS) -c $< -o $@	
 	@$(CXX) $(CXXFLAGS) -MD -MP -MF $@.d $(INCDIRS) -c $< -o $@
 
 clean:
