@@ -673,6 +673,7 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 
 static void op_dummy(struct onnx_node_t * n)
 {
+	printf("[%s] OPERATOR NOT IMPLEMENTED\r\n", n->proto->op_type);
 	onnx_dump_node(n);
 }
 

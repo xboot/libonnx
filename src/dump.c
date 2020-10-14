@@ -156,8 +156,6 @@ void onnx_dump_node(struct onnx_node_t * n)
 {
 	int i;
 
-	if(!n->op)
-		printf("[%s] OPERATOR NOT IMPLEMENTED\r\n", n->proto->op_type);
 	printf("\tInput:\r\n");
 	for(i = 0; i < n->ninput; i++)
 	{
