@@ -22,9 +22,9 @@ struct onnx_context_t {
 struct onnx_node_t {
 	struct onnx_context_t * ctx;
 	Onnx__NodeProto * proto;
-	Onnx__TensorProto ** input;
+	Onnx__TensorProto ** inputs;
 	int ninput;
-	Onnx__TensorProto ** output;
+	Onnx__TensorProto ** outputs;
 	int noutput;
 
 	void (*init)(struct onnx_node_t * n);

@@ -80,15 +80,15 @@ static void onnx_node_op_dummy(struct onnx_node_t * n)
 	printf("\tInput:\r\n");
 	for(i = 0; i < n->ninput; i++)
 	{
-		printf("\t\t%s - ", n->input[i]->name);
-		onnx_dump_tensor_type(n->input[i]);
+		printf("\t\t%s - ", n->inputs[i]->name);
+		onnx_dump_tensor_type(n->inputs[i]);
 		printf("\r\n");
 	}
 	printf("\tOutput:\r\n");
 	for(i = 0; i < n->noutput; i++)
 	{
-		printf("\t\t%s - ", n->output[i]->name);
-		onnx_dump_tensor_type(n->output[i]);
+		printf("\t\t%s - ", n->outputs[i]->name);
+		onnx_dump_tensor_type(n->outputs[i]);
 		printf("\r\n");
 	}
 	if(n->proto->n_attribute > 0)
@@ -900,19 +900,19 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 
 		n->ctx = ctx;
 		n->proto = ctx->model->graph->node[i];
-		n->input = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_input);
-		if(n->input)
+		n->inputs = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_input);
+		if(n->inputs)
 		{
 			n->ninput = n->proto->n_input;
 			for(j = 0; j < n->ninput; j++)
-				n->input[j] = onnx_search_tensor(ctx, n->proto->input[j]);
+				n->inputs[j] = onnx_search_tensor(ctx, n->proto->input[j]);
 		}
-		n->output = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_output);
-		if(n->output)
+		n->outputs = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_output);
+		if(n->outputs)
 		{
 			n->noutput = n->proto->n_output;
 			for(j = 0; j < n->noutput; j++)
-				n->output[j] = onnx_search_tensor(ctx, n->proto->output[j]);
+				n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
 		}
 		if(r)
 		{
@@ -977,10 +977,10 @@ void onnx_context_free(struct onnx_context_t * ctx)
 				n = &ctx->nodes[i];
 				if(n->exit)
 					n->exit(n);
-				if(n->input)
-					free(n->input);
-				if(n->output)
-					free(n->output);
+				if(n->inputs)
+					free(n->inputs);
+				if(n->outputs)
+					free(n->outputs);
 			}
 			free(ctx->nodes);
 		}
