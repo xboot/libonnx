@@ -818,15 +818,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
 		}
 		if(r)
-		{
 			resolver_solve_operator(r, n);
-			if(!n->op)
-				resolver_solve_operator(&default_resolver, n);
-		}
-		else
-		{
+		if(!n->op)
 			resolver_solve_operator(&default_resolver, n);
-		}
 		if(!n->op)
 			n->op = op_dummy;
 		if(n->init)
