@@ -937,21 +937,21 @@ struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, stru
 {
 	struct onnx_context_t * ctx = NULL;
 	FILE * fp;
-    void * buf;
-    size_t len;
+	void * buf;
+	size_t l, len;
 
 	fp = fopen(filename, "rb");
 	if(fp)
 	{
 		fseek(fp, 0L, SEEK_END);
-		len = ftell(fp);
+		l = ftell(fp);
 		fseek(fp, 0L, SEEK_SET);
-		if(len > 0)
+		if(l > 0)
 		{
-			buf = malloc(len);
+			buf = malloc(l);
 			if(buf)
 			{
-				len = fread(buf, 1, len, fp);
+				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
 				ctx = onnx_context_alloc(buf, len, r);
 				free(buf);
 			}
