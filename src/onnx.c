@@ -680,13 +680,11 @@ static Onnx__TensorProto * onnx_get_initializer(struct onnx_context_t * ctx, con
 
 static void hmap_entry_callback(struct hmap_entry_t * e)
 {
-	Onnx__TensorProto * t;
-
-	if(e && (t = e->value))
-		onnx_tensor_free(t);
+	if(e && e->value)
+		onnx_tensor_free((Onnx__TensorProto *)e->value);
 }
 
-static void onnx_node_op_dummy(struct onnx_node_t * n)
+static void op_dummy(struct onnx_node_t * n)
 {
 	onnx_dump_node(n);
 }
@@ -840,7 +838,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			resolver_operator(&default_resolver, n);
 		}
 		if(!n->op)
-			n->op = onnx_node_op_dummy;
+			n->op = op_dummy;
 		if(n->init)
 			n->init(n);
 	}
