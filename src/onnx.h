@@ -369,6 +369,7 @@ void onnx_context_free(struct onnx_context_t * ctx);
 Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v);
 void onnx_tensor_free(Onnx__TensorProto * t);
 Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
+
 void onnx_run(struct onnx_context_t * ctx);
 
 #ifdef __cplusplus
