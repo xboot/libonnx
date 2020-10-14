@@ -14,8 +14,6 @@ struct resolver_t;
 
 struct onnx_context_t {
 	Onnx__ModelProto * model;
-	void * buf;
-	int buflen;
 	struct onnx_node_t * nodes;
 	int nlen;
 	struct hmap_t * map;
@@ -363,7 +361,7 @@ void default_resolver_op_Range(struct onnx_node_t * n);
 void default_resolver_op_Softmax(struct onnx_node_t * n);
 void default_resolver_op_SoftmaxCrossEntropyLoss(struct onnx_node_t * n);
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct resolver_t * r);
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t * r);
 struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r);
 void onnx_context_free(struct onnx_context_t * ctx);
 
@@ -373,7 +371,6 @@ Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char *
 void onnx_run(struct onnx_context_t * ctx);
 
 void onnx_dump_model(struct onnx_context_t * ctx);
-void onnx_dump_tensor(Onnx__TensorProto * t);
 
 #ifdef __cplusplus
 }

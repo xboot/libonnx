@@ -776,7 +776,7 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 		onnx_tensor_free(t);
 }
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct resolver_t * r)
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t * r)
 {
 	struct onnx_context_t * ctx;
 	struct onnx_node_t * n;
@@ -792,19 +792,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct res
 	if(!ctx)
 		return NULL;
 
-	ctx->buflen = len;
-	ctx->buf = memalign(8, ctx->buflen);
-	if(!ctx->buf)
-	{
-		free(ctx);
-		return NULL;
-	}
-	memcpy(ctx->buf, buf, ctx->buflen);
-
-	ctx->model = onnx__model_proto__unpack(NULL, ctx->buflen, (const uint8_t *)ctx->buf);
+	ctx->model = onnx__model_proto__unpack(NULL, len, buf);
 	if(!ctx->model)
 	{
-		free(ctx->buf);
 		free(ctx);
 		return NULL;
 	}
@@ -814,7 +804,6 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct res
 	if(!ctx->nodes)
 	{
 		onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx->buf);
 		free(ctx);
 		return NULL;
 	}
@@ -824,7 +813,6 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct res
 	{
 		free(ctx->nodes);
 		onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx->buf);
 		free(ctx);
 		return NULL;
 	}
@@ -899,7 +887,6 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct res
 				hmap_free(ctx->map, hmap_entry_callback);
 				free(ctx->nodes);
 				onnx__model_proto__free_unpacked(ctx->model, NULL);
-				free(ctx->buf);
 				free(ctx);
 				return NULL;
 			}
@@ -948,30 +935,29 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, int len, struct res
 
 struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r)
 {
-	struct onnx_context_t * ctx;
+	struct onnx_context_t * ctx = NULL;
 	FILE * fp;
     void * buf;
-    int len;
+    size_t len;
 
 	fp = fopen(filename, "rb");
-	if(!fp)
-		return NULL;
-
-	fseek(fp, 0L, SEEK_END);
-	len = ftell(fp);
-	fseek(fp, 0L, SEEK_SET);
-
-	buf = malloc(len);
-	if(!buf)
+	if(fp)
 	{
-		fclose(fp);
-		return NULL;
+		fseek(fp, 0L, SEEK_END);
+		len = ftell(fp);
+		fseek(fp, 0L, SEEK_SET);
+		if(len > 0)
+		{
+			buf = malloc(len);
+			if(buf)
+			{
+				len = fread(buf, 1, len, fp);
+				ctx = onnx_context_alloc(buf, len, r);
+				free(buf);
+			}
+		}
 	}
-	len = fread(buf, 1, len, fp);
 	fclose(fp);
-
-	ctx = onnx_context_alloc(buf, len, r);
-	free(buf);
 	return ctx;
 }
 
@@ -1000,8 +986,6 @@ void onnx_context_free(struct onnx_context_t * ctx)
 		}
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
-		if(ctx->buf)
-			free(ctx->buf);
 		free(ctx);
 	}
 }
@@ -1435,63 +1419,6 @@ void onnx_dump_model(struct onnx_context_t * ctx)
 				onnx_dump_attribute_type(model->graph->node[i]->attribute[j]);
 				printf("\r\n");
 			}
-		}
-	}
-}
-
-void onnx_dump_tensor(Onnx__TensorProto * t)
-{
-	int n = 0, i;
-
-	if(t)
-	{
-		printf("\r\n\r\n===============%s - ", t->name);
-		onnx_dump_tensor_type(t);
-		printf("\r\n");
-
-		if(t->n_dims > 0)
-		{
-			for(i = 0, n = 1; i < t->n_dims; i++)
-				n *= t->dims[i];
-		}
-		switch(t->data_type)
-		{
-		case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-			for(i = 0; i < n; i++)
-				printf("%f\r\n", t->float_data[i]);
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
-			break;
-		case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
-			break;
-		default:
-			break;
 		}
 	}
 }
