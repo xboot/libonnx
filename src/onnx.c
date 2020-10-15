@@ -1425,8 +1425,8 @@ void onnx_tensor_copy(Onnx__TensorProto * t, Onnx__TensorProto * o)
 				switch(o->data_type)
 				{
 				case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-					if(o->n_float_data > 0)
-						memcpy(t->float_data, o->raw_data.data, o->raw_data.len);
+					memcpy(t->float_data, o->raw_data.data, o->raw_data.len);
+					t->n_float_data = o->raw_data.len / sizeof(float);
 					break;
 				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
 					if(t->int32_data)
