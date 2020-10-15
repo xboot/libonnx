@@ -48,7 +48,7 @@ static int onnx_tensor_equal(Onnx__TensorProto * a, Onnx__TensorProto * b)
 	switch(a->data_type)
 	{
 	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-		if(a->float_data != b->float_data)
+		if(a->n_float_data != b->n_float_data)
 			return 0;
 		for(i = 0; i < a->n_float_data; i++)
 		{
