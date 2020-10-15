@@ -728,10 +728,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			{
 				for(j = 0; j < ctx->model->graph->n_initializer; j++)
 				{
-					if(strcmp(ctx->model->graph->initializer[i]->name, name) == 0)
-					{
-						//TODO Copy from ctx->model->graph->initializer[i]
-					}
+					if(strcmp(ctx->model->graph->initializer[j]->name, t->name) == 0)
+						onnx_tensor_copy(t, ctx->model->graph->initializer[j]);
 				}
 				hmap_add(ctx->map, t->name, t);
 			}
@@ -885,6 +883,13 @@ void onnx_context_free(struct onnx_context_t * ctx)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		free(ctx);
 	}
+}
+
+Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name)
+{
+	if(ctx)
+		return hmap_search(ctx->map, name);
+	return NULL;
 }
 
 Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v)
@@ -1124,11 +1129,367 @@ void onnx_tensor_free(Onnx__TensorProto * t)
 	}
 }
 
-Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name)
+void onnx_tensor_clear(Onnx__TensorProto * t)
 {
-	if(ctx)
-		return hmap_search(ctx->map, name);
-	return NULL;
+	int i;
+
+	if(t)
+	{
+		if((t->n_dims > 0) && t->dims)
+		{
+			free(t->dims);
+			t->dims = NULL;
+			t->n_dims = 0;
+		}
+		t->data_type = ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED;
+		if(t->segment)
+		{
+			free(t->segment);
+			t->segment = NULL;
+		}
+		if((t->n_float_data > 0) && t->float_data)
+		{
+			free(t->float_data);
+			t->float_data = NULL;
+			t->n_float_data = 0;
+		}
+		if((t->n_int32_data > 0) && t->int32_data)
+		{
+			free(t->int32_data);
+			t->int32_data = NULL;
+			t->n_int32_data = 0;
+		}
+		if((t->n_string_data > 0) && t->string_data)
+		{
+			for(i = 0; i < t->n_string_data; i++)
+			{
+				if(t->string_data[i].data)
+					free(t->string_data[i].data);
+			}
+			free(t->string_data);
+			t->string_data = NULL;
+			t->n_string_data = 0;
+		}
+		if((t->n_int64_data > 0) && t->int64_data)
+		{
+			free(t->int64_data);
+			t->int64_data = NULL;
+			t->n_int64_data = 0;
+		}
+		if((t->raw_data.len > 0) && t->raw_data.data)
+		{
+			free(t->raw_data.data);
+			t->raw_data.data = NULL;
+			t->raw_data.len = 0;
+		}
+		if((t->n_external_data > 0) && t->external_data)
+		{
+			for(i = 0; i < t->n_external_data; i++)
+			{
+				if(t->external_data[i]->key)
+					free(t->external_data[i]->key);
+				if(t->external_data[i]->value)
+					free(t->external_data[i]->value);
+			}
+			free(t->external_data);
+			t->external_data = NULL;
+			t->n_external_data = 0;
+		}
+		t->data_location = ONNX__TENSOR_PROTO__DATA_LOCATION__DEFAULT;
+		if((t->n_double_data > 0) && t->double_data)
+		{
+			free(t->double_data);
+			t->double_data = NULL;
+			t->n_double_data = 0;
+		}
+		if((t->n_uint64_data > 0) && t->uint64_data)
+		{
+			free(t->uint64_data);
+			t->uint64_data = NULL;
+			t->n_uint64_data = 0;
+		}
+	}
+}
+
+void onnx_tensor_ready(Onnx__TensorProto * t, int type, int ndims, int64_t * dims)
+{
+	int n, i;
+
+	if(t && (type != ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED))
+	{
+		onnx_tensor_clear(t);
+		if((ndims > 0) && dims)
+		{
+			t->dims = malloc(sizeof(int64_t) * ndims);
+			if(t->dims)
+			{
+				memcpy(t->dims, dims, sizeof(int64_t) * ndims);
+				t->n_dims = ndims;
+				t->data_type = type;
+
+				for(i = 0, n = 1; i < t->n_dims; i++)
+					n *= dims[i];
+				switch(type)
+				{
+				case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
+					t->float_data = malloc(sizeof(float) * n);
+					if(t->float_data)
+					{
+						memset(t->float_data, 0, sizeof(float) * n);
+						t->n_float_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
+					t->int32_data = malloc(sizeof(uint8_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(uint8_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
+					t->int32_data = malloc(sizeof(int8_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int8_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
+					t->int32_data = malloc(sizeof(uint16_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(uint16_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
+					t->int32_data = malloc(sizeof(int16_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int16_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
+					t->int32_data = malloc(sizeof(int32_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int32_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
+					t->int64_data = malloc(sizeof(int64_t) * n);
+					if(t->int64_data)
+					{
+						memset(t->int64_data, 0, sizeof(int64_t) * n);
+						t->n_int64_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
+					t->string_data = malloc(sizeof(ProtobufCBinaryData) * n);
+					if(t->string_data)
+					{
+						for(i = 0; i < n; i++)
+						{
+							t->string_data[i].len = 0;
+							t->string_data[i].data = NULL;
+						}
+						t->n_string_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
+					t->int32_data = malloc(sizeof(int32_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int32_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+					t->int32_data = malloc(sizeof(int16_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int16_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+					t->double_data = malloc(sizeof(double) * n);
+					if(t->double_data)
+					{
+						memset(t->double_data, 0, sizeof(double) * n);
+						t->n_double_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
+					t->uint64_data = malloc(sizeof(uint32_t) * n);
+					if(t->int64_data)
+					{
+						memset(t->uint64_data, 0, sizeof(uint32_t) * n);
+						t->n_uint64_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
+					t->uint64_data = malloc(sizeof(uint64_t) * n);
+					if(t->int64_data)
+					{
+						memset(t->uint64_data, 0, sizeof(uint64_t) * n);
+						t->n_uint64_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
+					t->float_data = malloc(sizeof(float) * 2 * n);
+					if(t->float_data)
+					{
+						memset(t->float_data, 0, sizeof(float) *2 * n);
+						t->n_float_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
+					t->double_data = malloc(sizeof(double) * 2 * n);
+					if(t->double_data)
+					{
+						memset(t->double_data, 0, sizeof(double) * 2 * n);
+						t->n_double_data = n;
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
+					t->int32_data = malloc(sizeof(int16_t) * n);
+					if(t->int32_data)
+					{
+						memset(t->int32_data, 0, sizeof(int16_t) * n);
+						t->n_int32_data = n;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
+void onnx_tensor_copy(Onnx__TensorProto * t, Onnx__TensorProto * o)
+{
+	int i;
+
+	if(t && o)
+	{
+		if(o->data_type == t->data_type)
+		{
+			if((o->raw_data.len > 0) && o->raw_data.data)
+			{
+				switch(o->data_type)
+				{
+				case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
+					if(o->n_float_data > 0)
+						memcpy(t->float_data, o->raw_data.data, o->raw_data.len);
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
+					if(t->int64_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+					if(t->int32_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+					if(t->double_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
+					if(t->int64_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
+					if(t->int64_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
+					if(t->float_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
+					if(t->double_data)
+					{
+					}
+					break;
+				case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
+					if(t->int32_data)
+					{
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				if((o->n_float_data > 0) && o->float_data)
+					memcpy(t->float_data, o->float_data, sizeof(float) * o->n_float_data);
+				else if((o->n_int32_data > 0) && o->int32_data)
+					memcpy(t->int32_data, o->int32_data, sizeof(int32_t) * o->n_int32_data);
+				else if((o->n_string_data > 0) && o->string_data)
+				{
+					for(i = 0; i < o->n_string_data; i++)
+					{
+						t->string_data[i].data = malloc(o->string_data[i].len);
+						if(t->string_data[i].data)
+						{
+							memcpy(t->string_data[i].data, o->string_data[i].data, o->string_data[i].len);
+							t->string_data[i].len = o->string_data[i].len;
+						}
+					}
+				}
+				else if((o->n_int64_data > 0) && o->int64_data)
+					memcpy(t->int64_data, o->int64_data, sizeof(int32_t) * o->n_int64_data);
+				else if((o->n_double_data > 0) && o->double_data)
+					memcpy(t->double_data, o->double_data, sizeof(float) * o->n_double_data);
+				else if((o->n_uint64_data > 0) && o->uint64_data)
+					memcpy(t->uint64_data, o->uint64_data, sizeof(float) * o->n_uint64_data);
+			}
+		}
+	}
 }
 
 void onnx_run(struct onnx_context_t * ctx)
