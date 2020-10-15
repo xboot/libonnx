@@ -11,6 +11,7 @@ extern "C" {
 #include <stddef.h>
 #include <string.h>
 #include <malloc.h>
+#include <math.h>
 #include <list.h>
 
 struct hmap_t {

@@ -368,6 +368,7 @@ void onnx_context_free(struct onnx_context_t * ctx);
 
 Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
 Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v);
+Onnx__TensorProto * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(Onnx__TensorProto * t);
 void onnx_tensor_clear(Onnx__TensorProto * t);
 void onnx_tensor_ready(Onnx__TensorProto * t, int type, int ndims, int64_t * dims);

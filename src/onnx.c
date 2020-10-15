@@ -1079,6 +1079,48 @@ Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v)
 	return t;
 }
 
+Onnx__TensorProto * onnx_tensor_alloc_from_file(const char * filename)
+{
+	Onnx__TensorProto * pb, * t = NULL;
+	FILE * fp;
+	void * buf;
+	size_t l, len;
+
+	fp = fopen(filename, "rb");
+	if(fp)
+	{
+		fseek(fp, 0L, SEEK_END);
+		l = ftell(fp);
+		fseek(fp, 0L, SEEK_SET);
+		if(l > 0)
+		{
+			buf = malloc(l);
+			if(buf)
+			{
+				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
+				pb = onnx__tensor_proto__unpack(NULL, len, buf);
+				free(buf);
+				if(pb)
+				{
+					t = malloc(sizeof(Onnx__TensorProto));
+					if(t)
+					{
+						onnx__tensor_proto__init(t);
+						t->data_type = ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED;
+						t->name = pb->name ? strdup(pb->name) : NULL;
+						t->doc_string = pb->doc_string ? strdup(pb->doc_string) : NULL;
+						onnx_tensor_ready(t, pb->data_type, pb->n_dims, pb->dims);
+						onnx_tensor_copy(t, pb);
+					}
+					onnx__tensor_proto__free_unpacked(pb, NULL);
+				}
+			}
+		}
+	}
+	fclose(fp);
+	return t;
+}
+
 void onnx_tensor_free(Onnx__TensorProto * t)
 {
 	int i;
