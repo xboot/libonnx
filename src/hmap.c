@@ -27,11 +27,6 @@
 
 #include <hmap.h>
 
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(array) \
-	(sizeof(array) / sizeof((array)[0]))
-#endif
-
 static inline int fls_generic(unsigned int word)
 {
 	int bit = 32;
@@ -287,7 +282,7 @@ static void lsort(void * priv, struct list_head * head, int (*cmp)(void * priv, 
 		}
 		if(lev > maxlev)
 		{
-			if(lev >= ARRAY_SIZE(part) - 1)
+			if(lev >= (sizeof(part) / sizeof((part)[0])) - 1)
 				lev--;
 			maxlev = lev;
 		}
