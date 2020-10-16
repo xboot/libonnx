@@ -9,28 +9,29 @@ extern "C" {
 
 static inline uint16_t float32_to_float16(float v)
 {
-	uint32_t * p = (uint32_t *)&v;
-	uint32_t t = *p;
-	uint16_t value;
+	union { uint32_t u; float f; } t;
+	uint16_t y;
 
-	value = ((t & 0x7fffffff) >> 13) - (0x38000000 >> 13);
-	value |= ((t & 0x80000000) >> 16);
-	return value;
+	t.f = v;
+	y = ((t.u & 0x7fffffff) >> 13) - (0x38000000 >> 13);
+	y |= ((t.u & 0x80000000) >> 16);
+	return y;
 }
 
 static inline float float16_to_float32(uint16_t v)
 {
-	uint32_t t = v;
-	float * p = (float *)&t;
+	union { uint32_t u; float f; } t;
 
-	t = ((t & 0x7fff) << 13) + 0x38000000;
-	t |= ((v & 0x8000) << 16);
-	return *p;
+	t.u = v;
+	t.u = ((t.u & 0x7fff) << 13) + 0x38000000;
+	t.u |= ((v & 0x8000) << 16);
+	return t.f;
 }
 
 static inline uint16_t float32_to_bfloat16(float v)
 {
 	union { uint32_t u; float f; } t;
+
 	t.f = v;
 	return t.u >> 16;
 }
@@ -38,6 +39,7 @@ static inline uint16_t float32_to_bfloat16(float v)
 static inline float bfloat16_to_float32(uint16_t v)
 {
 	union { uint32_t u; float f; } t;
+
 	t.u = v << 16;
 	return t.f;
 }
