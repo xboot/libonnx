@@ -7,7 +7,6 @@ extern "C" {
 
 #include <dump.h>
 #include <hmap.h>
-#include <helper.h>
 #include <onnx.proto3.pb-c.h>
 
 struct onnx_context_t;

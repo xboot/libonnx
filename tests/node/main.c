@@ -4,67 +4,16 @@
 #include <string.h>
 #include <malloc.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <libgen.h>
+#include <sys/stat.h>
 #include <onnx.h>
 
 #define FLOAT_PRECISION		(0.001f)
 
-struct testcase_t {
-	const char * name;
-	const char * model_file;
-	const char ** input_files;
-	const char ** input_names;
-	int ninput;
-	const char ** output_files;
-	const char ** output_names;
-	int noutput;
-};
-
-static struct testcase_t testcases[] = {
-	{
-		.name			= "test_relu",
-		.model_file		= "test_relu/model.onnx",
-		.input_files	= &(const char *){ "test_relu/test_data_set_0/input_0.pb", },
-		.input_names	= &(const char *){ "x", },
-		.ninput			= 1,
-		.output_files	= &(const char *){ "test_relu/test_data_set_0/output_0.pb", },
-		.output_names	= &(const char *){ "y", },
-		.noutput		= 1,
-	},
-	{
-		.name			= "test_leakyrelu",
-		.model_file		= "test_leakyrelu/model.onnx",
-		.input_files	= &(const char *){ "test_leakyrelu/test_data_set_0/input_0.pb", },
-		.input_names	= &(const char *){ "x", },
-		.ninput			= 1,
-		.output_files	= &(const char *){ "test_leakyrelu/test_data_set_0/output_0.pb", },
-		.output_names	= &(const char *){ "y", },
-		.noutput		= 1,
-	},
-	{
-		.name			= "test_leakyrelu_default",
-		.model_file		= "test_leakyrelu_default/model.onnx",
-		.input_files	= &(const char *){ "test_leakyrelu_default/test_data_set_0/input_0.pb", },
-		.input_names	= &(const char *){ "x", },
-		.ninput			= 1,
-		.output_files	= &(const char *){ "test_leakyrelu_default/test_data_set_0/output_0.pb", },
-		.output_names	= &(const char *){ "y", },
-		.noutput		= 1,
-	},
-	{
-		.name			= "test_leakyrelu_example",
-		.model_file		= "test_leakyrelu_example/model.onnx",
-		.input_files	= &(const char *){ "test_leakyrelu_example/test_data_set_0/input_0.pb", },
-		.input_names	= &(const char *){ "x", },
-		.ninput			= 1,
-		.output_files	= &(const char *){ "test_leakyrelu_example/test_data_set_0/output_0.pb", },
-		.output_names	= &(const char *){ "y", },
-		.noutput		= 1,
-	},
-};
-
 static int onnx_tensor_equal(Onnx__TensorProto * a, Onnx__TensorProto * b)
 {
+	int n = 0;
 	int i;
 
 	if(!a || !b)
@@ -75,10 +24,18 @@ static int onnx_tensor_equal(Onnx__TensorProto * a, Onnx__TensorProto * b)
 		return 0;
 	if(memcmp(a->dims, b->dims, sizeof(int64_t) * a->n_dims) != 0)
 		return 0;
+	if(a->n_dims > 0)
+	{
+		for(i = 0, n = 1; i < a->n_dims; i++)
+		{
+			if(a->dims[i] != 0)
+				n *= a->dims[i];
+		}
+	}
 	switch(a->data_type)
 	{
 	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-		if(a->n_float_data != b->n_float_data)
+		if((a->n_float_data != b->n_float_data) || (a->n_float_data != n))
 			return 0;
 		for(i = 0; i < a->n_float_data; i++)
 		{
@@ -87,84 +44,126 @@ static int onnx_tensor_equal(Onnx__TensorProto * a, Onnx__TensorProto * b)
 		}
 		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
-		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
-		break;
+		//TODO
 	default:
-		break;
+		return 0;
 	}
 	return 1;
 }
 
-static void testcase_run(struct resolver_t * r, struct testcase_t * tc)
+static void testcase(const char * path, struct resolver_t * r)
 {
 	struct onnx_context_t * ctx;
 	Onnx__TensorProto * t, * o;
-	int fail = 0;
-	int i;
+	struct stat st;
+	char data_set_path[PATH_MAX];
+	char tmp[PATH_MAX * 2];
+	int data_set_index;
+	int ninput, noutput;
+	int fail;
+	int len;
 
-	ctx = onnx_context_alloc_from_file(tc->model_file, r);
+	sprintf(tmp, "%s/%s", path, "model.onnx");
+	ctx = onnx_context_alloc_from_file(tmp, r);
 	if(ctx)
 	{
-		for(i = 0; i < tc->ninput; i++)
+		data_set_index = 0;
+		while(1)
 		{
-			t = onnx_search_tensor(ctx, tc->input_names[i]);
-			o = onnx_tensor_alloc_from_file(tc->input_files[i]);
-			onnx_tensor_copy(t, o);
-			onnx_tensor_free(o);
-		}
-		onnx_run(ctx);
-		for(i = 0; i < tc->noutput; i++)
-		{
-			t = onnx_search_tensor(ctx, tc->output_names[i]);
-			o = onnx_tensor_alloc_from_file(tc->output_files[i]);
-			if(!onnx_tensor_equal(t, o))
-				fail |= 1;
-			onnx_tensor_free(o);
+			sprintf(data_set_path, "%s/test_data_set_%d", path, data_set_index);
+			if((lstat(data_set_path, &st) != 0) || !S_ISDIR(st.st_mode))
+				break;
+			ninput = 0;
+			noutput = 0;
+			fail = 0;
+			while(1)
+			{
+				sprintf(tmp, "%s/input_%d.pb", data_set_path, ninput);
+				if((lstat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
+					break;
+				if(ninput > ctx->model->graph->n_input)
+					break;
+				t = onnx_search_tensor(ctx, ctx->model->graph->input[ninput]->name);
+				o = onnx_tensor_alloc_from_file(tmp);
+				onnx_tensor_copy(t, o);
+				onnx_tensor_free(o);
+				ninput++;
+			}
+			onnx_run(ctx);
+			while(1)
+			{
+				sprintf(tmp, "%s/output_%d.pb", data_set_path, noutput);
+				if((lstat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
+					break;
+				if(noutput > ctx->model->graph->n_output)
+					break;
+				t = onnx_search_tensor(ctx, ctx->model->graph->output[noutput]->name);
+				o = onnx_tensor_alloc_from_file(tmp);
+				if(!onnx_tensor_equal(t, o))
+					fail |= 1;
+				onnx_tensor_free(o);
+				noutput++;
+			}
+
+			len = printf("[%s](test_data_set_%d)", path, data_set_index);
+			printf("%*s\r\n", 100 + 12 - 6 - len, fail ? "\033[41;37m[FAIL]\033[0m" : "\033[42;37m[OKAY]\033[0m");
+			data_set_index++;
 		}
 		onnx_context_free(ctx);
 	}
-	i = printf("\033[43;37m[%s]\033[0m", tc->name);
-	printf("%*s\r\n", 80 + 12 - 6 - i, fail ? "\033[41;37m[FAIL]\033[0m" : "\033[42;37m[OKAY]\033[0m");
 }
 
 int main(int argc, char * argv[])
 {
 	struct resolver_t * r = NULL;
+	struct hmap_t * m;
+	struct hmap_entry_t * e;
+	struct dirent * d;
+	struct stat st;
 	char path[PATH_MAX];
-	int i;
+	DIR * dir;
 
 	if((readlink("/proc/self/exe", path, sizeof(path)) <= 0) || (chdir(dirname(path)) != 0))
 		printf("ERROR: Can't change working directory.(%s)\r\n", getcwd(path, sizeof(path)));
 
-	for(i = 0; i < (sizeof(testcases) / sizeof((testcases)[0])); i++)
-		testcase_run(r, &testcases[i]);
-
+	if((lstat(path, &st) == 0) && S_ISDIR(st.st_mode))
+	{
+		m = hmap_alloc(0);
+		if((dir = opendir(path)) != NULL)
+		{
+			while((d = readdir(dir)) != NULL)
+			{
+				if((lstat(d->d_name, &st) == 0) && S_ISDIR(st.st_mode))
+				{
+					if(strcmp(".", d->d_name) == 0)
+						continue;
+					if(strcmp("..", d->d_name) == 0)
+						continue;
+					hmap_add(m, d->d_name, NULL);
+				}
+			}
+			closedir(dir);
+		}
+		hmap_sort(m);
+		hmap_for_each_entry(e, m)
+		{
+			testcase(e->key, r);
+		}
+		hmap_free(m, NULL);
+	}
 	return 0;
 }

@@ -13,6 +13,7 @@ extern "C" {
 #include <malloc.h>
 #include <math.h>
 #include <list.h>
+#include <helper.h>
 
 struct hmap_t {
 	struct hlist_head * hash;
@@ -27,17 +28,6 @@ struct hmap_entry_t {
 	char * key;
 	void * value;
 };
-
-static inline uint32_t shash(const char * s)
-{
-	uint32_t v = 5381;
-	if(s)
-	{
-		while(*s)
-			v = (v << 5) + v + (*s++);
-	}
-	return v;
-}
 
 #define hmap_for_each_entry(entry, m) \
 	list_for_each_entry(entry, &(m)->list, head)

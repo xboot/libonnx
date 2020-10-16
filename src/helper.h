@@ -7,6 +7,10 @@ extern "C" {
 
 #include <stdint.h>
 
+#define min(a, b)		({typeof(a) _amin = (a); typeof(b) _bmin = (b); (void)(&_amin == &_bmin); _amin < _bmin ? _amin : _bmin;})
+#define max(a, b)		({typeof(a) _amax = (a); typeof(b) _bmax = (b); (void)(&_amax == &_bmax); _amax > _bmax ? _amax : _bmax;})
+#define clamp(v, a, b)	min(max(a, v), b)
+
 static inline uint16_t float32_to_float16(float v)
 {
 	union { uint32_t u; float f; } t;
@@ -42,6 +46,17 @@ static inline float bfloat16_to_float32(uint16_t v)
 
 	t.u = v << 16;
 	return t.f;
+}
+
+static inline uint32_t shash(const char * s)
+{
+	uint32_t v = 5381;
+	if(s)
+	{
+		while(*s)
+			v = (v << 5) + v + (*s++);
+	}
+	return v;
 }
 
 #ifdef __cplusplus
