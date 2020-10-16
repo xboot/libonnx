@@ -1,5 +1,21 @@
 #include <onnx.h>
 
+static void Relu_init(struct onnx_node_t * n)
+{
+	Onnx__TensorProto * t = n->inputs[0];
+	int i;
+
+	for(i = 0; i < n->noutput; i++)
+	{
+		if(n->outputs[i]->data_type == ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED)
+			onnx_tensor_ready(n->outputs[i], t->data_type, t->n_dims, t->dims);
+	}
+}
+
+static void Relu_exit(struct onnx_node_t * n)
+{
+}
+
 static void Relu_float(struct onnx_node_t * n)
 {
 	Onnx__TensorProto * x = n->inputs[0];
@@ -58,27 +74,26 @@ static void Relu_bfloat16(struct onnx_node_t * n)
 
 void default_resolver_op_Relu(struct onnx_node_t * n)
 {
-	Onnx__TensorProto * t = n->inputs[0];
-	int i;
-
-	for(i = 0; i < n->noutput; i++)
-	{
-		if(n->outputs[i]->data_type == ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED)
-			onnx_tensor_ready(n->outputs[i], t->data_type, t->n_dims, t->dims);
-	}
-
-	switch(t->data_type)
+	switch(n->inputs[0]->data_type)
 	{
 	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
+		n->init = Relu_init;
+		n->exit = Relu_exit;
 		n->op = Relu_float;
 		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+		n->init = Relu_init;
+		n->exit = Relu_exit;
 		n->op = Relu_float16;
 		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+		n->init = Relu_init;
+		n->exit = Relu_exit;
 		n->op = Relu_double;
 		break;
 	case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
+		n->init = Relu_init;
+		n->exit = Relu_exit;
 		n->op = Relu_bfloat16;
 		break;
 	default:
