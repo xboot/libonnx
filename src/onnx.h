@@ -375,6 +375,14 @@ void onnx_tensor_clear(Onnx__TensorProto * t);
 void onnx_tensor_ready(Onnx__TensorProto * t, int type, int ndims, int64_t * dims);
 void onnx_tensor_copy(Onnx__TensorProto * t, Onnx__TensorProto * o);
 
+Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name);
+float onnx_attribute_read_float(Onnx__AttributeProto * a, float def);
+int64_t onnx_attribute_read_int(Onnx__AttributeProto * a, int64_t def);
+char * onnx_attribute_read_string(Onnx__AttributeProto * a, char * def);
+Onnx__TensorProto * onnx_attribute_read_tensor(Onnx__AttributeProto * a, Onnx__TensorProto * def);
+Onnx__GraphProto * onnx_attribute_read_graph(Onnx__AttributeProto * a, Onnx__GraphProto * def);
+Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(Onnx__AttributeProto * a, Onnx__SparseTensorProto * def);
+
 void onnx_run(struct onnx_context_t * ctx);
 
 #ifdef __cplusplus
