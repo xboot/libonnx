@@ -31,6 +31,36 @@ static struct testcase_t testcases[] = {
 		.output_names	= &(const char *){ "y", },
 		.noutput		= 1,
 	},
+	{
+		.name			= "test_leakyrelu",
+		.model_file		= "test_leakyrelu/model.onnx",
+		.input_files	= &(const char *){ "test_leakyrelu/test_data_set_0/input_0.pb", },
+		.input_names	= &(const char *){ "x", },
+		.ninput			= 1,
+		.output_files	= &(const char *){ "test_leakyrelu/test_data_set_0/output_0.pb", },
+		.output_names	= &(const char *){ "y", },
+		.noutput		= 1,
+	},
+	{
+		.name			= "test_leakyrelu_default",
+		.model_file		= "test_leakyrelu_default/model.onnx",
+		.input_files	= &(const char *){ "test_leakyrelu_default/test_data_set_0/input_0.pb", },
+		.input_names	= &(const char *){ "x", },
+		.ninput			= 1,
+		.output_files	= &(const char *){ "test_leakyrelu_default/test_data_set_0/output_0.pb", },
+		.output_names	= &(const char *){ "y", },
+		.noutput		= 1,
+	},
+	{
+		.name			= "test_leakyrelu_example",
+		.model_file		= "test_leakyrelu_example/model.onnx",
+		.input_files	= &(const char *){ "test_leakyrelu_example/test_data_set_0/input_0.pb", },
+		.input_names	= &(const char *){ "x", },
+		.ninput			= 1,
+		.output_files	= &(const char *){ "test_leakyrelu_example/test_data_set_0/output_0.pb", },
+		.output_names	= &(const char *){ "y", },
+		.noutput		= 1,
+	},
 };
 
 static int onnx_tensor_equal(Onnx__TensorProto * a, Onnx__TensorProto * b)
