@@ -9,29 +9,57 @@ extern "C" {
 #include <hmap.h>
 #include <onnx.proto3.pb-c.h>
 
-struct onnx_context_t;
+enum onnx_tensor_type_t {
+	ONNX_TENSOR_TYPE_UNDEFINED	= 0,
+	ONNX_TENSOR_TYPE_BOOL		= 9,
+	ONNX_TENSOR_TYPE_INT8		= 3,
+	ONNX_TENSOR_TYPE_INT16		= 5,
+	ONNX_TENSOR_TYPE_INT32		= 6,
+	ONNX_TENSOR_TYPE_INT64		= 7,
+	ONNX_TENSOR_TYPE_UINT8		= 2,
+	ONNX_TENSOR_TYPE_UINT16		= 4,
+	ONNX_TENSOR_TYPE_UINT32		= 12,
+	ONNX_TENSOR_TYPE_UINT64		= 13,
+	ONNX_TENSOR_TYPE_BFLOAT16	= 16,
+	ONNX_TENSOR_TYPE_FLOAT16	= 10,
+	ONNX_TENSOR_TYPE_FLOAT32	= 1,
+	ONNX_TENSOR_TYPE_FLOAT64	= 11,
+	ONNX_TENSOR_TYPE_COMPLEX64	= 14,
+	ONNX_TENSOR_TYPE_COMPLEX128	= 15,
+	ONNX_TENSOR_TYPE_STRING		= 8,
+};
+
+struct onnx_tensor_t;
 struct onnx_node_t;
+struct onnx_context_t;
 struct resolver_t;
 
-struct onnx_context_t {
-	Onnx__ModelProto * model;
-	struct onnx_node_t * nodes;
-	int nlen;
-	struct hmap_t * map;
+struct onnx_tensor_t {
+	char * name;
+	enum onnx_tensor_type_t type;
+	int64_t * dims, * datas;
+	int ndim, ndata;
 };
 
 struct onnx_node_t {
 	struct onnx_context_t * ctx;
 	Onnx__NodeProto * proto;
-	Onnx__TensorProto ** inputs;
+	struct onnx_tensor_t ** inputs;
 	int ninput;
-	Onnx__TensorProto ** outputs;
+	struct onnx_tensor_t ** outputs;
 	int noutput;
 
 	void (*init)(struct onnx_node_t * n);
 	void (*exit)(struct onnx_node_t * n);
 	void (*op)(struct onnx_node_t * n);
 	void * priv;
+};
+
+struct onnx_context_t {
+	Onnx__ModelProto * model;
+	struct onnx_node_t * nodes;
+	int nlen;
+	struct hmap_t * map;
 };
 
 struct resolver_t {
@@ -366,21 +394,18 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r);
 void onnx_context_free(struct onnx_context_t * ctx);
 
-Onnx__TensorProto * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
-Onnx__TensorProto * onnx_tensor_alloc(Onnx__ValueInfoProto * v);
-Onnx__TensorProto * onnx_tensor_alloc_from_file(const char * filename);
-void onnx_tensor_free(Onnx__TensorProto * t);
-void onnx_tensor_clear(Onnx__TensorProto * t);
-void onnx_tensor_ready(Onnx__TensorProto * t, int type, int ndims, int64_t * dims);
-void onnx_tensor_copy(Onnx__TensorProto * t, Onnx__TensorProto * o);
+struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
+struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
+struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
+void onnx_tensor_free(struct onnx_tensor_t * t);
+void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
 
-Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name);
-float onnx_attribute_read_float(Onnx__AttributeProto * a, float def);
-int64_t onnx_attribute_read_int(Onnx__AttributeProto * a, int64_t def);
-char * onnx_attribute_read_string(Onnx__AttributeProto * a, char * def);
-Onnx__TensorProto * onnx_attribute_read_tensor(Onnx__AttributeProto * a, Onnx__TensorProto * def);
-Onnx__GraphProto * onnx_attribute_read_graph(Onnx__AttributeProto * a, Onnx__GraphProto * def);
-Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(Onnx__AttributeProto * a, Onnx__SparseTensorProto * def);
+float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
+int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);
+char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def);
+Onnx__TensorProto * onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, Onnx__TensorProto * def);
+Onnx__GraphProto * onnx_attribute_read_graph(struct onnx_node_t * n, const char * name, Onnx__GraphProto * def);
+Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t * n, const char * name, Onnx__SparseTensorProto * def);
 
 void onnx_run(struct onnx_context_t * ctx);
 

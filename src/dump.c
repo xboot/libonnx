@@ -179,36 +179,6 @@ static void onnx_dump_value_info_type(Onnx__ValueInfoProto * v)
 	}
 }
 
-void onnx_dump_node(struct onnx_node_t * n)
-{
-	int i;
-
-	printf("\tInput:\r\n");
-	for(i = 0; i < n->ninput; i++)
-	{
-		printf("\t\t%s - ", n->inputs[i]->name);
-		onnx_dump_tensor_type(n->inputs[i]);
-		printf("\r\n");
-	}
-	printf("\tOutput:\r\n");
-	for(i = 0; i < n->noutput; i++)
-	{
-		printf("\t\t%s - ", n->outputs[i]->name);
-		onnx_dump_tensor_type(n->outputs[i]);
-		printf("\r\n");
-	}
-	if(n->proto->n_attribute > 0)
-	{
-		printf("\tAttribute:\r\n");
-		for(i = 0; i < n->proto->n_attribute; i++)
-		{
-			printf("\t\t%s - ", n->proto->attribute[i]->name);
-			onnx_dump_attribute_type(n->proto->attribute[i]);
-			printf("\r\n");
-		}
-	}
-}
-
 void onnx_dump_model(struct onnx_context_t * ctx)
 {
 	Onnx__ModelProto * model;

@@ -7,22 +7,18 @@ struct operator_pdata_t {
 static void LeakyRelu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	Onnx__TensorProto * t = n->inputs[0];
-	Onnx__AttributeProto * a;
+	struct onnx_tensor_t * t = n->inputs[0];
 	int i;
 
 	for(i = 0; i < n->noutput; i++)
 	{
-		if(n->outputs[i]->data_type == ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED)
-			onnx_tensor_ready(n->outputs[i], t->data_type, t->n_dims, t->dims);
+		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
+			onnx_tensor_reinit(n->outputs[i], t->type, t->dims, t->ndim);
 	}
 
 	pdat = malloc(sizeof(struct operator_pdata_t));
 	if(pdat)
-	{
-		a = onnx_search_attribute(n, "alpha");
-		pdat->alpha = onnx_attribute_read_float(a, 0.01);
-	}
+		pdat->alpha = onnx_attribute_read_float(n, "alpha", 0.01);
 	n->priv = pdat;
 }
 
@@ -34,28 +30,17 @@ static void LeakyRelu_exit(struct onnx_node_t * n)
 		free(pdat);
 }
 
-static void LeakyRelu_float(struct onnx_node_t * n)
-{
-	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
-	Onnx__TensorProto * x = n->inputs[0];
-	Onnx__TensorProto * y = n->outputs[0];
-	int i, l;
-
-	for(i = 0, l = y->n_float_data; i < l; i++)
-		y->float_data[i] = (x->float_data[i] < 0) ? x->float_data[i] * pdat->alpha : x->float_data[i];
-}
-
 static void LeakyRelu_float16(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
-	Onnx__TensorProto * x = n->inputs[0];
-	Onnx__TensorProto * y = n->outputs[0];
-	uint16_t * px = (uint16_t *)x->int32_data;
-	uint16_t * py = (uint16_t *)y->int32_data;
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	uint16_t * px = (uint16_t *)x->datas;
+	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 	int i, l;
 
-	for(i = 0, l = (y->n_int32_data << 1); i < l; i++)
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		if(v < 0)
@@ -64,35 +49,50 @@ static void LeakyRelu_float16(struct onnx_node_t * n)
 	}
 }
 
-static void LeakyRelu_double(struct onnx_node_t * n)
+static void LeakyRelu_float32(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
-	Onnx__TensorProto * x = n->inputs[0];
-	Onnx__TensorProto * y = n->outputs[0];
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	float * px = (float *)x->datas;
+	float * py = (float *)y->datas;
 	int i, l;
 
-	for(i = 0, l = y->n_double_data; i < l; i++)
-		y->double_data[i] = (x->double_data[i] < 0) ? x->double_data[i] * pdat->alpha : x->double_data[i];
+	for(i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? px[i] * pdat->alpha : px[i];
+}
+
+static void LeakyRelu_float64(struct onnx_node_t * n)
+{
+	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	double * px = (double *)x->datas;
+	double * py = (double *)y->datas;
+	int i, l;
+
+	for(i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? px[i] * pdat->alpha : px[i];
 }
 
 void default_resolver_op_LeakyRelu(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->data_type)
+	switch(n->inputs[0]->type)
 	{
-	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-		n->init = LeakyRelu_init;
-		n->exit = LeakyRelu_exit;
-		n->op = LeakyRelu_float;
-		break;
-	case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = LeakyRelu_init;
 		n->exit = LeakyRelu_exit;
 		n->op = LeakyRelu_float16;
 		break;
-	case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = LeakyRelu_init;
 		n->exit = LeakyRelu_exit;
-		n->op = LeakyRelu_double;
+		n->op = LeakyRelu_float32;
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT64:
+		n->init = LeakyRelu_init;
+		n->exit = LeakyRelu_exit;
+		n->op = LeakyRelu_float64;
 		break;
 	default:
 		break;

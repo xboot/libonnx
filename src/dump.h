@@ -7,11 +7,11 @@ extern "C" {
 
 #include <onnx.h>
 
-struct onnx_context_t;
+struct onnx_tensor_t;
 struct onnx_node_t;
+struct onnx_context_t;
 struct resolver_t;
 
-void onnx_dump_node(struct onnx_node_t * n);
 void onnx_dump_model(struct onnx_context_t * ctx);
 
 #ifdef __cplusplus
