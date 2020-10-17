@@ -399,6 +399,7 @@ struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_typ
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
+void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len);
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);

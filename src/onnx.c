@@ -1291,6 +1291,22 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 	}
 }
 
+void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len)
+{
+	int sz, l;
+
+	if(t && t->datas && buf && (len > 0))
+	{
+		sz = onnx_tensor_type_size(t->type);
+		if(sz > 0)
+		{
+			l = t->ndata * sz;
+			if(l > 0)
+				memcpy(t->datas, buf, min(l, len));
+		}
+	}
+}
+
 static Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name)
 {
 	Onnx__AttributeProto * a;
