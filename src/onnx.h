@@ -9,6 +9,8 @@ extern "C" {
 #include <hmap.h>
 #include <onnx.proto3.pb-c.h>
 
+#define LIBONNX_VERSION			"1.0.0"
+
 enum onnx_tensor_type_t {
 	ONNX_TENSOR_TYPE_UNDEFINED	= 0,
 	ONNX_TENSOR_TYPE_BOOL		= 9,
