@@ -40,7 +40,7 @@ static inline uint32_t __swahb32(uint32_t x)
 	return (((x & (uint32_t)0x00ff00ffUL) << 8) | ((x & (uint32_t)0xff00ff00UL) >> 8));
 }
 
-#ifdef __BIG_ENDIAN
+#ifdef ONNX_CPU_BIG_ENDIAN
 #define cpu_to_le64(x)	(__swab64((uint64_t)(x)))
 #define le64_to_cpu(x)	(__swab64((uint64_t)(x)))
 #define cpu_to_le32(x)	(__swab32((uint32_t)(x)))
