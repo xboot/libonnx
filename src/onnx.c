@@ -1385,15 +1385,35 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len)
 {
 	int sz, l;
+	int i;
 
 	if(t && t->datas && buf && (len > 0))
 	{
 		sz = onnx_tensor_type_size(t->type);
 		if(sz > 0)
 		{
-			l = t->ndata * sz;
-			if(l > 0)
-				memcpy(t->datas, buf, min(l, len));
+			if(t->type == ONNX_TENSOR_TYPE_STRING)
+			{
+				char ** p = (char **)t->datas;
+				char ** q = (char **)buf;
+				for(i = 0; i < t->ndata; i++)
+				{
+					if(p[i])
+					{
+						free(p[i]);
+						p[i] = NULL;
+					}
+				}
+				l = min(t->ndata, len);
+				for(i = 0; i < l; i++)
+					p[i] = strdup(q[i]);
+			}
+			else
+			{
+				l = t->ndata * sz;
+				if(l > 0)
+					memcpy(t->datas, buf, min(l, len));
+			}
 		}
 	}
 }
