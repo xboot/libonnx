@@ -1172,8 +1172,8 @@ struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, stru
 				free(buf);
 			}
 		}
+		fclose(fp);
 	}
-	fclose(fp);
 	return ctx;
 }
 
@@ -1286,8 +1286,8 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 				}
 			}
 		}
+		fclose(fp);
 	}
-	fclose(fp);
 	return t;
 }
 
