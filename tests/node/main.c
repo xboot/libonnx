@@ -119,6 +119,17 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 		}
 		break;
 	case ONNX_TENSOR_TYPE_STRING:
+		{
+			char ** p = (char **)a->datas;
+			char ** q = (char **)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(p[i] && q[i] && (strcmp(p[i], q[i]) != 0))
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
 		break;
 	default:
 		break;
