@@ -692,32 +692,6 @@ static void resolver_solve_operator(struct resolver_t * r, struct onnx_node_t * 
 	}
 }
 
-static int onnx_tensor_type_size(enum onnx_tensor_type_t type)
-{
-	static const int typesz[17] = {
-		0,
-		sizeof(float),
-		sizeof(uint8_t),
-		sizeof(int8_t),
-		sizeof(uint16_t),
-		sizeof(int16_t),
-		sizeof(int32_t),
-		sizeof(int64_t),
-		sizeof(char *),
-		sizeof(uint8_t),
-		sizeof(uint16_t),
-		sizeof(double),
-		sizeof(uint32_t),
-		sizeof(uint64_t),
-		sizeof(float) * 2,
-		sizeof(double) * 2,
-		sizeof(uint16_t),
-	};
-	if((type > 0) && (type < (sizeof(typesz) / sizeof((typesz)[0]))))
-		return typesz[type];
-	return 0;
-}
-
 static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoProto * v)
 {
 	struct onnx_tensor_t * t;
@@ -1230,6 +1204,32 @@ void onnx_context_free(struct onnx_context_t * ctx)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		free(ctx);
 	}
+}
+
+int onnx_tensor_type_size(enum onnx_tensor_type_t type)
+{
+	static const int typesz[17] = {
+		0,
+		sizeof(float),
+		sizeof(uint8_t),
+		sizeof(int8_t),
+		sizeof(uint16_t),
+		sizeof(int16_t),
+		sizeof(int32_t),
+		sizeof(int64_t),
+		sizeof(char *),
+		sizeof(uint8_t),
+		sizeof(uint16_t),
+		sizeof(double),
+		sizeof(uint32_t),
+		sizeof(uint64_t),
+		sizeof(float) * 2,
+		sizeof(double) * 2,
+		sizeof(uint16_t),
+	};
+	if((type > 0) && (type < (sizeof(typesz) / sizeof((typesz)[0]))))
+		return typesz[type];
+	return 0;
 }
 
 struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name)
