@@ -941,7 +941,7 @@ static void onnx_tensor_copy_from_tensor_proto(struct onnx_tensor_t * t, Onnx__T
 									str[i] = NULL;
 								}
 							}
-							for(i = 0; i < t->ndata; i++)
+							for(i = 0; i < n; i++)
 							{
 								str[i] = malloc(o->string_data[i].len + 1);
 								if(str[i])

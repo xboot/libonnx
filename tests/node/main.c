@@ -146,8 +146,7 @@ static void testcase(const char * path, struct resolver_t * r)
 	char tmp[PATH_MAX * 2];
 	int data_set_index;
 	int ninput, noutput;
-	int fail;
-	int len;
+	int okay;
 
 	sprintf(tmp, "%s/%s", path, "model.onnx");
 	ctx = onnx_context_alloc_from_file(tmp, r);
@@ -161,7 +160,7 @@ static void testcase(const char * path, struct resolver_t * r)
 				break;
 			ninput = 0;
 			noutput = 0;
-			fail = 0;
+			okay = 0;
 			while(1)
 			{
 				sprintf(tmp, "%s/input_%d.pb", data_set_path, ninput);
@@ -173,6 +172,7 @@ static void testcase(const char * path, struct resolver_t * r)
 				o = onnx_tensor_alloc_from_file(tmp);
 				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_size(o->type));
 				onnx_tensor_free(o);
+				okay++;
 				ninput++;
 			}
 			onnx_run(ctx);
@@ -185,14 +185,14 @@ static void testcase(const char * path, struct resolver_t * r)
 					break;
 				t = onnx_search_tensor(ctx, ctx->model->graph->output[noutput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
-				if(!onnx_tensor_equal(t, o))
-					fail |= 1;
+				if(onnx_tensor_equal(t, o))
+					okay++;
 				onnx_tensor_free(o);
 				noutput++;
 			}
 
-			len = printf("[%s](test_data_set_%d)", path, data_set_index);
-			printf("%*s\r\n", 100 + 12 - 6 - len, fail ? "\033[41;37m[FAIL]\033[0m" : "\033[42;37m[OKAY]\033[0m");
+			int len = printf("[%s](test_data_set_%d)", path, data_set_index);
+			printf("%*s\r\n", 100 + 12 - 6 - len, ((ninput + noutput == okay) && (okay >= 2)) ? "\033[42;37m[OKAY]\033[0m" : "\033[41;37m[FAIL]\033[0m");
 			data_set_index++;
 		}
 		onnx_context_free(ctx);
