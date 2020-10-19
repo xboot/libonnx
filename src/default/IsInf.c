@@ -45,25 +45,16 @@ static void IsInf_float32(struct onnx_node_t * n)
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		switch(isinff(px[i]))
+		if(isinff(px[i]))
 		{
-		case -1:
-			if(pdat->detect_negative)
+			if((pdat->detect_negative && (px[i] < 0)) || (pdat->detect_positive && (px[i] > 0)))
 				py[i] = 1;
 			else
 				py[i] = 0;
-			break;
-		case 0:
+		}
+		else
+		{
 			py[i] = 0;
-			break;
-		case 1:
-			if(pdat->detect_positive)
-				py[i] = 1;
-			else
-				py[i] = 0;
-			break;
-		default:
-			break;
 		}
 	}
 }
@@ -79,25 +70,16 @@ static void IsInf_float64(struct onnx_node_t * n)
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		switch(isinf(px[i]))
+		if(isinf(px[i]))
 		{
-		case -1:
-			if(pdat->detect_negative)
+			if((pdat->detect_negative && (px[i] < 0)) || (pdat->detect_positive && (px[i] > 0)))
 				py[i] = 1;
 			else
 				py[i] = 0;
-			break;
-		case 0:
+		}
+		else
+		{
 			py[i] = 0;
-			break;
-		case 1:
-			if(pdat->detect_positive)
-				py[i] = 1;
-			else
-				py[i] = 0;
-			break;
-		default:
-			break;
 		}
 	}
 }
