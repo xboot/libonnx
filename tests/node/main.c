@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <onnx.h>
 
-#define FLOAT_PRECISION		(0.001f)
+#define FLOAT_EPSILON		(1e-5)
 
 static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 {
@@ -46,7 +46,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			uint16_t * q = (uint16_t *)b->datas;
 			for(i = 0; i < a->ndata; i++)
 			{
-				if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > FLOAT_PRECISION)
+				if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata)
@@ -59,7 +59,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			uint16_t * q = (uint16_t *)b->datas;
 			for(i = 0; i < a->ndata; i++)
 			{
-				if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > FLOAT_PRECISION)
+				if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata)
@@ -72,7 +72,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			float * q = (float *)b->datas;
 			for(i = 0; i < a->ndata; i++)
 			{
-				if(fabsf(p[i] - q[i]) > FLOAT_PRECISION)
+				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata)
@@ -85,7 +85,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			double * q = (double *)b->datas;
 			for(i = 0; i < a->ndata; i++)
 			{
-				if(fabs(p[i] - q[i]) > FLOAT_PRECISION)
+				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata)
@@ -98,7 +98,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			float * q = (float *)b->datas;
 			for(i = 0; i < a->ndata * 2; i++)
 			{
-				if(fabsf(p[i] - q[i]) > FLOAT_PRECISION)
+				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata * 2)
@@ -111,7 +111,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			double * q = (double *)b->datas;
 			for(i = 0; i < a->ndata * 2; i++)
 			{
-				if(fabs(p[i] - q[i]) > FLOAT_PRECISION)
+				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
 					break;
 			}
 			if(i == a->ndata * 2)
