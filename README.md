@@ -16,8 +16,8 @@ struct onnx_context_t * ctx = onnx_context_alloc_from_file(filename, NULL);
 Then, you can get input and output tensor using `onnx_search_tensor` function.
 
 ```c
-Onnx__TensorProto * input = onnx_search_tensor(ctx, "input-tensor-name");
-Onnx__TensorProto * output = onnx_search_tensor(ctx, "output-tensor-name");
+struct onnx_tensor_t * input = onnx_search_tensor(ctx, "input-tensor-name");
+struct onnx_tensor_t * output = onnx_search_tensor(ctx, "output-tensor-name");
 ```
 
 When the input tensor has been setting, you can run inference engine using `onnx_run` function and the result will putting into the output tensor.
