@@ -170,7 +170,7 @@ static void testcase(const char * path, struct resolver_t * r)
 					break;
 				t = onnx_search_tensor(ctx, ctx->model->graph->input[ninput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
-				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_size(o->type));
+				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_size(o->type), &o->scalar);
 				onnx_tensor_free(o);
 				okay++;
 				ninput++;

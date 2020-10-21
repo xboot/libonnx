@@ -170,7 +170,7 @@ static void testcase(const char * path, struct resolver_t * r)
 					break;
 				t = onnx_search_tensor(ctx, ctx->model->graph->input[ninput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
-				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_size(o->type));
+				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_size(o->type), &o->scalar);
 				onnx_tensor_free(o);
 				okay++;
 				ninput++;
@@ -233,7 +233,8 @@ int main(int argc, char * argv[])
 		hmap_sort(m);
 		hmap_for_each_entry(e, m)
 		{
-			testcase(e->key, r);
+			if(strncmp(e->key, "test_clip", strlen("test_clip")) == 0)
+				testcase(e->key, r);
 		}
 		hmap_free(m, NULL);
 	}

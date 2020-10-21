@@ -1509,53 +1509,45 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 	}
 }
 
-void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len)
+void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx_scalar_t * s)
 {
 	int sz, l;
 	int i;
 
-	if(t && t->datas && buf && (len > 0))
+	if(t)
 	{
-		sz = onnx_tensor_type_size(t->type);
-		if(sz > 0)
+		if(t->datas && buf && (len > 0))
 		{
-			if(t->type == ONNX_TENSOR_TYPE_STRING)
+			sz = onnx_tensor_type_size(t->type);
+			if(sz > 0)
 			{
-				char ** p = (char **)t->datas;
-				char ** q = (char **)buf;
-				for(i = 0; i < t->ndata; i++)
+				if(t->type == ONNX_TENSOR_TYPE_STRING)
 				{
-					if(p[i])
+					char ** p = (char **)t->datas;
+					char ** q = (char **)buf;
+					for(i = 0; i < t->ndata; i++)
 					{
-						free(p[i]);
-						p[i] = NULL;
+						if(p[i])
+						{
+							free(p[i]);
+							p[i] = NULL;
+						}
 					}
+					l = min(t->ndata, len);
+					for(i = 0; i < l; i++)
+						p[i] = strdup(q[i]);
 				}
-				l = min(t->ndata, len);
-				for(i = 0; i < l; i++)
-					p[i] = strdup(q[i]);
-			}
-			else
-			{
-				l = t->ndata * sz;
-				if(l > 0)
-					memcpy(t->datas, buf, min(l, len));
+				else
+				{
+					l = t->ndata * sz;
+					if(l > 0)
+						memcpy(t->datas, buf, min(l, len));
+				}
 			}
 		}
+		if(s)
+			memcpy(&t->scalar, s, sizeof(union onnx_scalar_t));
 	}
-}
-
-union onnx_scalar_t * onnx_tensor_get_scalar(struct onnx_tensor_t * t)
-{
-	if(t)
-		return &t->scalar;
-	return NULL;
-}
-
-void onnx_tensor_set_scalar(struct onnx_tensor_t * t, union onnx_scalar_t * s)
-{
-	if(t && s)
-		memcpy(&t->scalar, s, sizeof(union onnx_scalar_t));
 }
 
 static Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name)
