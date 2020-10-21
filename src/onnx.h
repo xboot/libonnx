@@ -11,6 +11,10 @@ extern "C" {
 
 #define LIBONNX_VERSION			"1.0.0"
 
+struct onnx_node_t;
+struct onnx_context_t;
+struct resolver_t;
+
 enum onnx_tensor_type_t {
 	ONNX_TENSOR_TYPE_UNDEFINED	= 0,
 	ONNX_TENSOR_TYPE_BOOL		= 9,
@@ -31,16 +35,36 @@ enum onnx_tensor_type_t {
 	ONNX_TENSOR_TYPE_STRING		= 8,
 };
 
-struct onnx_tensor_t;
-struct onnx_node_t;
-struct onnx_context_t;
-struct resolver_t;
+union onnx_scalar_t {
+	uint8_t v_bool;
+	int8_t v_int8;
+	int16_t v_int16;
+	int32_t v_int32;
+	int64_t v_int64;
+	uint8_t v_uint8;
+	uint16_t v_uint16;
+	uint32_t v_uint32;
+	uint64_t v_uint64;
+	uint16_t v_bfloat16;
+	uint16_t v_float16;
+	float v_float32;
+	double v_float64;
+	struct {
+		float real;
+		float imaginary;
+	} v_complex64;
+	struct {
+		double real;
+		double imaginary;
+	} v_complex128;
+};
 
 struct onnx_tensor_t {
 	char * name;
 	enum onnx_tensor_type_t type;
 	int64_t * dims, * datas;
 	int ndim, ndata;
+	union onnx_scalar_t scalar;
 };
 
 struct onnx_node_t {
@@ -403,6 +427,8 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len);
+union onnx_scalar_t * onnx_tensor_get_scalar(struct onnx_tensor_t * t);
+void onnx_tensor_set_scalar(struct onnx_tensor_t * t, union onnx_scalar_t * s);
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);

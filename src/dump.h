@@ -7,7 +7,6 @@ extern "C" {
 
 #include <onnx.h>
 
-struct onnx_tensor_t;
 struct onnx_node_t;
 struct onnx_context_t;
 struct resolver_t;

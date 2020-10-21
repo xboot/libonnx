@@ -767,11 +767,19 @@ static void onnx_tensor_copy_from_tensor_proto(struct onnx_tensor_t * t, Onnx__T
 							float * p = (float *)t->datas;
 							uint32_t * q = (uint32_t *)o->raw_data.data;
 							union { uint32_t u; float f; } v;
-							n = min(t->ndata, (int)o->raw_data.len / sz);
-							for(i = 0; i < n; i++)
+							if(t->ndata > 0)
 							{
-								v.u = le32_to_cpu(q[i]);
-								p[i] = v.f;
+								n = min(t->ndata, (int)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+								{
+									v.u = le32_to_cpu(q[i]);
+									p[i] = v.f;
+								}
+							}
+							else if((t->ndata == 0) && ((int)o->raw_data.len == sz))
+							{
+								v.u = le32_to_cpu(q[0]);
+								t->scalar.v_float32 = v.f;
 							}
 						}
 						break;
@@ -1416,6 +1424,19 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len)
 			}
 		}
 	}
+}
+
+union onnx_scalar_t * onnx_tensor_get_scalar(struct onnx_tensor_t * t)
+{
+	if(t)
+		return &t->scalar;
+	return NULL;
+}
+
+void onnx_tensor_set_scalar(struct onnx_tensor_t * t, union onnx_scalar_t * s)
+{
+	if(t && s)
+		memcpy(&t->scalar, s, sizeof(union onnx_scalar_t));
 }
 
 static Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name)
