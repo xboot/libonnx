@@ -233,8 +233,7 @@ int main(int argc, char * argv[])
 		hmap_sort(m);
 		hmap_for_each_entry(e, m)
 		{
-			if(strncmp(e->key, "test_clip", strlen("test_clip")) == 0)
-				testcase(e->key, r);
+			testcase(e->key, r);
 		}
 		hmap_free(m, NULL);
 	}
