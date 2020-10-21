@@ -8,7 +8,7 @@ static void Shape_init(struct onnx_node_t * n)
 	for(i = 0; i < n->noutput; i++)
 	{
 		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], t->type, (int64_t[]){ t->ndim }, 1);
+			onnx_tensor_reinit(n->outputs[i], ONNX_TENSOR_TYPE_INT64, (int64_t[]){ t->ndim }, 1);
 	}
 }
 
