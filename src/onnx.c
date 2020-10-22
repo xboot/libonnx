@@ -29,7 +29,7 @@
 
 #define ONNX_LOG(...)	printf(__VA_ARGS__)
 
-const static struct resolver_t default_resolver = {
+static struct resolver_t default_resolver = {
 	.name 							= "default",
 
 	.op_Abs							= default_resolver_op_Abs,
@@ -195,7 +195,7 @@ const static struct resolver_t default_resolver = {
 	.op_SoftmaxCrossEntropyLoss		= default_resolver_op_SoftmaxCrossEntropyLoss,
 };
 
-static void resolver_solve_operator(const struct resolver_t * r, struct onnx_node_t * n)
+static void resolver_solve_operator(struct resolver_t * r, struct onnx_node_t * n)
 {
 	void (*rop)(struct onnx_node_t *);
 
