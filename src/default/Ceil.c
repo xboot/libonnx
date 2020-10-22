@@ -72,7 +72,7 @@ static void Ceil_float64(struct onnx_node_t * n)
 		py[i] = ceil(px[i]);
 }
 
-void default_resolver_op_Ceil(struct onnx_node_t * n)
+void resolver_default_op_Ceil(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -75,7 +75,7 @@ static void LeakyRelu_float64(struct onnx_node_t * n)
 		py[i] = (px[i] < 0) ? px[i] * pdat->alpha : px[i];
 }
 
-void default_resolver_op_LeakyRelu(struct onnx_node_t * n)
+void resolver_default_op_LeakyRelu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

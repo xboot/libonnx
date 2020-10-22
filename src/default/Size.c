@@ -23,7 +23,7 @@ static void Size_operator(struct onnx_node_t * n)
 	y->scalar.v_int64 = x->ndata;
 }
 
-void default_resolver_op_Size(struct onnx_node_t * n)
+void resolver_default_op_Size(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -314,7 +314,7 @@ static void Clip_float64(struct onnx_node_t * n)
 	}
 }
 
-void default_resolver_op_Clip(struct onnx_node_t * n)
+void resolver_default_op_Clip(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -72,7 +72,7 @@ static void Log_float64(struct onnx_node_t * n)
 		py[i] = log(px[i]);
 }
 
-void default_resolver_op_Log(struct onnx_node_t * n)
+void resolver_default_op_Log(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

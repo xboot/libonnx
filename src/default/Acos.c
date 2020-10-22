@@ -56,7 +56,7 @@ static void Acos_float64(struct onnx_node_t * n)
 		py[i] = acos(px[i]);
 }
 
-void default_resolver_op_Acos(struct onnx_node_t * n)
+void resolver_default_op_Acos(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

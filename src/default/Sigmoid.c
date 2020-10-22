@@ -88,7 +88,7 @@ static void Sigmoid_float64(struct onnx_node_t * n)
 	}
 }
 
-void default_resolver_op_Sigmoid(struct onnx_node_t * n)
+void resolver_default_op_Sigmoid(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -27,7 +27,7 @@ static void Shape_operator(struct onnx_node_t * n)
 		py[i] = x->dims[i];
 }
 
-void default_resolver_op_Shape(struct onnx_node_t * n)
+void resolver_default_op_Shape(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -73,7 +73,7 @@ static void ThresholdedRelu_float64(struct onnx_node_t * n)
 		py[i] = (px[i] > pdat->alpha) ? px[i] : 0;
 }
 
-void default_resolver_op_ThresholdedRelu(struct onnx_node_t * n)
+void resolver_default_op_ThresholdedRelu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

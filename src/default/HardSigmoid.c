@@ -77,7 +77,7 @@ static void HardSigmoid_float64(struct onnx_node_t * n)
 		py[i] = max((double)0.0, min((double)1.0, (double)(pdat->alpha * px[i] + pdat->beta)));
 }
 
-void default_resolver_op_HardSigmoid(struct onnx_node_t * n)
+void resolver_default_op_HardSigmoid(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

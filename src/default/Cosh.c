@@ -56,7 +56,7 @@ static void Cosh_float64(struct onnx_node_t * n)
 		py[i] = cosh(px[i]);
 }
 
-void default_resolver_op_Cosh(struct onnx_node_t * n)
+void resolver_default_op_Cosh(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

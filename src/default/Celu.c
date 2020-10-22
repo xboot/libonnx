@@ -43,7 +43,7 @@ static void Celu_float32(struct onnx_node_t * n)
 		py[i] = max((float)0.0, (float)px[i]) + min((float)0.0, (float)pdat->alpha * (expf(px[i] / pdat->alpha) - 1));
 }
 
-void default_resolver_op_Celu(struct onnx_node_t * n)
+void resolver_default_op_Celu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

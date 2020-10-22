@@ -28,7 +28,7 @@ static void Not_bool(struct onnx_node_t * n)
 		py[i] = !px[i];
 }
 
-void default_resolver_op_Not(struct onnx_node_t * n)
+void resolver_default_op_Not(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

@@ -72,7 +72,7 @@ static void Floor_float64(struct onnx_node_t * n)
 		py[i] = floor(px[i]);
 }
 
-void default_resolver_op_Floor(struct onnx_node_t * n)
+void resolver_default_op_Floor(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

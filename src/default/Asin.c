@@ -56,7 +56,7 @@ static void Asin_float64(struct onnx_node_t * n)
 		py[i] = asin(px[i]);
 }
 
-void default_resolver_op_Asin(struct onnx_node_t * n)
+void resolver_default_op_Asin(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

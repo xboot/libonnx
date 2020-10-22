@@ -56,7 +56,7 @@ static void Acosh_float64(struct onnx_node_t * n)
 		py[i] = acosh(px[i]);
 }
 
-void default_resolver_op_Acosh(struct onnx_node_t * n)
+void resolver_default_op_Acosh(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

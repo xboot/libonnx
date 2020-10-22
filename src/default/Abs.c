@@ -168,7 +168,7 @@ static void Abs_float64(struct onnx_node_t * n)
 		py[i] = fabs(px[i]);
 }
 
-void default_resolver_op_Abs(struct onnx_node_t * n)
+void resolver_default_op_Abs(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

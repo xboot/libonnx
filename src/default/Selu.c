@@ -90,7 +90,7 @@ static void Selu_float64(struct onnx_node_t * n)
 	}
 }
 
-void default_resolver_op_Selu(struct onnx_node_t * n)
+void resolver_default_op_Selu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

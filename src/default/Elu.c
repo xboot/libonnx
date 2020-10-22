@@ -73,7 +73,7 @@ static void Elu_float64(struct onnx_node_t * n)
 		py[i] = (px[i] < 0) ? (exp(px[i]) - 1) * pdat->alpha : px[i];
 }
 
-void default_resolver_op_Elu(struct onnx_node_t * n)
+void resolver_default_op_Elu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

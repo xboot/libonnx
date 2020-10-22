@@ -76,7 +76,7 @@ static void Relu_float64(struct onnx_node_t * n)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
-void default_resolver_op_Relu(struct onnx_node_t * n)
+void resolver_default_op_Relu(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

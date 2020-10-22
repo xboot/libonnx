@@ -84,7 +84,7 @@ static void IsInf_float64(struct onnx_node_t * n)
 	}
 }
 
-void default_resolver_op_IsInf(struct onnx_node_t * n)
+void resolver_default_op_IsInf(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

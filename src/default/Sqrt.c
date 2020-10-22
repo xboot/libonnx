@@ -72,7 +72,7 @@ static void Sqrt_float64(struct onnx_node_t * n)
 		py[i] = sqrt(px[i]);
 }
 
-void default_resolver_op_Sqrt(struct onnx_node_t * n)
+void resolver_default_op_Sqrt(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

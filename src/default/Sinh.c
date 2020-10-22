@@ -56,7 +56,7 @@ static void Sinh_float64(struct onnx_node_t * n)
 		py[i] = sinh(px[i]);
 }
 
-void default_resolver_op_Sinh(struct onnx_node_t * n)
+void resolver_default_op_Sinh(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

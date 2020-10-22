@@ -120,7 +120,7 @@ static void Neg_float64(struct onnx_node_t * n)
 		py[i] = -px[i];
 }
 
-void default_resolver_op_Neg(struct onnx_node_t * n)
+void resolver_default_op_Neg(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

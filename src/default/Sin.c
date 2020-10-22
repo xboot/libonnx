@@ -56,7 +56,7 @@ static void Sin_float64(struct onnx_node_t * n)
 		py[i] = sin(px[i]);
 }
 
-void default_resolver_op_Sin(struct onnx_node_t * n)
+void resolver_default_op_Sin(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{

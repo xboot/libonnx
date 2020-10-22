@@ -72,7 +72,7 @@ static void IsNaN_float64(struct onnx_node_t * n)
 		py[i] = isnan(px[i]) ? 1 : 0;
 }
 
-void default_resolver_op_IsNaN(struct onnx_node_t * n)
+void resolver_default_op_IsNaN(struct onnx_node_t * n)
 {
 	switch(n->inputs[0]->type)
 	{
