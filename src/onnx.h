@@ -70,7 +70,7 @@ struct onnx_tensor_t {
 	union onnx_scalar_t scalar;
 };
 
-struct resolver_t {
+struct onnx_resolver_t {
 	const char * name;
 
 	void * (*create)(void);
@@ -240,7 +240,7 @@ struct resolver_t {
 };
 
 struct onnx_node_t {
-	struct resolver_t * r;
+	struct onnx_resolver_t * r;
 	void * rctx;
 	struct onnx_tensor_t ** inputs;
 	int ninput;
@@ -258,7 +258,7 @@ struct onnx_context_t {
 	Onnx__ModelProto * model;
 	struct onnx_node_t * nodes;
 	int nlen;
-	struct resolver_t ** r;
+	struct onnx_resolver_t ** r;
 	void ** rctx;
 	int rlen;
 	struct hmap_t * map;
@@ -426,8 +426,8 @@ void default_resolver_op_Range(struct onnx_node_t * n);
 void default_resolver_op_Softmax(struct onnx_node_t * n);
 void default_resolver_op_SoftmaxCrossEntropyLoss(struct onnx_node_t * n);
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t ** r, int rlen);
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t ** r, int rlen);
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen);
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen);
 void onnx_context_free(struct onnx_context_t * ctx);
 
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type);

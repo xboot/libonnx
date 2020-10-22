@@ -146,7 +146,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 	return result;
 }
 
-static void testcase(const char * path, struct resolver_t ** r, int rlen)
+static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx;
 	struct onnx_tensor_t * t, * o;

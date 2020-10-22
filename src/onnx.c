@@ -38,7 +38,7 @@ static void default_resolver_destroy(void * rctx)
 {
 }
 
-static struct resolver_t default_resolver = {
+static struct onnx_resolver_t default_resolver = {
 	.name 							= "default",
 
 	.create							= default_resolver_create,
@@ -207,7 +207,7 @@ static struct resolver_t default_resolver = {
 	.op_SoftmaxCrossEntropyLoss		= default_resolver_op_SoftmaxCrossEntropyLoss,
 };
 
-static void resolver_solve_operator(struct resolver_t * r, struct onnx_node_t * n)
+static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node_t * n)
 {
 	void (*rop)(struct onnx_node_t *);
 
@@ -1143,7 +1143,7 @@ static void op_dummy(struct onnx_node_t * n)
 {
 }
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t ** r, int rlen)
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx;
 	struct onnx_node_t * n;
@@ -1178,7 +1178,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	ctx->rlen = rlen;
 	if(r && (ctx->rlen > 0))
 	{
-		ctx->r = malloc(sizeof(struct resolver_t *) * ctx->rlen);
+		ctx->r = malloc(sizeof(struct onnx_resolver_t *) * ctx->rlen);
 		ctx->rctx = malloc(sizeof(void *) * ctx->rlen);
 		if(!ctx->r || !ctx->rctx)
 		{
@@ -1337,7 +1337,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	return ctx;
 }
 
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t ** r, int rlen)
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx = NULL;
 	FILE * fp;
