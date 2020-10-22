@@ -1333,6 +1333,32 @@ void onnx_context_free(struct onnx_context_t * ctx)
 	}
 }
 
+const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
+{
+	static const char * typestr[17] = {
+		"undefined",
+		"float32",
+		"uint8",
+		"int8",
+		"uint16",
+		"int16",
+		"int32",
+		"int64",
+		"string",
+		"bool",
+		"float16",
+		"float64",
+		"uint32",
+		"uint64",
+		"complex64",
+		"complex128",
+		"bfloat16",
+	};
+	if((type > 0) && (type < (sizeof(typestr) / sizeof((typestr)[0]))))
+		return typestr[type];
+	return typestr[0];
+}
+
 int onnx_tensor_type_size(enum onnx_tensor_type_t type)
 {
 	static const int typesz[17] = {
