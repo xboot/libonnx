@@ -755,7 +755,7 @@ static void onnx_tensor_copy_from_tensor_proto(struct onnx_tensor_t * t, Onnx__T
 	{
 		if(t->type == o->data_type)
 		{
-			sz = onnx_tensor_type_size(t->type);
+			sz = onnx_tensor_type_tosize(t->type);
 			if(sz > 0)
 			{
 				if((o->raw_data.len > 0) && o->raw_data.data)
@@ -1359,7 +1359,7 @@ const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
 	return typestr[0];
 }
 
-int onnx_tensor_type_size(enum onnx_tensor_type_t type)
+int onnx_tensor_type_tosize(enum onnx_tensor_type_t type)
 {
 	static const int typesz[17] = {
 		0,
@@ -1382,7 +1382,7 @@ int onnx_tensor_type_size(enum onnx_tensor_type_t type)
 	};
 	if((type > 0) && (type < (sizeof(typesz) / sizeof((typesz)[0]))))
 		return typesz[type];
-	return 0;
+	return typesz[0];
 }
 
 struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name)
@@ -1519,7 +1519,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 						if(t->dims[i] != 0)
 							n *= t->dims[i];
 					}
-					sz = onnx_tensor_type_size(t->type);
+					sz = onnx_tensor_type_tosize(t->type);
 					if(sz > 0)
 					{
 						t->datas = memalign(8, n * sz);
@@ -1544,7 +1544,7 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx
 	{
 		if(t->datas && buf && (len > 0))
 		{
-			sz = onnx_tensor_type_size(t->type);
+			sz = onnx_tensor_type_tosize(t->type);
 			if(sz > 0)
 			{
 				if(t->type == ONNX_TENSOR_TYPE_STRING)

@@ -421,7 +421,7 @@ struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, stru
 void onnx_context_free(struct onnx_context_t * ctx);
 
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type);
-int onnx_tensor_type_size(enum onnx_tensor_type_t type);
+int onnx_tensor_type_tosize(enum onnx_tensor_type_t type);
 struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
 struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
