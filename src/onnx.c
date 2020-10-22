@@ -27,6 +27,8 @@
 
 #include <onnx.h>
 
+#define ONNX_LOG(...)	printf(__VA_ARGS__)
+
 static struct resolver_t default_resolver = {
 	.name 							= "default",
 
@@ -1670,6 +1672,156 @@ void onnx_run(struct onnx_context_t * ctx)
 		{
 			n = &ctx->nodes[i];
 			n->op(n);
+		}
+	}
+}
+
+void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
+{
+	char * p;
+	int sz, i;
+
+	if(t)
+	{
+		ONNX_LOG("%s: %s", t->name, onnx_tensor_type_tostring(t->type));
+		if(t->ndim > 0)
+		{
+			ONNX_LOG("[");
+			for(i = 0; i < t->ndim; i++)
+			{
+				ONNX_LOG("%ld", t->dims[i]);
+				if(i != t->ndim - 1)
+					ONNX_LOG(" x ");
+			}
+			ONNX_LOG("]");
+			if(detail)
+			{
+				ONNX_LOG(" = \r\n");
+				ONNX_LOG("[\r\n");
+				p = (void *)t->datas;
+				sz = onnx_tensor_type_tosize(t->type);
+				for(i = 0; i < t->ndata; i++, p += sz)
+				{
+					switch(t->type)
+					{
+					case ONNX_TENSOR_TYPE_BOOL:
+						ONNX_LOG("%s,", *((uint8_t *)p) ? "true" : "false");
+						break;
+					case ONNX_TENSOR_TYPE_INT8:
+						ONNX_LOG("%d,", *((int8_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_INT16:
+						ONNX_LOG("%d,", *((int16_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_INT32:
+						ONNX_LOG("%d,", *((int32_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_INT64:
+						ONNX_LOG("%ld,", *((int64_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_UINT8:
+						ONNX_LOG("%u,", *((uint8_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_UINT16:
+						ONNX_LOG("%u,", *((uint16_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_UINT32:
+						ONNX_LOG("%u,", *((uint32_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_UINT64:
+						ONNX_LOG("%lu,", *((uint64_t *)p));
+						break;
+					case ONNX_TENSOR_TYPE_BFLOAT16:
+						ONNX_LOG("%g,", bfloat16_to_float32(*((uint16_t *)p)));
+						break;
+					case ONNX_TENSOR_TYPE_FLOAT16:
+						ONNX_LOG("%g,", float16_to_float32(*((uint16_t *)p)));
+						break;
+					case ONNX_TENSOR_TYPE_FLOAT32:
+						ONNX_LOG("%g,", *((float *)p));
+						break;
+					case ONNX_TENSOR_TYPE_FLOAT64:
+						ONNX_LOG("%g,", *((double *)p));
+						break;
+					case ONNX_TENSOR_TYPE_COMPLEX64:
+						ONNX_LOG("%g + %gi,", *((float *)p), *((float *)(p + sizeof(float))));
+						break;
+					case ONNX_TENSOR_TYPE_COMPLEX128:
+						ONNX_LOG("%g + %gi,", *((double *)p), *((double *)(p + sizeof(double))));
+						break;
+					case ONNX_TENSOR_TYPE_STRING:
+						ONNX_LOG("%s,", (char *)p);
+						break;
+					default:
+						ONNX_LOG("?,");
+						break;
+					}
+					ONNX_LOG("\r\n");
+				}
+				ONNX_LOG("]\r\n");
+			}
+			else
+			{
+				ONNX_LOG(" = ");
+				ONNX_LOG("[...]");
+				ONNX_LOG("\r\n");
+			}
+		}
+		else
+		{
+			ONNX_LOG(" = ");
+			switch(t->type)
+			{
+			case ONNX_TENSOR_TYPE_BOOL:
+				ONNX_LOG("%s", t->scalar.v_bool ? "true" : "false");
+				break;
+			case ONNX_TENSOR_TYPE_INT8:
+				ONNX_LOG("%d", t->scalar.v_int8);
+				break;
+			case ONNX_TENSOR_TYPE_INT16:
+				ONNX_LOG("%d", t->scalar.v_int16);
+				break;
+			case ONNX_TENSOR_TYPE_INT32:
+				ONNX_LOG("%d", t->scalar.v_int32);
+				break;
+			case ONNX_TENSOR_TYPE_INT64:
+				ONNX_LOG("%ld", t->scalar.v_int64);
+				break;
+			case ONNX_TENSOR_TYPE_UINT8:
+				ONNX_LOG("%u", t->scalar.v_uint8);
+				break;
+			case ONNX_TENSOR_TYPE_UINT16:
+				ONNX_LOG("%u", t->scalar.v_uint16);
+				break;
+			case ONNX_TENSOR_TYPE_UINT32:
+				ONNX_LOG("%u", t->scalar.v_uint32);
+				break;
+			case ONNX_TENSOR_TYPE_UINT64:
+				ONNX_LOG("%lu", t->scalar.v_uint64);
+				break;
+			case ONNX_TENSOR_TYPE_BFLOAT16:
+				ONNX_LOG("%g", bfloat16_to_float32(t->scalar.v_bfloat16));
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT16:
+				ONNX_LOG("%g", float16_to_float32(t->scalar.v_float16));
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT32:
+				ONNX_LOG("%g", t->scalar.v_float32);
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT64:
+				ONNX_LOG("%g", t->scalar.v_float64);
+				break;
+			case ONNX_TENSOR_TYPE_COMPLEX64:
+				ONNX_LOG("%g + %gi", t->scalar.v_complex64.real, t->scalar.v_complex64.imaginary);
+				break;
+			case ONNX_TENSOR_TYPE_COMPLEX128:
+				ONNX_LOG("%g + %gi", t->scalar.v_complex64.real, t->scalar.v_complex64.imaginary);
+				break;
+			default:
+				ONNX_LOG("?");
+				break;
+			}
+			ONNX_LOG("\r\n");
 		}
 	}
 }
