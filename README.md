@@ -5,12 +5,12 @@
 A lightweight, portable pure `C99` `onnx` `inference engine` for embedded devices with hardware acceleration support.
 
 ## Getting Started
-The library's .c and .h files can be dropped into a project and compiled along with it. Before use, should be allocated `struct onnx_context_t` and you can pass a `struct resolver_t` for hardware acceleration.
+The library's .c and .h files can be dropped into a project and compiled along with it. Before use, should be allocated `struct onnx_context_t *` and you can pass an array of `struct resolver_t *` for hardware acceleration.
 
 The filename is path to the format of `onnx` model.
 
 ```c
-struct onnx_context_t * ctx = onnx_context_alloc_from_file(filename, NULL);
+struct onnx_context_t * ctx = onnx_context_alloc_from_file(filename, NULL, 0);
 ```
 
 Then, you can get input and output tensor using `onnx_search_tensor` function.
@@ -26,7 +26,7 @@ When the input tensor has been setting, you can run inference engine using `onnx
 onnx_run(ctx);
 ```
 
-Finally, you must free `struct onnx_context_t` using `onnx_context_free` function.
+Finally, you must free `struct onnx_context_t *` using `onnx_context_free` function.
 
 ```c
 onnx_context_free(ctx);

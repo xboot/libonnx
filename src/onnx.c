@@ -29,8 +29,20 @@
 
 #define ONNX_LOG(...)	printf(__VA_ARGS__)
 
+static void * default_resolver_create(void)
+{
+	return NULL;
+}
+
+static void default_resolver_destroy(void * rctx)
+{
+}
+
 static struct resolver_t default_resolver = {
 	.name 							= "default",
+
+	.create							= default_resolver_create,
+	.destroy						= default_resolver_destroy,
 
 	.op_Abs							= default_resolver_op_Abs,
 	.op_Acos						= default_resolver_op_Acos,
@@ -1131,7 +1143,7 @@ static void op_dummy(struct onnx_node_t * n)
 {
 }
 
-struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t * r)
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx;
 	struct onnx_node_t * n;
@@ -1163,9 +1175,36 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		return NULL;
 	}
 
+	ctx->rlen = rlen;
+	if(r && (ctx->rlen > 0))
+	{
+		ctx->r = malloc(sizeof(struct resolver_t *) * ctx->rlen);
+		ctx->rctx = malloc(sizeof(void *) * ctx->rlen);
+		if(!ctx->r || !ctx->rctx)
+		{
+			if(ctx->rctx)
+				free(ctx->rctx);
+			if(ctx->r)
+				free(ctx->r);
+			free(ctx->nodes);
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+			free(ctx);
+			return NULL;
+		}
+	}
+	else
+	{
+		ctx->r = NULL;
+		ctx->rctx = NULL;
+	}
+
 	ctx->map = hmap_alloc(0);
 	if(!ctx->map)
 	{
+		if(ctx->rctx)
+			free(ctx->rctx);
+		if(ctx->r)
+			free(ctx->r);
 		free(ctx->nodes);
 		onnx__model_proto__free_unpacked(ctx->model, NULL);
 		free(ctx);
@@ -1234,6 +1273,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			if(!onnx_search_tensor(ctx, name))
 			{
 				hmap_free(ctx->map, hmap_entry_callback);
+				if(ctx->rctx)
+					free(ctx->rctx);
+				if(ctx->r)
+					free(ctx->r);
 				free(ctx->nodes);
 				onnx__model_proto__free_unpacked(ctx->model, NULL);
 				free(ctx);
@@ -1242,12 +1285,18 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		}
 	}
 
+	for(i = 0; i < ctx->rlen; i++)
+	{
+		ctx->r[i] = r[i];
+		if(r[i] && r[i]->create)
+			ctx->rctx[i] = r[i]->create();
+	}
+
 	for(i = 0; i < ctx->nlen; i++)
 	{
 		n = &ctx->nodes[i];
 		memset(n, 0, sizeof(struct onnx_node_t));
 
-		n->ctx = ctx;
 		n->proto = ctx->model->graph->node[i];
 		n->inputs = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_input);
 		if(n->inputs)
@@ -1263,22 +1312,32 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			for(j = 0; j < n->noutput; j++)
 				n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
 		}
-		if(r)
-			resolver_solve_operator(r, n);
+		for(j = 0; j < ctx->rlen; j++)
+		{
+			resolver_solve_operator(ctx->r[j], n);
+			if(n->op)
+			{
+				n->r = ctx->r[j];
+				n->rctx = ctx->rctx[j];
+				break;
+			}
+		}
 		if(!n->op)
+		{
 			resolver_solve_operator(&default_resolver, n);
+			if(n->op)
+				n->r = &default_resolver;
+		}
 		if(!n->op)
 			n->op = op_dummy;
 		if(n->init)
 			n->init(n);
-		if(n->op)
-			n->op(n);
 	}
 
 	return ctx;
 }
 
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t * r)
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx = NULL;
 	FILE * fp;
@@ -1297,7 +1356,7 @@ struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, stru
 			if(buf)
 			{
 				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
-				ctx = onnx_context_alloc(buf, len, r);
+				ctx = onnx_context_alloc(buf, len, r, rlen);
 				free(buf);
 			}
 		}
@@ -1329,6 +1388,15 @@ void onnx_context_free(struct onnx_context_t * ctx)
 			}
 			free(ctx->nodes);
 		}
+		for(i = 0; i < ctx->rlen; i++)
+		{
+			if(ctx->r[i] && ctx->r[i]->destroy)
+				ctx->r[i]->destroy(ctx->rctx[i]);
+		}
+		if(ctx->rctx)
+			free(ctx->rctx);
+		if(ctx->r)
+			free(ctx->r);
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		free(ctx);

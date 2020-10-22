@@ -2216,9 +2216,9 @@ int main(int argc, char * argv[])
 	if(argc > 1)
 		filename = argv[1];
 	if(filename)
-		ctx = onnx_context_alloc_from_file(filename, NULL);
+		ctx = onnx_context_alloc_from_file(filename, NULL, 0);
 	else
-		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL);
+		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL, 0);
 	if(ctx)
 	{
 		onnx_context_dump(ctx, 0);

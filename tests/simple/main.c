@@ -146,7 +146,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 	return result;
 }
 
-static void testcase(const char * path, struct resolver_t * r)
+static void testcase(const char * path, struct resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx;
 	struct onnx_tensor_t * t, * o;
@@ -158,7 +158,7 @@ static void testcase(const char * path, struct resolver_t * r)
 	int okay;
 
 	sprintf(tmp, "%s/%s", path, "model.onnx");
-	ctx = onnx_context_alloc_from_file(tmp, r);
+	ctx = onnx_context_alloc_from_file(tmp, r, rlen);
 	if(ctx)
 	{
 		data_set_index = 0;
@@ -210,7 +210,6 @@ static void testcase(const char * path, struct resolver_t * r)
 
 int main(int argc, char * argv[])
 {
-	struct resolver_t * r = NULL;
 	struct hmap_t * m;
 	struct hmap_entry_t * e;
 	struct dirent * d;
@@ -242,7 +241,7 @@ int main(int argc, char * argv[])
 		hmap_sort(m);
 		hmap_for_each_entry(e, m)
 		{
-			testcase(e->key, r);
+			testcase(e->key, NULL, 0);
 		}
 		hmap_free(m, NULL);
 	}
