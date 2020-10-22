@@ -16,7 +16,7 @@ static void Shape_exit(struct onnx_node_t * n)
 {
 }
 
-static void Shape_common(struct onnx_node_t * n)
+static void Shape_operator(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
@@ -46,9 +46,10 @@ void default_resolver_op_Shape(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT64:
 	case ONNX_TENSOR_TYPE_COMPLEX64:
 	case ONNX_TENSOR_TYPE_COMPLEX128:
+	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Shape_init;
 		n->exit = Shape_exit;
-		n->op = Shape_common;
+		n->op = Shape_operator;
 		break;
 	default:
 		break;

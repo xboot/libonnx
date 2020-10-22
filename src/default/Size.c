@@ -15,7 +15,7 @@ static void Size_exit(struct onnx_node_t * n)
 {
 }
 
-static void Size_common(struct onnx_node_t * n)
+static void Size_operator(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
@@ -42,9 +42,10 @@ void default_resolver_op_Size(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT64:
 	case ONNX_TENSOR_TYPE_COMPLEX64:
 	case ONNX_TENSOR_TYPE_COMPLEX128:
+	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Size_init;
 		n->exit = Size_exit;
-		n->op = Size_common;
+		n->op = Size_operator;
 		break;
 	default:
 		break;
