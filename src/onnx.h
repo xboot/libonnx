@@ -439,6 +439,8 @@ Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t *
 void onnx_run(struct onnx_context_t * ctx);
 
 void onnx_tensor_dump(struct onnx_tensor_t * t, int detail);
+void onnx_node_dump(struct onnx_node_t * n, int detail);
+void onnx_context_dump(struct onnx_context_t * ctx, int detail);
 
 #ifdef __cplusplus
 }

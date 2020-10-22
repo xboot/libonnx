@@ -1825,3 +1825,55 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 		}
 	}
 }
+
+void onnx_node_dump(struct onnx_node_t * n, int detail)
+{
+	int i;
+
+	if(n)
+	{
+		ONNX_LOG("%s: %s\r\n", n->proto->name, n->proto->op_type);
+		if(n->ninput > 0)
+		{
+			ONNX_LOG("\tInputs:\r\n");
+			for(i = 0; i < n->ninput; i++)
+			{
+				ONNX_LOG("\t\t");
+				onnx_tensor_dump(n->inputs[i], detail);
+			}
+		}
+		if(n->noutput > 0)
+		{
+			ONNX_LOG("\tOutputs:\r\n");
+			for(i = 0; i < n->noutput; i++)
+			{
+				ONNX_LOG("\t\t");
+				onnx_tensor_dump(n->outputs[i], detail);
+			}
+		}
+	}
+}
+
+void onnx_context_dump(struct onnx_context_t * ctx, int detail)
+{
+	int i;
+
+	if(ctx)
+	{
+		if(ctx->model)
+		{
+			ONNX_LOG("IR Version: v%ld\r\n", ctx->model->ir_version);
+			ONNX_LOG("Producer: %s %s\r\n", ctx->model->producer_name, ctx->model->producer_version);
+			ONNX_LOG("Domain: %s\r\n", ctx->model->domain);
+			ONNX_LOG("Imports:\r\n");
+			for(i = 0; i < ctx->model->n_opset_import; i++)
+				ONNX_LOG("\t%s v%ld\r\n", (strlen(ctx->model->opset_import[i]->domain) > 0) ? ctx->model->opset_import[i]->domain : "ai.onnx", ctx->model->opset_import[i]->version);
+		}
+		if(ctx->nlen > 0)
+		{
+			ONNX_LOG("Nodes:\r\n");
+			for(i = 0; i < ctx->nlen; i++)
+				onnx_node_dump(&ctx->nodes[i], detail);
+		}
+	}
+}
