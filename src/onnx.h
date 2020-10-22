@@ -66,7 +66,7 @@ struct onnx_tensor_t {
 	enum onnx_tensor_type_t type;
 	int64_t * dims;
 	int ndim;
-	uint64_t * datas;
+	void * datas;
 	int ndata;
 	union onnx_scalar_t scalar;
 };
