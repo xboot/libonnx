@@ -2221,7 +2221,7 @@ int main(int argc, char * argv[])
 		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL);
 	if(ctx)
 	{
-		onnx_dump_model(ctx);
+		onnx_context_dump(ctx, 0);
 		onnx_run(ctx);
 		onnx_context_free(ctx);
 	}

@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-#include <dump.h>
 #include <hmap.h>
 #include <onnx.proto3.pb-c.h>
 
