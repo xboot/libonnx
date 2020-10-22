@@ -8,7 +8,10 @@ extern "C" {
 #include <hmap.h>
 #include <onnx.proto3.pb-c.h>
 
-#define LIBONNX_VERSION			"1.0.0"
+#define LIBONNX_MAJOY			(1)
+#define LIBONNX_MINIOR			(0)
+#define LIBONNX_PATCH			(0)
+#define LIBONNX_VERSION			((LIBONNX_MAJOY * 10000) + (LIBONNX_MINIOR * 100) + LIBONNX_PATCH)
 
 struct onnx_node_t;
 struct onnx_context_t;
