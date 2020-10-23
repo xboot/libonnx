@@ -1790,7 +1790,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 				ONNX_LOG(" = \r\n");
 				for(i = 0; i < t->ndim; i++)
 				{
-					if(t->dims[0] <= 0)
+					if(t->dims[i] <= 0)
 						return;
 				}
 				sizes = malloc(sizeof(int) * t->ndim);
