@@ -1668,16 +1668,16 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx
 
 static Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, const char * name)
 {
-	Onnx__AttributeProto * a;
+	Onnx__AttributeProto * attr;
 	int i;
 
 	if(n && name)
 	{
 		for(i = 0; i < n->proto->n_attribute; i++)
 		{
-			a = n->proto->attribute[i];
-			if(strcmp(a->name, name) == 0)
-				return a;
+			attr = n->proto->attribute[i];
+			if(strcmp(attr->name, name) == 0)
+				return attr;
 		}
 	}
 	return NULL;
@@ -1685,66 +1685,66 @@ static Onnx__AttributeProto * onnx_search_attribute(struct onnx_node_t * n, cons
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOAT))
-		return a->f;
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOAT))
+		return attr->f;
 	return def;
 }
 
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INT))
-		return a->i;
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INT))
+		return attr->i;
 	return def;
 }
 
 char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING))
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING))
 	{
-		if(a->s.len > 0)
-			return (char *)a->s.data;
+		if(attr->s.len > 0)
+			return (char *)attr->s.data;
 	}
 	return def;
 }
 
 Onnx__TensorProto * onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, Onnx__TensorProto * def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSOR))
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSOR))
 	{
-		if(a->t)
-			return a->t;
+		if(attr->t)
+			return attr->t;
 	}
 	return def;
 }
 
 Onnx__GraphProto * onnx_attribute_read_graph(struct onnx_node_t * n, const char * name, Onnx__GraphProto * def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__GRAPH))
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__GRAPH))
 	{
-		if(a->g)
-			return a->g;
+		if(attr->g)
+			return attr->g;
 	}
 	return def;
 }
 
 Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t * n, const char * name, Onnx__SparseTensorProto * def)
 {
-	Onnx__AttributeProto * a = onnx_search_attribute(n, name);
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
 
-	if(a && (a->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSOR))
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSOR))
 	{
-		if(a->sparse_tensor)
-			return a->sparse_tensor;
+		if(attr->sparse_tensor)
+			return attr->sparse_tensor;
 	}
 	return def;
 }
