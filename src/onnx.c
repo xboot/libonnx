@@ -710,7 +710,7 @@ static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoP
 {
 	struct onnx_tensor_t * t;
 	enum onnx_tensor_type_t type;
-	int64_t * dims = NULL;
+	int * dims = NULL;
 	int ndim;
 	int i;
 
@@ -724,7 +724,7 @@ static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoP
 		ndim = v->type->tensor_type->shape->n_dim;
 		if(ndim > 0)
 		{
-			dims = memalign(8, sizeof(int64_t) * ndim);
+			dims = memalign(8, sizeof(int) * ndim);
 			if(dims)
 			{
 				for(i = 0; i < ndim; i++)
@@ -1462,7 +1462,7 @@ struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const cha
 	return NULL;
 }
 
-struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int64_t * dims, int ndim)
+struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int * dims, int ndim)
 {
 	struct onnx_tensor_t * t;
 
@@ -1486,6 +1486,9 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 	FILE * fp;
 	void * buf;
 	size_t l, len;
+	int * dims;
+	int ndim;
+	int i;
 
 	fp = fopen(filename, "rb");
 	if(fp)
@@ -1503,7 +1506,24 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 				free(buf);
 				if(pb)
 				{
-					t = onnx_tensor_alloc(pb->name, (enum onnx_tensor_type_t)pb->data_type, pb->dims, pb->n_dims);
+					if(pb->n_dims > 0)
+					{
+						dims = memalign(8, sizeof(int) * pb->n_dims);
+						if(dims)
+						{
+							for(i = 0; i < pb->n_dims; i++)
+								dims[i] = pb->dims[i];
+							ndim = pb->n_dims;
+						}
+					}
+					else
+					{
+						dims = NULL;
+						ndim = 0;
+					}
+					t = onnx_tensor_alloc(pb->name, (enum onnx_tensor_type_t)pb->data_type, dims, ndim);
+					if((ndim > 0) && dims)
+						free(dims);
 					onnx_tensor_copy_from_tensor_proto(t, pb);
 					onnx__tensor_proto__free_unpacked(pb, NULL);
 				}
@@ -1542,7 +1562,7 @@ void onnx_tensor_free(struct onnx_tensor_t * t)
 	}
 }
 
-void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int64_t * dims, int ndim)
+void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim)
 {
 	char ** str;
 	int n, sz;
@@ -1579,10 +1599,10 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 		{
 			if((ndim > 0) && dims)
 			{
-				t->dims = memalign(8, sizeof(int64_t) * ndim);
+				t->dims = memalign(8, sizeof(int) * ndim);
 				if(t->dims)
 				{
-					memcpy(t->dims, dims, sizeof(int64_t) * ndim);
+					memcpy(t->dims, dims, sizeof(int) * ndim);
 					t->ndim = ndim;
 					for(i = 0, n = 1; i < t->ndim; i++)
 					{
@@ -1757,7 +1777,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 			ONNX_LOG("[");
 			for(i = 0; i < t->ndim; i++)
 			{
-				ONNX_LOG("%ld", t->dims[i]);
+				ONNX_LOG("%d", t->dims[i]);
 				if(i != t->ndim - 1)
 					ONNX_LOG(" x ");
 			}

@@ -63,7 +63,7 @@ union onnx_scalar_t {
 struct onnx_tensor_t {
 	char * name;
 	enum onnx_tensor_type_t type;
-	int64_t * dims;
+	int * dims;
 	int ndim;
 	void * datas;
 	int ndata;
@@ -433,10 +433,10 @@ void onnx_context_free(struct onnx_context_t * ctx);
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type);
 int onnx_tensor_type_tosize(enum onnx_tensor_type_t type);
 struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
-struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
+struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int * dims, int ndim);
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
-void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int64_t * dims, int ndim);
+void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim);
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx_scalar_t * s);
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);

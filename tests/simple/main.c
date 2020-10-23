@@ -26,7 +26,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 		return 0;
 	if(a->ndim > 0)
 	{
-		if(memcmp(a->dims, b->dims, sizeof(int64_t) * a->ndim) == 0)
+		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
 		{
 			switch(a->type)
 			{
