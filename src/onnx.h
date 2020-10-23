@@ -264,6 +264,26 @@ struct onnx_context_t {
 	struct hmap_t * map;
 };
 
+static inline int onnx_tensor_get_index(struct onnx_tensor_t * t, int * coords)
+{
+    int index, i;
+
+	for(i = 0, index = coords[0]; i < t->ndim - 1; i++)
+		index = t->dims[i + 1] * index + coords[i + 1];
+	return index;
+}
+
+static inline void onnx_tensor_get_coords(struct onnx_tensor_t * t, int index, int * coords)
+{
+	int i;
+
+	for(i = t->ndim - 1; i >= 0; i--)
+	{
+		coords[i] = index % t->dims[i];
+		index /= t->dims[i];
+	}
+}
+
 void resolver_default_op_Abs(struct onnx_node_t * n);
 void resolver_default_op_Acos(struct onnx_node_t * n);
 void resolver_default_op_Acosh(struct onnx_node_t * n);
