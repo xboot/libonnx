@@ -47,9 +47,9 @@ TBD.
 
 ## Links
 
-* [The onnx spec repo](https://github.com/onnx/onnx)
+* [The chinese discussion posts](https://whycan.com/t_5440.html)
+* [The repo of onnx spec](https://github.com/onnx/onnx)
 * [The pre-trained onnx models](https://github.com/onnx/models)
-* [The onnx official website](https://onnx.ai)
 
 ## License
 
