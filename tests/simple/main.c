@@ -39,7 +39,7 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			case ONNX_TENSOR_TYPE_UINT16:
 			case ONNX_TENSOR_TYPE_UINT32:
 			case ONNX_TENSOR_TYPE_UINT64:
-				if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_tosize(a->type)) == 0)
+				if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) == 0)
 					result = 1;
 				break;
 			case ONNX_TENSOR_TYPE_BFLOAT16:
@@ -179,7 +179,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 					break;
 				t = onnx_search_tensor(ctx, ctx->model->graph->input[ninput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
-				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_tosize(o->type), &o->scalar);
+				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_sizeof(o->type), &o->scalar);
 				onnx_tensor_free(o);
 				okay++;
 				ninput++;
