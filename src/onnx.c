@@ -1766,8 +1766,11 @@ void onnx_run(struct onnx_context_t * ctx)
 
 void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 {
+	int * sizes, * levels;
+	char * lbuf, * rbuf;
+	char * lp, * rp;
 	char * p;
-	int sz, i;
+	int i, j, k;
 
 	if(t)
 	{
@@ -1785,11 +1788,61 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 			if(detail)
 			{
 				ONNX_LOG(" = \r\n");
-				ONNX_LOG("[\r\n");
-				p = (void *)t->datas;
-				sz = onnx_tensor_type_sizeof(t->type);
-				for(i = 0; i < t->ndata; i++, p += sz)
+				for(i = 0; i < t->ndim; i++)
 				{
+					if(t->dims[0] <= 0)
+						return;
+				}
+				sizes = malloc(sizeof(int) * t->ndim);
+				levels = malloc(sizeof(int) * t->ndim);
+				sizes[t->ndim - 1] = t->dims[t->ndim - 1];
+				levels[t->ndim - 1] = 0;
+				lbuf = malloc(sizeof(char) * (t->ndim + 1));
+				rbuf = malloc(sizeof(char) * (t->ndim + 1));
+				lp = lbuf;
+				rp = rbuf;
+				for(i = t->ndim - 2; i >= 0; i--)
+				{
+					sizes[i] = t->dims[i] * sizes[i + 1];
+					levels[i] = 0;
+				}
+				for(i = 0; i < t->ndata; i++)
+				{
+					for(j = 0; j < t->ndim; j++)
+					{
+						if((i % sizes[j]) == 0)
+							levels[j]++;
+						if(levels[j] == 1)
+						{
+							*lp++ = '[';
+							levels[j]++;
+						}
+						if(levels[j] == 3)
+						{
+							*rp++ = ']';
+							if((j != 0) && (levels[j] > levels[j - 1]))
+							{
+								*lp++ = '[';
+								levels[j] = 2;
+							}
+							else
+							{
+								levels[j] = 0;
+							}
+						}
+					}
+					*lp = *rp = '\0';
+					ONNX_LOG("%s", rbuf);
+					if(*rbuf != '\0')
+					{
+						ONNX_LOG("\r\n");
+						for(k = t->ndim - strlen(rbuf); k > 0; k--)
+							ONNX_LOG(" ");
+					}
+					ONNX_LOG("%s", lbuf);
+					if(*lbuf == '\0')
+						ONNX_LOG(" ");
+					p = (char *)(t->datas + onnx_tensor_type_sizeof(t->type) * i);
 					switch(t->type)
 					{
 					case ONNX_TENSOR_TYPE_BOOL:
@@ -1844,9 +1897,16 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 						ONNX_LOG("?,");
 						break;
 					}
-					ONNX_LOG("\r\n");
+					lp = lbuf;
+					rp = rbuf;
 				}
-				ONNX_LOG("]\r\n");
+				for(j = 0; j < t->ndim; j++)
+					ONNX_LOG("]");
+				free(sizes);
+				free(levels);
+				free(lbuf);
+				free(rbuf);
+				ONNX_LOG("\r\n");
 			}
 			else
 			{
