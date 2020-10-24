@@ -285,6 +285,16 @@ static inline void onnx_tensor_get_coords(struct onnx_tensor_t * t, int index, i
 	}
 }
 
+static inline int onnx_tensor_shape_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
+{
+	if(a->ndim == b->ndim)
+	{
+		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
+			return 1;
+	}
+	return 0;
+}
+
 void resolver_default_op_Abs(struct onnx_node_t * n);
 void resolver_default_op_Acos(struct onnx_node_t * n);
 void resolver_default_op_Acosh(struct onnx_node_t * n);
