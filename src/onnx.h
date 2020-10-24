@@ -63,6 +63,7 @@ union onnx_scalar_t {
 struct onnx_tensor_t {
 	char * name;
 	enum onnx_tensor_type_t type;
+	int * strides;
 	int * dims;
 	int ndim;
 	void * datas;

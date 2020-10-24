@@ -1590,8 +1590,13 @@ void onnx_tensor_free(struct onnx_tensor_t * t)
 	{
 		if(t->name)
 			free(t->name);
-		if((t->ndim > 0) && t->dims)
-			free(t->dims);
+		if(t->ndim > 0)
+		{
+			if(t->strides)
+				free(t->strides);
+			if(t->dims)
+				free(t->dims);
+		}
 		if((t->ndata > 0) && t->datas)
 		{
 			if(t->type == ONNX_TENSOR_TYPE_STRING)
@@ -1617,10 +1622,18 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 
 	if(t)
 	{
-		if((t->ndim > 0) && t->dims)
+		if(t->ndim > 0)
 		{
-			free(t->dims);
-			t->dims = NULL;
+			if(t->strides)
+			{
+				free(t->strides);
+				t->strides = NULL;
+			}
+			if(t->dims)
+			{
+				free(t->dims);
+				t->dims = NULL;
+			}
 			t->ndim = 0;
 		}
 		if((t->ndata > 0) && t->datas)
@@ -1646,16 +1659,22 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 		{
 			if((ndim > 0) && dims)
 			{
-				t->dims = memalign(8, sizeof(int) * ndim);
-				if(t->dims)
+				for(i = 0; i < ndim; i++)
 				{
+					if(dims[i] <= 0)
+						return;
+				}
+				t->strides = memalign(8, sizeof(int) * ndim);
+				t->dims = memalign(8, sizeof(int) * ndim);
+				if(t->strides && t->dims)
+				{
+					t->strides[ndim - 1] = 1;
+					for(i = ndim - 2; i >= 0; i--)
+						t->strides[i] = dims[i + 1] * t->strides[i + 1];
 					memcpy(t->dims, dims, sizeof(int) * ndim);
 					t->ndim = ndim;
 					for(i = 0, n = 1; i < t->ndim; i++)
-					{
-						if(t->dims[i] != 0)
-							n *= t->dims[i];
-					}
+						n *= t->dims[i];
 					sz = onnx_tensor_type_sizeof(t->type);
 					if(sz > 0)
 					{
@@ -1665,6 +1684,19 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 							memset(t->datas, 0, n * sz);
 							t->ndata = n;
 						}
+					}
+				}
+				else
+				{
+					if(t->strides)
+					{
+						free(t->strides);
+						t->strides = NULL;
+					}
+					if(t->dims)
+					{
+						free(t->dims);
+						t->dims = NULL;
 					}
 				}
 			}
