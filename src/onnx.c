@@ -1162,7 +1162,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	ctx->model = onnx__model_proto__unpack(NULL, len, buf);
 	if(!ctx->model)
 	{
-		free(ctx);
+		if(ctx)
+			free(ctx);
 		return NULL;
 	}
 
@@ -1170,8 +1171,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	ctx->nodes = malloc(sizeof(struct onnx_node_t) * ctx->nlen);
 	if(!ctx->nodes)
 	{
-		onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx);
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		if(ctx)
+			free(ctx);
 		return NULL;
 	}
 
@@ -1186,9 +1189,12 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				free(ctx->rctx);
 			if(ctx->r)
 				free(ctx->r);
-			free(ctx->nodes);
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
-			free(ctx);
+			if(ctx->nodes)
+				free(ctx->nodes);
+			if(ctx->model)
+				onnx__model_proto__free_unpacked(ctx->model, NULL);
+			if(ctx)
+				free(ctx);
 			return NULL;
 		}
 	}
@@ -1205,9 +1211,12 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			free(ctx->rctx);
 		if(ctx->r)
 			free(ctx->r);
-		free(ctx->nodes);
-		onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx);
+		if(ctx->nodes)
+			free(ctx->nodes);
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		if(ctx)
+			free(ctx);
 		return NULL;
 	}
 
@@ -1272,14 +1281,18 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			name = ctx->model->graph->node[i]->input[j];
 			if(!onnx_search_tensor(ctx, name))
 			{
-				hmap_free(ctx->map, hmap_entry_callback);
+				if(ctx->map)
+					hmap_free(ctx->map, hmap_entry_callback);
 				if(ctx->rctx)
 					free(ctx->rctx);
 				if(ctx->r)
 					free(ctx->r);
-				free(ctx->nodes);
-				onnx__model_proto__free_unpacked(ctx->model, NULL);
-				free(ctx);
+				if(ctx->nodes)
+					free(ctx->nodes);
+				if(ctx->model)
+					onnx__model_proto__free_unpacked(ctx->model, NULL);
+				if(ctx)
+					free(ctx);
 				return NULL;
 			}
 		}
@@ -1331,7 +1344,41 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		if(!n->op)
 			n->op = op_dummy;
 		if(n->init)
-			n->init(n);
+		{
+			if(n->init(n) <= 0)
+			{
+				if(ctx->map)
+					hmap_free(ctx->map, hmap_entry_callback);
+				if(ctx->nodes)
+				{
+					for(i = 0; i < ctx->nlen; i++)
+					{
+						n = &ctx->nodes[i];
+						if(n->exit)
+							n->exit(n);
+						if(n->inputs)
+							free(n->inputs);
+						if(n->outputs)
+							free(n->outputs);
+					}
+					free(ctx->nodes);
+				}
+				for(i = 0; i < ctx->rlen; i++)
+				{
+					if(ctx->r[i] && ctx->r[i]->destroy)
+						ctx->r[i]->destroy(ctx->rctx[i]);
+				}
+				if(ctx->rctx)
+					free(ctx->rctx);
+				if(ctx->r)
+					free(ctx->r);
+				if(ctx->model)
+					onnx__model_proto__free_unpacked(ctx->model, NULL);
+				if(ctx)
+					free(ctx);
+				return NULL;
+			}
+		}
 	}
 
 	return ctx;

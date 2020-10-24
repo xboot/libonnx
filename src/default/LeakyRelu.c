@@ -4,7 +4,7 @@ struct operator_pdata_t {
 	float alpha;
 };
 
-static void LeakyRelu_init(struct onnx_node_t * n)
+static int LeakyRelu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -20,14 +20,16 @@ static void LeakyRelu_init(struct onnx_node_t * n)
 	if(pdat)
 		pdat->alpha = onnx_attribute_read_float(n, "alpha", 0.01);
 	n->priv = pdat;
+	return 1;
 }
 
-static void LeakyRelu_exit(struct onnx_node_t * n)
+static int LeakyRelu_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void LeakyRelu_float16(struct onnx_node_t * n)

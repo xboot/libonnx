@@ -5,7 +5,7 @@ struct operator_pdata_t {
 	int nperm;
 };
 
-static void Transpose_init(struct onnx_node_t * n)
+static int Transpose_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -40,9 +40,10 @@ static void Transpose_init(struct onnx_node_t * n)
 		}
 	}
 	n->priv = pdat;
+	return 1;
 }
 
-static void Transpose_exit(struct onnx_node_t * n)
+static int Transpose_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
@@ -52,6 +53,7 @@ static void Transpose_exit(struct onnx_node_t * n)
 			free(pdat->perm);
 		free(pdat);
 	}
+	return 1;
 }
 
 static void Transpose_bool(struct onnx_node_t * n)

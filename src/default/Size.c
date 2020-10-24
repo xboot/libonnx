@@ -1,6 +1,6 @@
 #include <onnx.h>
 
-static void Size_init(struct onnx_node_t * n)
+static int Size_init(struct onnx_node_t * n)
 {
 	int i;
 
@@ -9,10 +9,12 @@ static void Size_init(struct onnx_node_t * n)
 		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
 			onnx_tensor_reinit(n->outputs[i], ONNX_TENSOR_TYPE_INT64, NULL, 0);
 	}
+	return 1;
 }
 
-static void Size_exit(struct onnx_node_t * n)
+static int Size_exit(struct onnx_node_t * n)
 {
+	return 1;
 }
 
 static void Size_operator(struct onnx_node_t * n)

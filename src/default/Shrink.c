@@ -5,7 +5,7 @@ struct operator_pdata_t {
 	float lambd;
 };
 
-static void Shrink_init(struct onnx_node_t * n)
+static int Shrink_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -24,14 +24,16 @@ static void Shrink_init(struct onnx_node_t * n)
 		pdat->lambd = onnx_attribute_read_float(n, "lambd", 0.5);
 	}
 	n->priv = pdat;
+	return 1;
 }
 
-static void Shrink_exit(struct onnx_node_t * n)
+static int Shrink_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void Shrink_int8(struct onnx_node_t * n)

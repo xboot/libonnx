@@ -1,6 +1,6 @@
 #include <onnx.h>
 
-static void Sinh_init(struct onnx_node_t * n)
+static int Sinh_init(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * t = n->inputs[0];
 	int i;
@@ -10,10 +10,12 @@ static void Sinh_init(struct onnx_node_t * n)
 		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
 			onnx_tensor_reinit(n->outputs[i], t->type, t->dims, t->ndim);
 	}
+	return 1;
 }
 
-static void Sinh_exit(struct onnx_node_t * n)
+static int Sinh_exit(struct onnx_node_t * n)
 {
+	return 1;
 }
 
 static void Sinh_float16(struct onnx_node_t * n)

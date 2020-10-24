@@ -1,6 +1,6 @@
 #include <onnx.h>
 
-static void Shape_init(struct onnx_node_t * n)
+static int Shape_init(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * t = n->inputs[0];
 	int i;
@@ -10,10 +10,12 @@ static void Shape_init(struct onnx_node_t * n)
 		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
 			onnx_tensor_reinit(n->outputs[i], ONNX_TENSOR_TYPE_INT64, (int[]){ t->ndim }, 1);
 	}
+	return 1;
 }
 
-static void Shape_exit(struct onnx_node_t * n)
+static int Shape_exit(struct onnx_node_t * n)
 {
+	return 1;
 }
 
 static void Shape_operator(struct onnx_node_t * n)

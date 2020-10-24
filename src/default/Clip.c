@@ -5,7 +5,7 @@ struct operator_pdata_t {
 	union onnx_scalar_t * pmax;
 };
 
-static void Clip_init(struct onnx_node_t * n)
+static int Clip_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -34,14 +34,16 @@ static void Clip_init(struct onnx_node_t * n)
 		}
 	}
 	n->priv = pdat;
+	return 1;
 }
 
-static void Clip_exit(struct onnx_node_t * n)
+static int Clip_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void Clip_int8(struct onnx_node_t * n)

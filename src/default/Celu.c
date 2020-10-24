@@ -4,7 +4,7 @@ struct operator_pdata_t {
 	float alpha;
 };
 
-static void Celu_init(struct onnx_node_t * n)
+static int Celu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -20,14 +20,16 @@ static void Celu_init(struct onnx_node_t * n)
 	if(pdat)
 		pdat->alpha = onnx_attribute_read_float(n, "alpha", 1.0);
 	n->priv = pdat;
+	return 1;
 }
 
-static void Celu_exit(struct onnx_node_t * n)
+static int Celu_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void Celu_float32(struct onnx_node_t * n)

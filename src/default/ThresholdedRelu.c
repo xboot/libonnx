@@ -4,7 +4,7 @@ struct operator_pdata_t {
 	float alpha;
 };
 
-static void ThresholdedRelu_init(struct onnx_node_t * n)
+static int ThresholdedRelu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -20,14 +20,16 @@ static void ThresholdedRelu_init(struct onnx_node_t * n)
 	if(pdat)
 		pdat->alpha = onnx_attribute_read_float(n, "alpha", 1.0);
 	n->priv = pdat;
+	return 1;
 }
 
-static void ThresholdedRelu_exit(struct onnx_node_t * n)
+static int ThresholdedRelu_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void ThresholdedRelu_float16(struct onnx_node_t * n)

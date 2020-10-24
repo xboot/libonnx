@@ -5,7 +5,7 @@ struct operator_pdata_t {
 	float gamma;
 };
 
-static void Selu_init(struct onnx_node_t * n)
+static int Selu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -24,14 +24,16 @@ static void Selu_init(struct onnx_node_t * n)
 		pdat->gamma = onnx_attribute_read_float(n, "gamma", 1.0507);
 	}
 	n->priv = pdat;
+	return 1;
 }
 
-static void Selu_exit(struct onnx_node_t * n)
+static int Selu_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void Selu_float16(struct onnx_node_t * n)

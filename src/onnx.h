@@ -248,8 +248,8 @@ struct onnx_node_t {
 	int noutput;
 	Onnx__NodeProto * proto;
 
-	void (*init)(struct onnx_node_t * n);
-	void (*exit)(struct onnx_node_t * n);
+	int (*init)(struct onnx_node_t * n);
+	int (*exit)(struct onnx_node_t * n);
 	void (*op)(struct onnx_node_t * n);
 	void * priv;
 };

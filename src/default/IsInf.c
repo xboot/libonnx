@@ -5,7 +5,7 @@ struct operator_pdata_t {
 	int detect_positive;
 };
 
-static void IsInf_init(struct onnx_node_t * n)
+static int IsInf_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
 	struct onnx_tensor_t * t = n->inputs[0];
@@ -24,14 +24,16 @@ static void IsInf_init(struct onnx_node_t * n)
 		pdat->detect_positive = onnx_attribute_read_int(n, "detect_positive", 1);
 	}
 	n->priv = pdat;
+	return 1;
 }
 
-static void IsInf_exit(struct onnx_node_t * n)
+static int IsInf_exit(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
 		free(pdat);
+	return 1;
 }
 
 static void IsInf_float32(struct onnx_node_t * n)
