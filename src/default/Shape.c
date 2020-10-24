@@ -10,7 +10,7 @@ static int Shape_init(struct onnx_node_t * n)
 		x = n->inputs[0];
 		y = n->outputs[0];
 		if(!onnx_tensor_shape_equal(y, x) || (y->type != ONNX_TENSOR_TYPE_INT64))
-			onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, x->dims, x->ndim);
+			onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, (int[]){ x->ndim }, 1);
 		return 1;
 	}
 	return 0;
