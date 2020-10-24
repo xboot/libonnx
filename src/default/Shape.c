@@ -2,15 +2,18 @@
 
 static int Shape_init(struct onnx_node_t * n)
 {
-	struct onnx_tensor_t * t = n->inputs[0];
-	int i;
+	struct onnx_tensor_t * x;
+	struct onnx_tensor_t * y;
 
-	for(i = 0; i < n->noutput; i++)
+	if((n->ninput > 0) && (n->noutput > 0))
 	{
-		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], ONNX_TENSOR_TYPE_INT64, (int[]){ t->ndim }, 1);
+		x = n->inputs[0];
+		y = n->outputs[0];
+		if(!onnx_tensor_shape_equal(y, x) || (y->type != ONNX_TENSOR_TYPE_INT64))
+			onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, x->dims, x->ndim);
+		return 1;
 	}
-	return 1;
+	return 0;
 }
 
 static int Shape_exit(struct onnx_node_t * n)

@@ -8,23 +8,25 @@ struct operator_pdata_t {
 static int IsInf_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * t = n->inputs[0];
-	int i;
+	struct onnx_tensor_t * x;
+	struct onnx_tensor_t * y;
 
-	for(i = 0; i < n->noutput; i++)
+	if((n->ninput > 0) && (n->noutput > 0))
 	{
-		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], ONNX_TENSOR_TYPE_BOOL, t->dims, t->ndim);
+		pdat = malloc(sizeof(struct operator_pdata_t));
+		if(pdat)
+		{
+			x = n->inputs[0];
+			y = n->outputs[0];
+			if(!onnx_tensor_shape_equal(y, x) || (y->type != ONNX_TENSOR_TYPE_BOOL))
+				onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_BOOL, x->dims, x->ndim);
+			pdat->detect_negative = onnx_attribute_read_int(n, "detect_negative", 1);
+			pdat->detect_positive = onnx_attribute_read_int(n, "detect_positive", 1);
+			n->priv = pdat;
+			return 1;
+		}
 	}
-
-	pdat = malloc(sizeof(struct operator_pdata_t));
-	if(pdat)
-	{
-		pdat->detect_negative = onnx_attribute_read_int(n, "detect_negative", 1);
-		pdat->detect_positive = onnx_attribute_read_int(n, "detect_positive", 1);
-	}
-	n->priv = pdat;
-	return 1;
+	return 0;
 }
 
 static int IsInf_exit(struct onnx_node_t * n)

@@ -8,39 +8,49 @@ struct operator_pdata_t {
 static int Transpose_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * t = n->inputs[0];
+	struct onnx_tensor_t * x;
+	struct onnx_tensor_t * y;
 	int64_t * ints;
 	int i, j;
 
-	for(i = 0; i < n->noutput; i++)
+	if((n->ninput > 0) && (n->noutput > 0))
 	{
-		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], t->type, t->dims, t->ndim);
+		pdat = malloc(sizeof(struct operator_pdata_t));
+		if(pdat)
+		{
+			pdat->nperm = n->inputs[0]->ndim;
+			pdat->perm = malloc(sizeof(int) * pdat->nperm);
+			if(pdat->perm)
+			{
+				x = n->inputs[0];
+				y = n->outputs[0];
+				if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
+					onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
+				if(pdat->nperm == onnx_attribute_read_ints(n, "perm", &ints))
+				{
+					for(i = 0; i < pdat->nperm; i++)
+						pdat->perm[i] = ints[i];
+				}
+				else
+				{
+					for(i = 0; i < pdat->nperm; i++)
+						pdat->perm[i] = pdat->nperm - i - 1;
+				}
+				for(i = 0; i < n->noutput; i++)
+				{
+					for(j = 0; j < x->ndim; j++)
+						n->outputs[i]->dims[j] = x->dims[pdat->perm[j]];
+				}
+				n->priv = pdat;
+				return 1;
+			}
+			else
+			{
+				free(pdat);
+			}
+		}
 	}
-
-	pdat = malloc(sizeof(struct operator_pdata_t));
-	if(pdat)
-	{
-		pdat->nperm = t->ndim;
-		pdat->perm = malloc(sizeof(int) * pdat->nperm);
-		if(pdat->nperm == onnx_attribute_read_ints(n, "perm", &ints))
-		{
-			for(i = 0; i < pdat->nperm; i++)
-				pdat->perm[i] = ints[i];
-		}
-		else
-		{
-			for(i = 0; i < t->ndim; i++)
-				pdat->perm[i] = t->ndim - i - 1;
-		}
-		for(i = 0; i < n->noutput; i++)
-		{
-			for(j = 0; j < t->ndim; j++)
-				n->outputs[i]->dims[j] = t->dims[pdat->perm[j]];
-		}
-	}
-	n->priv = pdat;
-	return 1;
+	return 0;
 }
 
 static int Transpose_exit(struct onnx_node_t * n)

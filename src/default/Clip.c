@@ -8,33 +8,36 @@ struct operator_pdata_t {
 static int Clip_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * t = n->inputs[0];
+	struct onnx_tensor_t * x;
+	struct onnx_tensor_t * y;
 	int i;
 
-	for(i = 0; i < n->noutput; i++)
+	if((n->ninput > 0) && (n->noutput > 0))
 	{
-		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], t->type, t->dims, t->ndim);
-	}
-
-	pdat = malloc(sizeof(struct operator_pdata_t));
-	if(pdat)
-	{
-		pdat->pmin = NULL;
-		pdat->pmax = NULL;
-		for(i = 1; i < min(3, n->ninput); i++)
+		pdat = malloc(sizeof(struct operator_pdata_t));
+		if(pdat)
 		{
-			if(n->inputs[i]->ndata == 0)
+			x = n->inputs[0];
+			y = n->outputs[0];
+			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
+				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
+			pdat->pmin = NULL;
+			pdat->pmax = NULL;
+			for(i = 1; i < min(3, n->ninput); i++)
 			{
-				if(strcmp(n->inputs[i]->name, "min") == 0)
-					pdat->pmin = &n->inputs[i]->scalar;
-				else if(strcmp(n->inputs[i]->name, "max") == 0)
-					pdat->pmax = &n->inputs[i]->scalar;
+				if(n->inputs[i]->ndim == 0)
+				{
+					if(strcmp(n->inputs[i]->name, "min") == 0)
+						pdat->pmin = &n->inputs[i]->scalar;
+					else if(strcmp(n->inputs[i]->name, "max") == 0)
+						pdat->pmax = &n->inputs[i]->scalar;
+				}
 			}
+			n->priv = pdat;
+			return 1;
 		}
 	}
-	n->priv = pdat;
-	return 1;
+	return 0;
 }
 
 static int Clip_exit(struct onnx_node_t * n)

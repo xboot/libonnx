@@ -8,23 +8,25 @@ struct operator_pdata_t {
 static int Shrink_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * t = n->inputs[0];
-	int i;
+	struct onnx_tensor_t * x;
+	struct onnx_tensor_t * y;
 
-	for(i = 0; i < n->noutput; i++)
+	if((n->ninput > 0) && (n->noutput > 0))
 	{
-		if(n->outputs[i]->type == ONNX_TENSOR_TYPE_UNDEFINED)
-			onnx_tensor_reinit(n->outputs[i], t->type, t->dims, t->ndim);
+		pdat = malloc(sizeof(struct operator_pdata_t));
+		if(pdat)
+		{
+			x = n->inputs[0];
+			y = n->outputs[0];
+			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
+				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
+			pdat->bias = onnx_attribute_read_float(n, "bias", 0.0);
+			pdat->lambd = onnx_attribute_read_float(n, "lambd", 0.5);
+			n->priv = pdat;
+			return 1;
+		}
 	}
-
-	pdat = malloc(sizeof(struct operator_pdata_t));
-	if(pdat)
-	{
-		pdat->bias = onnx_attribute_read_float(n, "bias", 0.0);
-		pdat->lambd = onnx_attribute_read_float(n, "lambd", 0.5);
-	}
-	n->priv = pdat;
-	return 1;
+	return 0;
 }
 
 static int Shrink_exit(struct onnx_node_t * n)
