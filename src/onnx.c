@@ -1701,6 +1701,30 @@ int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64
 	return def;
 }
 
+int onnx_attribute_read_floats(struct onnx_node_t * n, const char * name, float ** floats)
+{
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
+
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOATS))
+	{
+		*floats = attr->floats;
+		return attr->n_floats;
+	}
+	return 0;
+}
+
+int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t ** ints)
+{
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
+
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INTS))
+	{
+		*ints = attr->ints;
+		return attr->n_ints;
+	}
+	return 0;
+}
+
 char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def)
 {
 	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);

@@ -461,6 +461,8 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);
+int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t ** ints);
+int onnx_attribute_read_floats(struct onnx_node_t * n, const char * name, float ** floats);
 char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def);
 Onnx__TensorProto * onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, Onnx__TensorProto * def);
 Onnx__GraphProto * onnx_attribute_read_graph(struct onnx_node_t * n, const char * name, Onnx__GraphProto * def);
