@@ -285,15 +285,6 @@ static inline void onnx_tensor_get_coords(struct onnx_tensor_t * t, int index, i
 	}
 }
 
-static inline void onnx_tensor_get_strides(struct onnx_tensor_t * t, int * strides)
-{
-	int i;
-
-	strides[t->ndim - 1] = 1;
-	for(i = t->ndim - 2; i >= 0; i--)
-		strides[i] = t->dims[i + 1] * strides[i + 1];
-}
-
 void resolver_default_op_Abs(struct onnx_node_t * n);
 void resolver_default_op_Acos(struct onnx_node_t * n);
 void resolver_default_op_Acosh(struct onnx_node_t * n);
