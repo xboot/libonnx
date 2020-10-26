@@ -405,7 +405,6 @@ static void Transpose_string(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	char ** px = (char **)x->datas;
 	char ** py = (char **)y->datas;
-	char * s;
 	int nperm = pdat->nperm;
 	int xcoords[nperm], ycoords[nperm];
 	int xi, yi;
@@ -417,10 +416,9 @@ static void Transpose_string(struct onnx_node_t * n)
 		for(i = 0; i < nperm; i++)
 			xcoords[pdat->perm[i]] = ycoords[i];
 		xi = onnx_tensor_get_index(x, xcoords);
-		s = py[yi];
-		if(s)
-			free(s);
-		s = strdup(px[xi]);
+		if(py[yi])
+			free(py[yi]);
+		py[yi] = strdup(px[xi]);
 	}
 }
 
