@@ -141,14 +141,12 @@ static void Cast_bool(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%u", (px[i] != 0) ? 1 : 0);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -262,14 +260,12 @@ static void Cast_int8(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%d", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -383,14 +379,12 @@ static void Cast_int16(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%d", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -504,14 +498,12 @@ static void Cast_int32(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%d", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -625,14 +617,12 @@ static void Cast_int64(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%ld", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -746,14 +736,12 @@ static void Cast_uint8(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%u", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -867,14 +855,12 @@ static void Cast_uint16(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%u", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -988,14 +974,12 @@ static void Cast_uint32(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%u", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1109,14 +1093,12 @@ static void Cast_uint64(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%lu", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1230,14 +1212,12 @@ static void Cast_bfloat16(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%g", bfloat16_to_float32(px[i]));
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1351,14 +1331,12 @@ static void Cast_float16(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%g", float16_to_float32(px[i]));
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1472,14 +1450,12 @@ static void Cast_float32(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%g", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1593,14 +1569,12 @@ static void Cast_float64(struct onnx_node_t * n)
 		{
 			char ** py = (char **)y->datas;
 			char buf[32];
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
+				if(py[i])
+					free(py[i]);
 				sprintf(buf, "%g", px[i]);
-				s = strdup(buf);
+				py[i] = strdup(buf);
 			}
 		}
 		break;
@@ -1713,13 +1687,11 @@ static void Cast_string(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		{
 			char ** py = (char **)y->datas;
-			char * s;
 			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				s = py[i];
-				if(s)
-					free(s);
-				s = strdup(px[i]);
+				if(py[i])
+					free(py[i]);
+				py[i] = strdup(px[i]);
 			}
 		}
 		break;
