@@ -269,8 +269,8 @@ static inline int onnx_tensor_get_index(struct onnx_tensor_t * t, int * coords)
 {
 	int index, i;
 
-	for(i = 0, index = coords[0]; i < t->ndim - 1; i++)
-		index = t->dims[i + 1] * index + coords[i + 1];
+	for(i = 0, index = 0; i < t->ndim; i++)
+		index += coords[i] * t->strides[i];
 	return index;
 }
 
