@@ -31,7 +31,6 @@ static void Reshape_operator(struct onnx_node_t * n)
 	int64_t * ps = s->datas;
 	char ** px = (char **)x->datas;
 	char ** py = (char **)y->datas;
-	char * str;
 	int total_dim = 1;
 	int total_shape = 1;
 	int ndim = s->ndata;
@@ -64,10 +63,9 @@ static void Reshape_operator(struct onnx_node_t * n)
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
-			str = py[i];
-			if(str)
-				free(str);
-			str = strdup(px[i]);
+			if(py[i])
+				free(py[i]);
+			py[i] = strdup(px[i]);
 		}
 	}
 	else

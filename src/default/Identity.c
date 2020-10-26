@@ -27,17 +27,15 @@ static void Identity_operator(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	char ** px = (char **)x->datas;
 	char ** py = (char **)y->datas;
-	char * str;
 	int i, l;
 
 	if(x->type == ONNX_TENSOR_TYPE_STRING)
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
-			str = py[i];
-			if(str)
-				free(str);
-			str = strdup(px[i]);
+			if(py[i])
+				free(py[i]);
+			py[i] = strdup(px[i]);
 		}
 	}
 	else
