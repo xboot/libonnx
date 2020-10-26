@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <onnx.h>
 
-#define FLOAT_EPSILON		(1e-5)
+#define FLOAT_EPSILON		(1e-3)
 
 static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 {
