@@ -1872,7 +1872,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 	int * sizes, * levels;
 	char * lbuf, * rbuf;
 	char * lp, * rp;
-	char * p;
+	void * p;
 	int i, j, k;
 
 	if(t)
@@ -1945,7 +1945,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 					ONNX_LOG("%s", lbuf);
 					if(*lbuf == '\0')
 						ONNX_LOG(" ");
-					p = (char *)(t->datas + onnx_tensor_type_sizeof(t->type) * i);
+					p = (void *)(t->datas + onnx_tensor_type_sizeof(t->type) * i);
 					switch(t->type)
 					{
 					case ONNX_TENSOR_TYPE_BOOL:
@@ -1994,7 +1994,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 						ONNX_LOG("%g + %gi,", *((double *)p), *((double *)(p + sizeof(double))));
 						break;
 					case ONNX_TENSOR_TYPE_STRING:
-						ONNX_LOG("%s,", (char *)p);
+						ONNX_LOG("%s,", (char *)(((char **)p)[0]));
 						break;
 					default:
 						ONNX_LOG("?,");
