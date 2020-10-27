@@ -74,17 +74,17 @@ static void Transpose_bool(struct onnx_node_t * n)
 	uint8_t * px = (uint8_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -96,17 +96,17 @@ static void Transpose_int8(struct onnx_node_t * n)
 	int8_t * px = (int8_t *)x->datas;
 	int8_t * py = (int8_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -118,17 +118,17 @@ static void Transpose_int16(struct onnx_node_t * n)
 	int16_t * px = (int16_t *)x->datas;
 	int16_t * py = (int16_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -140,17 +140,17 @@ static void Transpose_int32(struct onnx_node_t * n)
 	int32_t * px = (int32_t *)x->datas;
 	int32_t * py = (int32_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -162,17 +162,17 @@ static void Transpose_int64(struct onnx_node_t * n)
 	int64_t * px = (int64_t *)x->datas;
 	int64_t * py = (int64_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -184,17 +184,17 @@ static void Transpose_uint8(struct onnx_node_t * n)
 	uint8_t * px = (uint8_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -206,17 +206,17 @@ static void Transpose_uint16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -228,17 +228,17 @@ static void Transpose_uint32(struct onnx_node_t * n)
 	uint32_t * px = (uint32_t *)x->datas;
 	uint32_t * py = (uint32_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -250,17 +250,17 @@ static void Transpose_uint64(struct onnx_node_t * n)
 	uint64_t * px = (uint64_t *)x->datas;
 	uint64_t * py = (uint64_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -272,17 +272,17 @@ static void Transpose_bfloat16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -294,17 +294,17 @@ static void Transpose_float16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -316,17 +316,17 @@ static void Transpose_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -338,17 +338,17 @@ static void Transpose_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
 	}
 }
 
@@ -360,18 +360,18 @@ static void Transpose_complex64(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
-		py[yi + 1] = px[xi + 1];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
+		py[oy + 1] = px[ox + 1];
 	}
 }
 
@@ -383,18 +383,18 @@ static void Transpose_complex128(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		py[yi] = px[xi];
-		py[yi + 1] = px[xi + 1];
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		py[oy] = px[ox];
+		py[oy + 1] = px[ox + 1];
 	}
 }
 
@@ -406,19 +406,19 @@ static void Transpose_string(struct onnx_node_t * n)
 	char ** px = (char **)x->datas;
 	char ** py = (char **)y->datas;
 	int nperm = pdat->nperm;
-	int xcoords[nperm], ycoords[nperm];
-	int xi, yi;
+	int ix[nperm], iy[nperm];
+	int ox, oy;
 	int i, l;
 
-	for(yi = 0, l = y->ndata; yi < l; yi++)
+	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
-		onnx_tensor_get_coords(y, yi, ycoords);
+		onnx_tensor_offset_to_indices(y, oy, iy);
 		for(i = 0; i < nperm; i++)
-			xcoords[pdat->perm[i]] = ycoords[i];
-		xi = onnx_tensor_get_index(x, xcoords);
-		if(py[yi])
-			free(py[yi]);
-		py[yi] = strdup(px[xi]);
+			ix[pdat->perm[i]] = iy[i];
+		ox = onnx_tensor_indices_to_offset(x, ix);
+		if(py[oy])
+			free(py[oy]);
+		py[oy] = strdup(px[ox]);
 	}
 }
 

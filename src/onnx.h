@@ -265,23 +265,23 @@ struct onnx_context_t {
 	struct hmap_t * map;
 };
 
-static inline int onnx_tensor_get_index(struct onnx_tensor_t * t, int * coords)
+static inline int onnx_tensor_indices_to_offset(struct onnx_tensor_t * t, int * indices)
 {
-	int index, i;
+	int offset, i;
 
-	for(i = 0, index = 0; i < t->ndim; i++)
-		index += coords[i] * t->strides[i];
-	return index;
+	for(i = 0, offset = 0; i < t->ndim; i++)
+		offset += indices[i] * t->strides[i];
+	return offset;
 }
 
-static inline void onnx_tensor_get_coords(struct onnx_tensor_t * t, int index, int * coords)
+static inline void onnx_tensor_offset_to_indices(struct onnx_tensor_t * t, int offset, int * indices)
 {
 	int i;
 
 	for(i = t->ndim - 1; i >= 0; i--)
 	{
-		coords[i] = index % t->dims[i];
-		index /= t->dims[i];
+		indices[i] = offset % t->dims[i];
+		offset /= t->dims[i];
 	}
 }
 
