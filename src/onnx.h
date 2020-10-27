@@ -502,6 +502,21 @@ static inline int onnx_tensor_multi_broadcast_reshape(struct onnx_tensor_t * a, 
 	return 1;
 }
 
+static inline void * onnx_tensor_broadcast_map_address(struct onnx_tensor_t * x, struct onnx_tensor_t * y, int offset)
+{
+	int xndim = x->ndim;
+	int yndim = y->ndim;
+	int dndim = yndim - xndim;
+	int ix[xndim];
+	int iy[yndim];
+	int i;
+
+	onnx_tensor_offset_to_indices(y, offset, iy);
+	for(i = 0; i < xndim; i++)
+		ix[i] = iy[dndim + i] % x->dims[i];
+	return x->datas + onnx_tensor_indices_to_offset(x, ix) * onnx_tensor_type_sizeof(x->type);
+}
+
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);
 int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t ** ints);
