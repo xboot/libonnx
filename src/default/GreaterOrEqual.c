@@ -186,27 +186,6 @@ static void GreaterOrEqual_uint64(struct onnx_node_t * n)
 	}
 }
 
-static void GreaterOrEqual_bfloat16(struct onnx_node_t * n)
-{
-	struct onnx_tensor_t * y = n->outputs[0];
-	struct onnx_tensor_t * a = n->inputs[0];
-	struct onnx_tensor_t * b = n->inputs[1];
-	uint8_t * py = (uint8_t *)y->datas;
-	uint16_t * pa;
-	uint16_t * pb;
-	int i, l;
-
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = (bfloat16_to_float32(*pa) >= bfloat16_to_float32(*pb)) ? 1 : 0;
-		}
-	}
-}
-
 static void GreaterOrEqual_float16(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * y = n->outputs[0];
@@ -313,11 +292,6 @@ void resolver_default_op_GreaterOrEqual(struct onnx_node_t * n)
 		n->init = GreaterOrEqual_init;
 		n->exit = GreaterOrEqual_exit;
 		n->op = GreaterOrEqual_uint64;
-		break;
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		n->init = GreaterOrEqual_init;
-		n->exit = GreaterOrEqual_exit;
-		n->op = GreaterOrEqual_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = GreaterOrEqual_init;
