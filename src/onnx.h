@@ -265,36 +265,6 @@ struct onnx_context_t {
 	struct hmap_t * map;
 };
 
-static inline int onnx_tensor_indices_to_offset(struct onnx_tensor_t * t, int * indices)
-{
-	int offset, i;
-
-	for(i = 0, offset = 0; i < t->ndim; i++)
-		offset += indices[i] * t->strides[i];
-	return offset;
-}
-
-static inline void onnx_tensor_offset_to_indices(struct onnx_tensor_t * t, int offset, int * indices)
-{
-	int i;
-
-	for(i = t->ndim - 1; i >= 0; i--)
-	{
-		indices[i] = offset % t->dims[i];
-		offset /= t->dims[i];
-	}
-}
-
-static inline int onnx_tensor_shape_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
-{
-	if(a->ndim == b->ndim)
-	{
-		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
-			return 1;
-	}
-	return 0;
-}
-
 void resolver_default_op_Abs(struct onnx_node_t * n);
 void resolver_default_op_Acos(struct onnx_node_t * n);
 void resolver_default_op_Acosh(struct onnx_node_t * n);
@@ -470,6 +440,68 @@ void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim);
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx_scalar_t * s);
 
+static inline int onnx_tensor_indices_to_offset(struct onnx_tensor_t * t, int * indices)
+{
+	int offset, i;
+
+	for(i = 0, offset = 0; i < t->ndim; i++)
+		offset += indices[i] * t->strides[i];
+	return offset;
+}
+
+static inline void onnx_tensor_offset_to_indices(struct onnx_tensor_t * t, int offset, int * indices)
+{
+	int i;
+
+	for(i = t->ndim - 1; i >= 0; i--)
+	{
+		indices[i] = offset % t->dims[i];
+		offset /= t->dims[i];
+	}
+}
+
+static inline int onnx_tensor_shape_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
+{
+	if(a->ndim == b->ndim)
+	{
+		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
+			return 1;
+	}
+	return 0;
+}
+
+static inline int onnx_tensor_multi_broadcast_reshape(struct onnx_tensor_t * a, struct onnx_tensor_t * b, struct onnx_tensor_t * y, enum onnx_tensor_type_t type)
+{
+	int ndim = max(a->ndim, b->ndim);
+	int dims[ndim];
+	int i, j, k;
+
+	if(ndim > 0)
+	{
+		for(i = a->ndim - 1, j = b->ndim - 1, k = ndim - 1; k >= 0; k--)
+		{
+			if(i < 0)
+				dims[k] = b->dims[j--];
+			else if(j < 0)
+				dims[k] = a->dims[i--];
+			else
+			{
+				if(a->dims[i] == b->dims[j])
+					dims[k] = a->dims[i];
+				else if((a->dims[i] == 1) || (b->dims[j] == 1))
+					dims[k] = (a->dims[i] > b->dims[j]) ? a->dims[i] : b->dims[j];
+				else
+					return 0;
+				i--;
+				j--;
+			}
+		}
+	}
+	if((y->type != type) || (y->ndim != ndim) || (memcmp(y->dims, dims, sizeof(int) * ndim) != 0))
+		onnx_tensor_reinit(y, type, dims, ndim);
+	return 1;
+}
+
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);
 int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64_t def);
 int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t ** ints);
@@ -479,11 +511,11 @@ Onnx__TensorProto * onnx_attribute_read_tensor(struct onnx_node_t * n, const cha
 Onnx__GraphProto * onnx_attribute_read_graph(struct onnx_node_t * n, const char * name, Onnx__GraphProto * def);
 Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t * n, const char * name, Onnx__SparseTensorProto * def);
 
-void onnx_run(struct onnx_context_t * ctx);
-
 void onnx_tensor_dump(struct onnx_tensor_t * t, int detail);
 void onnx_node_dump(struct onnx_node_t * n, int detail);
 void onnx_context_dump(struct onnx_context_t * ctx, int detail);
+
+void onnx_run(struct onnx_context_t * ctx);
 
 #ifdef __cplusplus
 }

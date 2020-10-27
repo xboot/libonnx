@@ -1852,21 +1852,6 @@ Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t *
 	return def;
 }
 
-void onnx_run(struct onnx_context_t * ctx)
-{
-	struct onnx_node_t * n;
-	int i;
-
-	if(ctx)
-	{
-		for(i = 0; i < ctx->nlen; i++)
-		{
-			n = &ctx->nodes[i];
-			n->op(n);
-		}
-	}
-}
-
 void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 {
 	int * sizes, * levels;
@@ -2125,6 +2110,21 @@ void onnx_context_dump(struct onnx_context_t * ctx, int detail)
 			ONNX_LOG("Nodes:\r\n");
 			for(i = 0; i < ctx->nlen; i++)
 				onnx_node_dump(&ctx->nodes[i], detail);
+		}
+	}
+}
+
+void onnx_run(struct onnx_context_t * ctx)
+{
+	struct onnx_node_t * n;
+	int i;
+
+	if(ctx)
+	{
+		for(i = 0; i < ctx->nlen; i++)
+		{
+			n = &ctx->nodes[i];
+			n->op(n);
 		}
 	}
 }
