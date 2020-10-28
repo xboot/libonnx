@@ -1539,8 +1539,8 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 	FILE * fp;
 	void * buf;
 	size_t l, len;
-	int * dims;
-	int ndim;
+	int * dims = NULL;
+	int ndim = 0;
 	int i;
 
 	fp = fopen(filename, "rb");
@@ -1568,11 +1568,6 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 								dims[i] = pb->dims[i];
 							ndim = pb->n_dims;
 						}
-					}
-					else
-					{
-						dims = NULL;
-						ndim = 0;
 					}
 					t = onnx_tensor_alloc(pb->name, (enum onnx_tensor_type_t)pb->data_type, dims, ndim);
 					if((ndim > 0) && dims)
@@ -1825,8 +1820,8 @@ int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t 
 int onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, struct onnx_tensor_t * t)
 {
 	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
-	int * dims;
-	int ndim;
+	int * dims = NULL;
+	int ndim = 0;
 	int i;
 
 	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSOR))
@@ -1842,11 +1837,6 @@ int onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, struct
 						dims[i] = attr->t->dims[i];
 					ndim = attr->t->n_dims;
 				}
-			}
-			else
-			{
-				dims = NULL;
-				ndim = 0;
 			}
 			if((t->ndim != ndim) || (memcmp(t->dims, dims, sizeof(int) * ndim) != 0) || (t->type != (enum onnx_tensor_type_t)attr->t->data_type))
 				onnx_tensor_reinit(t, (enum onnx_tensor_type_t)attr->t->data_type, dims, ndim);
