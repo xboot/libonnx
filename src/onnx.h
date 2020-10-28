@@ -440,6 +440,11 @@ void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim);
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx_scalar_t * s);
 
+static inline int onnx_tensor_is_scalar(struct onnx_tensor_t * t)
+{
+	return (t->ndim > 0) ? 0 : 1;
+}
+
 static inline int onnx_tensor_indices_to_offset(struct onnx_tensor_t * t, int * indices)
 {
 	int offset, i;
