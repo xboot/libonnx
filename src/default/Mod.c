@@ -45,9 +45,10 @@ static void Mod_int8(struct onnx_node_t * n)
 	int8_t * py = (int8_t *)y->datas;
 	int8_t * pa;
 	int8_t * pb;
+	int8_t t;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -64,7 +65,10 @@ static void Mod_int8(struct onnx_node_t * n)
 			{
 				pa = onnx_tensor_broadcast_map_address(a, y, i);
 				pb = onnx_tensor_broadcast_map_address(b, y, i);
-				py[i] = *pa % *pb;
+				t = *pa % *pb;
+				if(((t < 0) && (*pb > 0)) || ((t > 0) && (*pb < 0)))
+					t += *pb;
+				py[i] = t;
 			}
 		}
 	}
@@ -79,9 +83,10 @@ static void Mod_int16(struct onnx_node_t * n)
 	int16_t * py = (int16_t *)y->datas;
 	int16_t * pa;
 	int16_t * pb;
+	int16_t t;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -98,7 +103,10 @@ static void Mod_int16(struct onnx_node_t * n)
 			{
 				pa = onnx_tensor_broadcast_map_address(a, y, i);
 				pb = onnx_tensor_broadcast_map_address(b, y, i);
-				py[i] = *pa % *pb;
+				t = *pa % *pb;
+				if(((t < 0) && (*pb > 0)) || ((t > 0) && (*pb < 0)))
+					t += *pb;
+				py[i] = t;
 			}
 		}
 	}
@@ -113,9 +121,10 @@ static void Mod_int32(struct onnx_node_t * n)
 	int32_t * py = (int32_t *)y->datas;
 	int32_t * pa;
 	int32_t * pb;
+	int32_t t;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -132,7 +141,10 @@ static void Mod_int32(struct onnx_node_t * n)
 			{
 				pa = onnx_tensor_broadcast_map_address(a, y, i);
 				pb = onnx_tensor_broadcast_map_address(b, y, i);
-				py[i] = *pa % *pb;
+				t = *pa % *pb;
+				if(((t < 0) && (*pb > 0)) || ((t > 0) && (*pb < 0)))
+					t += *pb;
+				py[i] = t;
 			}
 		}
 	}
@@ -147,29 +159,30 @@ static void Mod_int64(struct onnx_node_t * n)
 	int64_t * py = (int64_t *)y->datas;
 	int64_t * pa;
 	int64_t * pb;
+	int64_t t;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
-		if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+		if(pdat->fmod)
 		{
-			if(pdat->fmod)
+			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				for(i = 0, l = y->ndata; i < l; i++)
-				{
-					pa = onnx_tensor_broadcast_map_address(a, y, i);
-					pb = onnx_tensor_broadcast_map_address(b, y, i);
-					py[i] = fmod(*pa, *pb);
-				}
+				pa = onnx_tensor_broadcast_map_address(a, y, i);
+				pb = onnx_tensor_broadcast_map_address(b, y, i);
+				py[i] = fmod(*pa, *pb);
 			}
-			else
+		}
+		else
+		{
+			for(i = 0, l = y->ndata; i < l; i++)
 			{
-				for(i = 0, l = y->ndata; i < l; i++)
-				{
-					pa = onnx_tensor_broadcast_map_address(a, y, i);
-					pb = onnx_tensor_broadcast_map_address(b, y, i);
-					py[i] = *pa % *pb;
-				}
+				pa = onnx_tensor_broadcast_map_address(a, y, i);
+				pb = onnx_tensor_broadcast_map_address(b, y, i);
+				t = *pa % *pb;
+				if(((t < 0) && (*pb > 0)) || ((t > 0) && (*pb < 0)))
+					t += *pb;
+				py[i] = t;
 			}
 		}
 	}
@@ -186,7 +199,7 @@ static void Mod_uint8(struct onnx_node_t * n)
 	uint8_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -220,7 +233,7 @@ static void Mod_uint16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -254,7 +267,7 @@ static void Mod_uint32(struct onnx_node_t * n)
 	uint32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -288,7 +301,7 @@ static void Mod_uint64(struct onnx_node_t * n)
 	uint64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		if(pdat->fmod)
 		{
@@ -321,13 +334,13 @@ static void Mod_bfloat16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = fmodf(bfloat16_to_float32(*pa), bfloat16_to_float32(*pb));
+			py[i] = float32_to_bfloat16(fmodf(bfloat16_to_float32(*pa), bfloat16_to_float32(*pb)));
 		}
 	}
 }
@@ -342,13 +355,13 @@ static void Mod_float16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = fmodf(float16_to_float32(*pa), float16_to_float32(*pb));
+			py[i] = float32_to_float16(fmodf(float16_to_float32(*pa), float16_to_float32(*pb)));
 		}
 	}
 }
@@ -363,7 +376,7 @@ static void Mod_float32(struct onnx_node_t * n)
 	float * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -384,7 +397,7 @@ static void Mod_float64(struct onnx_node_t * n)
 	double * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -397,9 +410,6 @@ static void Mod_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Mod(struct onnx_node_t * n)
 {
-	//FIXME
-	return;
-
 	switch(n->inputs[0]->type)
 	{
 	case ONNX_TENSOR_TYPE_INT8:
