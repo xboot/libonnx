@@ -724,7 +724,7 @@ static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoP
 		ndim = v->type->tensor_type->shape->n_dim;
 		if(ndim > 0)
 		{
-			dims = memalign(8, sizeof(int) * ndim);
+			dims = malloc(sizeof(int) * ndim);
 			if(dims)
 			{
 				for(i = 0; i < ndim; i++)
@@ -1522,7 +1522,7 @@ struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_typ
 	if(!name)
 		return NULL;
 
-	t = memalign(8, sizeof(struct onnx_tensor_t));
+	t = malloc(sizeof(struct onnx_tensor_t));
 	if(!t)
 		return NULL;
 	memset(t, 0, sizeof(struct onnx_tensor_t));
@@ -1561,7 +1561,7 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 				{
 					if(pb->n_dims > 0)
 					{
-						dims = memalign(8, sizeof(int) * pb->n_dims);
+						dims = malloc(sizeof(int) * pb->n_dims);
 						if(dims)
 						{
 							for(i = 0; i < pb->n_dims; i++)
@@ -1665,8 +1665,8 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 					if(dims[i] <= 0)
 						return;
 				}
-				t->strides = memalign(8, sizeof(int) * ndim);
-				t->dims = memalign(8, sizeof(int) * ndim);
+				t->strides = malloc(sizeof(int) * ndim);
+				t->dims = malloc(sizeof(int) * ndim);
 				if(t->strides && t->dims)
 				{
 					t->strides[ndim - 1] = 1;
@@ -1679,7 +1679,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 					sz = onnx_tensor_type_sizeof(t->type);
 					if(sz > 0)
 					{
-						t->datas = memalign(8, n * sz);
+						t->datas = memalign(512, n * sz);
 						if(t->datas)
 						{
 							memset(t->datas, 0, n * sz);
@@ -1830,7 +1830,7 @@ int onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, struct
 		{
 			if(attr->t->n_dims > 0)
 			{
-				dims = memalign(8, sizeof(int) * attr->t->n_dims);
+				dims = malloc(sizeof(int) * attr->t->n_dims);
 				if(dims)
 				{
 					for(i = 0; i < attr->t->n_dims; i++)
