@@ -1786,6 +1786,18 @@ int64_t onnx_attribute_read_int(struct onnx_node_t * n, const char * name, int64
 	return def;
 }
 
+char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def)
+{
+	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
+
+	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING))
+	{
+		if(attr->s.len > 0)
+			return (char *)attr->s.data;
+	}
+	return def;
+}
+
 int onnx_attribute_read_floats(struct onnx_node_t * n, const char * name, float ** floats)
 {
 	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
@@ -1810,28 +1822,41 @@ int onnx_attribute_read_ints(struct onnx_node_t * n, const char * name, int64_t 
 	return 0;
 }
 
-char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, char * def)
+int onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, struct onnx_tensor_t * t)
 {
 	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
-
-	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING))
-	{
-		if(attr->s.len > 0)
-			return (char *)attr->s.data;
-	}
-	return def;
-}
-
-Onnx__TensorProto * onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, Onnx__TensorProto * def)
-{
-	Onnx__AttributeProto * attr = onnx_search_attribute(n, name);
+	int * dims;
+	int ndim;
+	int i;
 
 	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSOR))
 	{
 		if(attr->t)
-			return attr->t;
+		{
+			if(attr->t->n_dims > 0)
+			{
+				dims = memalign(8, sizeof(int) * attr->t->n_dims);
+				if(dims)
+				{
+					for(i = 0; i < attr->t->n_dims; i++)
+						dims[i] = attr->t->dims[i];
+					ndim = attr->t->n_dims;
+				}
+			}
+			else
+			{
+				dims = NULL;
+				ndim = 0;
+			}
+			if((t->ndim != ndim) || (memcmp(t->dims, dims, sizeof(int) * ndim) != 0) || (t->type != (enum onnx_tensor_type_t)attr->t->data_type))
+				onnx_tensor_reinit(t, (enum onnx_tensor_type_t)attr->t->data_type, dims, ndim);
+			if((ndim > 0) && dims)
+				free(dims);
+			onnx_tensor_copy_from_tensor_proto(t, attr->t);
+			return 1;
+		}
 	}
-	return def;
+	return 0;
 }
 
 Onnx__GraphProto * onnx_attribute_read_graph(struct onnx_node_t * n, const char * name, Onnx__GraphProto * def)
