@@ -7,18 +7,12 @@ struct operator_pdata_t {
 static int ThresholdedRelu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
 
-	if((n->ninput > 0) && (n->noutput > 0))
+	if((n->ninput == 1) && (n->noutput == 1))
 	{
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			x = n->inputs[0];
-			y = n->outputs[0];
-			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
-				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
 			pdat->alpha = onnx_attribute_read_float(n, "alpha", 1.0);
 			n->priv = pdat;
 			return 1;
@@ -34,6 +28,14 @@ static int ThresholdedRelu_exit(struct onnx_node_t * n)
 	if(pdat)
 		free(pdat);
 	return 1;
+}
+
+static int ThresholdedRelu_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void ThresholdedRelu_float16(struct onnx_node_t * n)
@@ -86,16 +88,19 @@ void resolver_default_op_ThresholdedRelu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
+		n->reshape = ThresholdedRelu_reshape;
 		n->operator = ThresholdedRelu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
+		n->reshape = ThresholdedRelu_reshape;
 		n->operator = ThresholdedRelu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
+		n->reshape = ThresholdedRelu_reshape;
 		n->operator = ThresholdedRelu_float64;
 		break;
 	default:

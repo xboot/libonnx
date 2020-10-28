@@ -2,23 +2,21 @@
 
 static int Size_init(struct onnx_node_t * n)
 {
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
-
-	if((n->ninput > 0) && (n->noutput > 0))
-	{
-		x = n->inputs[0];
-		y = n->outputs[0];
-		if(!onnx_tensor_shape_equal(y, x) || (y->type != ONNX_TENSOR_TYPE_INT64))
-			onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, x->dims, x->ndim);
+	if((n->ninput == 1) && (n->noutput == 1))
 		return 1;
-	}
 	return 0;
 }
 
 static int Size_exit(struct onnx_node_t * n)
 {
 	return 1;
+}
+
+static int Size_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape(y, NULL, 0, ONNX_TENSOR_TYPE_INT64);
 }
 
 static void Size_operator(struct onnx_node_t * n)
@@ -51,6 +49,7 @@ void resolver_default_op_Size(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Size_init;
 		n->exit = Size_exit;
+		n->reshape = Size_reshape;
 		n->operator = Size_operator;
 		break;
 	default:

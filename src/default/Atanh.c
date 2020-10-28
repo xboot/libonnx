@@ -2,23 +2,22 @@
 
 static int Atanh_init(struct onnx_node_t * n)
 {
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
-
-	if((n->ninput > 0) && (n->noutput > 0))
-	{
-		x = n->inputs[0];
-		y = n->outputs[0];
-		if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
-			onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
+	if((n->ninput == 1) && (n->noutput == 1))
 		return 1;
-	}
 	return 0;
 }
 
 static int Atanh_exit(struct onnx_node_t * n)
 {
 	return 1;
+}
+
+static int Atanh_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void Atanh_float16(struct onnx_node_t * n)
@@ -68,16 +67,19 @@ void resolver_default_op_Atanh(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
+		n->reshape = Atanh_reshape;
 		n->operator = Atanh_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
+		n->reshape = Atanh_reshape;
 		n->operator = Atanh_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
+		n->reshape = Atanh_reshape;
 		n->operator = Atanh_float64;
 		break;
 	default:

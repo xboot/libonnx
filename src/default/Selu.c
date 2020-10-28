@@ -8,18 +8,12 @@ struct operator_pdata_t {
 static int Selu_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
 
-	if((n->ninput > 0) && (n->noutput > 0))
+	if((n->ninput == 1) && (n->noutput == 1))
 	{
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			x = n->inputs[0];
-			y = n->outputs[0];
-			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
-				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
 			pdat->alpha = onnx_attribute_read_float(n, "alpha", 1.67326);
 			pdat->gamma = onnx_attribute_read_float(n, "gamma", 1.0507);
 			n->priv = pdat;
@@ -36,6 +30,14 @@ static int Selu_exit(struct onnx_node_t * n)
 	if(pdat)
 		free(pdat);
 	return 1;
+}
+
+static int Selu_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void Selu_float16(struct onnx_node_t * n)
@@ -101,16 +103,19 @@ void resolver_default_op_Selu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
+		n->reshape = Selu_reshape;
 		n->operator = Selu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
+		n->reshape = Selu_reshape;
 		n->operator = Selu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
+		n->reshape = Selu_reshape;
 		n->operator = Selu_float64;
 		break;
 	default:

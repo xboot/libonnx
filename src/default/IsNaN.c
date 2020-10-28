@@ -2,23 +2,22 @@
 
 static int IsNaN_init(struct onnx_node_t * n)
 {
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
-
-	if((n->ninput > 0) && (n->noutput > 0))
-	{
-		x = n->inputs[0];
-		y = n->outputs[0];
-		if(!onnx_tensor_shape_equal(y, x) || (y->type != ONNX_TENSOR_TYPE_BOOL))
-			onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_BOOL, x->dims, x->ndim);
+	if((n->ninput == 1) && (n->noutput == 1))
 		return 1;
-	}
 	return 0;
 }
 
 static int IsNaN_exit(struct onnx_node_t * n)
 {
 	return 1;
+}
+
+static int IsNaN_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, ONNX_TENSOR_TYPE_BOOL);
 }
 
 static void IsNaN_bfloat16(struct onnx_node_t * n)
@@ -84,21 +83,25 @@ void resolver_default_op_IsNaN(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = IsNaN_init;
 		n->exit = IsNaN_exit;
+		n->reshape = IsNaN_reshape;
 		n->operator = IsNaN_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = IsNaN_init;
 		n->exit = IsNaN_exit;
+		n->reshape = IsNaN_reshape;
 		n->operator = IsNaN_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = IsNaN_init;
 		n->exit = IsNaN_exit;
+		n->reshape = IsNaN_reshape;
 		n->operator = IsNaN_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = IsNaN_init;
 		n->exit = IsNaN_exit;
+		n->reshape = IsNaN_reshape;
 		n->operator = IsNaN_float64;
 		break;
 	default:

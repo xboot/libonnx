@@ -8,19 +8,13 @@ struct operator_pdata_t {
 static int Clip_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
 	int i;
 
-	if((n->ninput > 0) && (n->noutput > 0))
+	if((n->ninput >= 1) && (n->noutput == 1))
 	{
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			x = n->inputs[0];
-			y = n->outputs[0];
-			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
-				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
 			pdat->pmin = NULL;
 			pdat->pmax = NULL;
 			for(i = 1; i < min(3, n->ninput); i++)
@@ -47,6 +41,14 @@ static int Clip_exit(struct onnx_node_t * n)
 	if(pdat)
 		free(pdat);
 	return 1;
+}
+
+static int Clip_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void Clip_int8(struct onnx_node_t * n)
@@ -326,61 +328,73 @@ void resolver_default_op_Clip(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_INT8:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_int8;
 		break;
 	case ONNX_TENSOR_TYPE_INT16:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_int16;
 		break;
 	case ONNX_TENSOR_TYPE_INT32:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_int32;
 		break;
 	case ONNX_TENSOR_TYPE_INT64:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_int64;
 		break;
 	case ONNX_TENSOR_TYPE_UINT8:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_uint8;
 		break;
 	case ONNX_TENSOR_TYPE_UINT16:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_uint16;
 		break;
 	case ONNX_TENSOR_TYPE_UINT32:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_uint32;
 		break;
 	case ONNX_TENSOR_TYPE_UINT64:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_uint64;
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Clip_init;
 		n->exit = Clip_exit;
+		n->reshape = Clip_reshape;
 		n->operator = Clip_float64;
 		break;
 	default:

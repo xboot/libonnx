@@ -8,18 +8,12 @@ struct operator_pdata_t {
 static int BatchNormalization_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	struct onnx_tensor_t * x;
-	struct onnx_tensor_t * y;
 
 	if((n->ninput == 5) && (n->noutput >= 1))
 	{
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			x = n->inputs[0];
-			y = n->outputs[0];
-			if(!onnx_tensor_shape_equal(y, x) || (y->type != x->type))
-				onnx_tensor_reinit(y, x->type, x->dims, x->ndim);
 			pdat->epsilon = onnx_attribute_read_float(n, "epsilon", 1e-05);
 			pdat->momentum = onnx_attribute_read_float(n, "momentum", 0.9);
 			n->priv = pdat;
@@ -36,6 +30,14 @@ static int BatchNormalization_exit(struct onnx_node_t * n)
 	if(pdat)
 		free(pdat);
 	return 1;
+}
+
+static int BatchNormalization_reshape(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void BatchNormalization_float16(struct onnx_node_t * n)
@@ -141,16 +143,19 @@ void resolver_default_op_BatchNormalization(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
+		n->reshape = BatchNormalization_reshape;
 		n->operator = BatchNormalization_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
+		n->reshape = BatchNormalization_reshape;
 		n->operator = BatchNormalization_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
+		n->reshape = BatchNormalization_reshape;
 		n->operator = BatchNormalization_float64;
 		break;
 	default:

@@ -476,7 +476,14 @@ static inline int onnx_tensor_shape_equal(struct onnx_tensor_t * a, struct onnx_
 	return 0;
 }
 
-static inline int onnx_tensor_reshape_identity(struct onnx_tensor_t * x, struct onnx_tensor_t * y, enum onnx_tensor_type_t type)
+static inline int onnx_tensor_reshape(struct onnx_tensor_t * y, int * dims, int ndim, enum onnx_tensor_type_t type)
+{
+	if((y->ndim != ndim) || (dims && (memcmp(y->dims, dims, sizeof(int) * y->ndim) != 0)) || (y->type != type))
+		onnx_tensor_reinit(y, type, dims, ndim);
+	return 1;
+}
+
+static inline int onnx_tensor_reshape_identity(struct onnx_tensor_t * y, struct onnx_tensor_t * x, enum onnx_tensor_type_t type)
 {
 	if((y->ndim != x->ndim) || (memcmp(y->dims, x->dims, sizeof(int) * y->ndim) != 0) || (y->type != type))
 		onnx_tensor_reinit(y, type, x->dims, x->ndim);
