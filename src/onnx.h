@@ -466,16 +466,6 @@ static inline void onnx_tensor_offset_to_indices(struct onnx_tensor_t * t, int o
 	}
 }
 
-static inline int onnx_tensor_shape_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
-{
-	if(a->ndim == b->ndim)
-	{
-		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
-			return 1;
-	}
-	return 0;
-}
-
 static inline int onnx_tensor_reshape(struct onnx_tensor_t * y, int * dims, int ndim, enum onnx_tensor_type_t type)
 {
 	if((y->ndim != ndim) || (dims && (memcmp(y->dims, dims, sizeof(int) * y->ndim) != 0)) || (y->type != type))
@@ -490,7 +480,7 @@ static inline int onnx_tensor_reshape_identity(struct onnx_tensor_t * y, struct 
 	return 1;
 }
 
-static inline int onnx_tensor_reshape_multi_broadcast(struct onnx_tensor_t * a, struct onnx_tensor_t * b, struct onnx_tensor_t * y, enum onnx_tensor_type_t type)
+static inline int onnx_tensor_reshape_multi_broadcast(struct onnx_tensor_t * y, struct onnx_tensor_t * a, struct onnx_tensor_t * b, enum onnx_tensor_type_t type)
 {
 	int ndim = max(a->ndim, b->ndim);
 	int dims[ndim];

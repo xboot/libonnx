@@ -104,6 +104,11 @@ static int ConstantOfShape_exit(struct onnx_node_t * n)
 	return 1;
 }
 
+static int ConstantOfShape_reshape(struct onnx_node_t * n)
+{
+	return 1;
+}
+
 static void ConstantOfShape_operator(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
@@ -133,5 +138,6 @@ void resolver_default_op_ConstantOfShape(struct onnx_node_t * n)
 {
 	n->init = ConstantOfShape_init;
 	n->exit = ConstantOfShape_exit;
+	n->reshape = ConstantOfShape_reshape;
 	n->operator = ConstantOfShape_operator;
 }

@@ -99,6 +99,11 @@ static int Constant_exit(struct onnx_node_t * n)
 	return 1;
 }
 
+static int Constant_reshape(struct onnx_node_t * n)
+{
+	return 1;
+}
+
 static void Constant_operator(struct onnx_node_t * n)
 {
 }
@@ -107,5 +112,6 @@ void resolver_default_op_Constant(struct onnx_node_t * n)
 {
 	n->init = Constant_init;
 	n->exit = Constant_exit;
+	n->reshape = Constant_reshape;
 	n->operator = Constant_operator;
 }

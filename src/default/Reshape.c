@@ -5,7 +5,7 @@ static int Reshape_init(struct onnx_node_t * n)
 	struct onnx_tensor_t * x;
 	struct onnx_tensor_t * s;
 
-	if((n->ninput > 1) && (n->noutput > 0))
+	if((n->ninput == 2) && (n->noutput == 1))
 	{
 		x = n->inputs[0];
 		s = n->inputs[1];
@@ -19,6 +19,11 @@ static int Reshape_init(struct onnx_node_t * n)
 }
 
 static int Reshape_exit(struct onnx_node_t * n)
+{
+	return 1;
+}
+
+static int Reshape_reshape(struct onnx_node_t * n)
 {
 	return 1;
 }
@@ -96,6 +101,7 @@ void resolver_default_op_Reshape(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Reshape_init;
 		n->exit = Reshape_exit;
+		n->reshape = Reshape_reshape;
 		n->operator = Reshape_operator;
 		break;
 	default:
