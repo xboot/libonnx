@@ -1139,6 +1139,11 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 		onnx_tensor_free((struct onnx_tensor_t *)e->value);
 }
 
+static int reshape_dummy(struct onnx_node_t * n)
+{
+	return 1;
+}
+
 static void operator_dummy(struct onnx_node_t * n)
 {
 }
@@ -1347,6 +1352,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			if(n->operator)
 				n->r = &resolver_default;
 		}
+		if(!n->reshape)
+			n->reshape = reshape_dummy;
 		if(!n->operator)
 			n->operator = operator_dummy;
 		if(n->init)
@@ -1385,6 +1392,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				return NULL;
 			}
 		}
+		if(n->reshape)
+			n->reshape(n);
 	}
 
 	return ctx;
@@ -2145,7 +2154,8 @@ void onnx_run(struct onnx_context_t * ctx)
 		for(i = 0; i < ctx->nlen; i++)
 		{
 			n = &ctx->nodes[i];
-			n->operator(n);
+			if(n->reshape(n))
+				n->operator(n);
 		}
 	}
 }
