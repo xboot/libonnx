@@ -7,7 +7,7 @@ static int Xor_init(struct onnx_node_t * n)
 		struct onnx_tensor_t * a = n->inputs[0];
 		struct onnx_tensor_t * b = n->inputs[1];
 		struct onnx_tensor_t * y = n->outputs[0];
-		if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+		if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 			return 1;
 	}
 	return 0;
@@ -28,7 +28,7 @@ static void Xor_bool(struct onnx_node_t * n)
 	uint8_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{

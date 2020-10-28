@@ -18,7 +18,7 @@ static int BitShift_init(struct onnx_node_t * n)
 		struct onnx_tensor_t * a = n->inputs[0];
 		struct onnx_tensor_t * b = n->inputs[1];
 		struct onnx_tensor_t * y = n->outputs[0];
-		if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+		if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 		{
 			pdat = malloc(sizeof(struct operator_pdata_t));
 			if(pdat)
@@ -52,7 +52,7 @@ static void BitShift_uint8(struct onnx_node_t * n)
 	uint8_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 	{
 		if(pdat->dir == BIT_SHIFT_DIRECTION_LEFT)
 		{
@@ -86,7 +86,7 @@ static void BitShift_uint16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 	{
 		if(pdat->dir == BIT_SHIFT_DIRECTION_LEFT)
 		{
@@ -120,7 +120,7 @@ static void BitShift_uint32(struct onnx_node_t * n)
 	uint32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 	{
 		if(pdat->dir == BIT_SHIFT_DIRECTION_LEFT)
 		{
@@ -154,7 +154,7 @@ static void BitShift_uint64(struct onnx_node_t * n)
 	uint64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, a->type))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, a->type))
 	{
 		if(pdat->dir == BIT_SHIFT_DIRECTION_LEFT)
 		{

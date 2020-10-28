@@ -7,7 +7,7 @@ static int LessOrEqual_init(struct onnx_node_t * n)
 		struct onnx_tensor_t * a = n->inputs[0];
 		struct onnx_tensor_t * b = n->inputs[1];
 		struct onnx_tensor_t * y = n->outputs[0];
-		if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+		if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 			return 1;
 	}
 	return 0;
@@ -28,7 +28,7 @@ static void LessOrEqual_int8(struct onnx_node_t * n)
 	int8_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -49,7 +49,7 @@ static void LessOrEqual_int16(struct onnx_node_t * n)
 	int16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -70,7 +70,7 @@ static void LessOrEqual_int32(struct onnx_node_t * n)
 	int32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -91,7 +91,7 @@ static void LessOrEqual_int64(struct onnx_node_t * n)
 	int64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -112,7 +112,7 @@ static void LessOrEqual_uint8(struct onnx_node_t * n)
 	uint8_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -133,7 +133,7 @@ static void LessOrEqual_uint16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -154,7 +154,7 @@ static void LessOrEqual_uint32(struct onnx_node_t * n)
 	uint32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -175,7 +175,7 @@ static void LessOrEqual_uint64(struct onnx_node_t * n)
 	uint64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -196,7 +196,7 @@ static void LessOrEqual_float16(struct onnx_node_t * n)
 	uint16_t * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -217,7 +217,7 @@ static void LessOrEqual_float32(struct onnx_node_t * n)
 	float * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
@@ -238,7 +238,7 @@ static void LessOrEqual_float64(struct onnx_node_t * n)
 	double * pb;
 	int i, l;
 
-	if(onnx_tensor_multi_broadcast_reshape(a, b, y, ONNX_TENSOR_TYPE_BOOL))
+	if(onnx_tensor_reshape_multi_broadcast(a, b, y, ONNX_TENSOR_TYPE_BOOL))
 	{
 		for(i = 0, l = y->ndata; i < l; i++)
 		{
