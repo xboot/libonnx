@@ -95,12 +95,12 @@ void resolver_default_op_IsInf(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = IsInf_init;
 		n->exit = IsInf_exit;
-		n->op = IsInf_float32;
+		n->operator = IsInf_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = IsInf_init;
 		n->exit = IsInf_exit;
-		n->op = IsInf_float64;
+		n->operator = IsInf_float64;
 		break;
 	default:
 		break;

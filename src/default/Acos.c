@@ -68,17 +68,17 @@ void resolver_default_op_Acos(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Acos_init;
 		n->exit = Acos_exit;
-		n->op = Acos_float16;
+		n->operator = Acos_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Acos_init;
 		n->exit = Acos_exit;
-		n->op = Acos_float32;
+		n->operator = Acos_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Acos_init;
 		n->exit = Acos_exit;
-		n->op = Acos_float64;
+		n->operator = Acos_float64;
 		break;
 	default:
 		break;

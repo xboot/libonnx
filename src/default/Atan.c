@@ -68,17 +68,17 @@ void resolver_default_op_Atan(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Atan_init;
 		n->exit = Atan_exit;
-		n->op = Atan_float16;
+		n->operator = Atan_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Atan_init;
 		n->exit = Atan_exit;
-		n->op = Atan_float32;
+		n->operator = Atan_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Atan_init;
 		n->exit = Atan_exit;
-		n->op = Atan_float64;
+		n->operator = Atan_float64;
 		break;
 	default:
 		break;

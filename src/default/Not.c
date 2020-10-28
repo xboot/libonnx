@@ -40,7 +40,7 @@ void resolver_default_op_Not(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BOOL:
 		n->init = Not_init;
 		n->exit = Not_exit;
-		n->op = Not_bool;
+		n->operator = Not_bool;
 		break;
 	default:
 		break;

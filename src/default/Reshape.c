@@ -96,7 +96,7 @@ void resolver_default_op_Reshape(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Reshape_init;
 		n->exit = Reshape_exit;
-		n->op = Reshape_operator;
+		n->operator = Reshape_operator;
 		break;
 	default:
 		break;

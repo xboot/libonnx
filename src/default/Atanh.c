@@ -68,17 +68,17 @@ void resolver_default_op_Atanh(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
-		n->op = Atanh_float16;
+		n->operator = Atanh_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
-		n->op = Atanh_float32;
+		n->operator = Atanh_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Atanh_init;
 		n->exit = Atanh_exit;
-		n->op = Atanh_float64;
+		n->operator = Atanh_float64;
 		break;
 	default:
 		break;

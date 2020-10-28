@@ -101,17 +101,17 @@ void resolver_default_op_Selu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
-		n->op = Selu_float16;
+		n->operator = Selu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
-		n->op = Selu_float32;
+		n->operator = Selu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Selu_init;
 		n->exit = Selu_exit;
-		n->op = Selu_float64;
+		n->operator = Selu_float64;
 		break;
 	default:
 		break;

@@ -51,7 +51,7 @@ void resolver_default_op_Size(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Size_init;
 		n->exit = Size_exit;
-		n->op = Size_operator;
+		n->operator = Size_operator;
 		break;
 	default:
 		break;

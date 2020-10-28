@@ -107,5 +107,5 @@ void resolver_default_op_Constant(struct onnx_node_t * n)
 {
 	n->init = Constant_init;
 	n->exit = Constant_exit;
-	n->op = Constant_operator;
+	n->operator = Constant_operator;
 }

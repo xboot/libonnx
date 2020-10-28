@@ -84,22 +84,22 @@ void resolver_default_op_Sqrt(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Sqrt_init;
 		n->exit = Sqrt_exit;
-		n->op = Sqrt_bfloat16;
+		n->operator = Sqrt_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Sqrt_init;
 		n->exit = Sqrt_exit;
-		n->op = Sqrt_float16;
+		n->operator = Sqrt_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Sqrt_init;
 		n->exit = Sqrt_exit;
-		n->op = Sqrt_float32;
+		n->operator = Sqrt_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Sqrt_init;
 		n->exit = Sqrt_exit;
-		n->op = Sqrt_float64;
+		n->operator = Sqrt_float64;
 		break;
 	default:
 		break;

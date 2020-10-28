@@ -46,7 +46,7 @@ void resolver_default_op_And(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BOOL:
 		n->init = And_init;
 		n->exit = And_exit;
-		n->op = And_bool;
+		n->operator = And_bool;
 		break;
 	default:
 		break;

@@ -56,7 +56,7 @@ void resolver_default_op_Celu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Celu_init;
 		n->exit = Celu_exit;
-		n->op = Celu_float32;
+		n->operator = Celu_float32;
 		break;
 	default:
 		break;

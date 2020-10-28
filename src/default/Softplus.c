@@ -68,17 +68,17 @@ void resolver_default_op_Softplus(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Softplus_init;
 		n->exit = Softplus_exit;
-		n->op = Softplus_float16;
+		n->operator = Softplus_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Softplus_init;
 		n->exit = Softplus_exit;
-		n->op = Softplus_float32;
+		n->operator = Softplus_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Softplus_init;
 		n->exit = Softplus_exit;
-		n->op = Softplus_float64;
+		n->operator = Softplus_float64;
 		break;
 	default:
 		break;

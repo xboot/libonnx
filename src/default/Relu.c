@@ -88,22 +88,22 @@ void resolver_default_op_Relu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Relu_init;
 		n->exit = Relu_exit;
-		n->op = Relu_bfloat16;
+		n->operator = Relu_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Relu_init;
 		n->exit = Relu_exit;
-		n->op = Relu_float16;
+		n->operator = Relu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Relu_init;
 		n->exit = Relu_exit;
-		n->op = Relu_float32;
+		n->operator = Relu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Relu_init;
 		n->exit = Relu_exit;
-		n->op = Relu_float64;
+		n->operator = Relu_float64;
 		break;
 	default:
 		break;

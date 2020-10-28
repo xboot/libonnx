@@ -86,17 +86,17 @@ void resolver_default_op_Elu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Elu_init;
 		n->exit = Elu_exit;
-		n->op = Elu_float16;
+		n->operator = Elu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Elu_init;
 		n->exit = Elu_exit;
-		n->op = Elu_float32;
+		n->operator = Elu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Elu_init;
 		n->exit = Elu_exit;
-		n->op = Elu_float64;
+		n->operator = Elu_float64;
 		break;
 	default:
 		break;

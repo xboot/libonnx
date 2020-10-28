@@ -68,17 +68,17 @@ void resolver_default_op_Tanh(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Tanh_init;
 		n->exit = Tanh_exit;
-		n->op = Tanh_float16;
+		n->operator = Tanh_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Tanh_init;
 		n->exit = Tanh_exit;
-		n->op = Tanh_float32;
+		n->operator = Tanh_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Tanh_init;
 		n->exit = Tanh_exit;
-		n->op = Tanh_float64;
+		n->operator = Tanh_float64;
 		break;
 	default:
 		break;

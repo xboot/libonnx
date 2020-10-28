@@ -141,17 +141,17 @@ void resolver_default_op_BatchNormalization(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
-		n->op = BatchNormalization_float16;
+		n->operator = BatchNormalization_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
-		n->op = BatchNormalization_float32;
+		n->operator = BatchNormalization_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = BatchNormalization_init;
 		n->exit = BatchNormalization_exit;
-		n->op = BatchNormalization_float64;
+		n->operator = BatchNormalization_float64;
 		break;
 	default:
 		break;

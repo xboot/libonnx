@@ -100,22 +100,22 @@ void resolver_default_op_Sigmoid(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Sigmoid_init;
 		n->exit = Sigmoid_exit;
-		n->op = Sigmoid_bfloat16;
+		n->operator = Sigmoid_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Sigmoid_init;
 		n->exit = Sigmoid_exit;
-		n->op = Sigmoid_float16;
+		n->operator = Sigmoid_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Sigmoid_init;
 		n->exit = Sigmoid_exit;
-		n->op = Sigmoid_float32;
+		n->operator = Sigmoid_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Sigmoid_init;
 		n->exit = Sigmoid_exit;
-		n->op = Sigmoid_float64;
+		n->operator = Sigmoid_float64;
 		break;
 	default:
 		break;

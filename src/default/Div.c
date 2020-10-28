@@ -193,42 +193,42 @@ void resolver_default_op_Div(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_INT32:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_int32;
+		n->operator = Div_int32;
 		break;
 	case ONNX_TENSOR_TYPE_INT64:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_int64;
+		n->operator = Div_int64;
 		break;
 	case ONNX_TENSOR_TYPE_UINT32:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_uint32;
+		n->operator = Div_uint32;
 		break;
 	case ONNX_TENSOR_TYPE_UINT64:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_uint64;
+		n->operator = Div_uint64;
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_bfloat16;
+		n->operator = Div_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_float16;
+		n->operator = Div_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_float32;
+		n->operator = Div_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Div_init;
 		n->exit = Div_exit;
-		n->op = Div_float64;
+		n->operator = Div_float64;
 		break;
 	default:
 		break;

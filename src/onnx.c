@@ -1139,7 +1139,7 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 		onnx_tensor_free((struct onnx_tensor_t *)e->value);
 }
 
-static void op_dummy(struct onnx_node_t * n)
+static void operator_dummy(struct onnx_node_t * n)
 {
 }
 
@@ -1334,21 +1334,21 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		for(j = 0; j < ctx->rlen; j++)
 		{
 			resolver_solve_operator(ctx->r[j], n);
-			if(n->op)
+			if(n->operator)
 			{
 				n->r = ctx->r[j];
 				n->rctx = ctx->rctx[j];
 				break;
 			}
 		}
-		if(!n->op)
+		if(!n->operator)
 		{
 			resolver_solve_operator(&resolver_default, n);
-			if(n->op)
+			if(n->operator)
 				n->r = &resolver_default;
 		}
-		if(!n->op)
-			n->op = op_dummy;
+		if(!n->operator)
+			n->operator = operator_dummy;
 		if(n->init)
 		{
 			if(n->init(n) <= 0)
@@ -2145,7 +2145,7 @@ void onnx_run(struct onnx_context_t * ctx)
 		for(i = 0; i < ctx->nlen; i++)
 		{
 			n = &ctx->nodes[i];
-			n->op(n);
+			n->operator(n);
 		}
 	}
 }

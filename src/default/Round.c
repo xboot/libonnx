@@ -68,17 +68,17 @@ void resolver_default_op_Round(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Round_init;
 		n->exit = Round_exit;
-		n->op = Round_float16;
+		n->operator = Round_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Round_init;
 		n->exit = Round_exit;
-		n->op = Round_float32;
+		n->operator = Round_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Round_init;
 		n->exit = Round_exit;
-		n->op = Round_float64;
+		n->operator = Round_float64;
 		break;
 	default:
 		break;

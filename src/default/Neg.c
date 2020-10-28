@@ -132,42 +132,42 @@ void resolver_default_op_Neg(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_INT8:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_int8;
+		n->operator = Neg_int8;
 		break;
 	case ONNX_TENSOR_TYPE_INT16:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_int16;
+		n->operator = Neg_int16;
 		break;
 	case ONNX_TENSOR_TYPE_INT32:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_int32;
+		n->operator = Neg_int32;
 		break;
 	case ONNX_TENSOR_TYPE_INT64:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_int64;
+		n->operator = Neg_int64;
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_bfloat16;
+		n->operator = Neg_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_float16;
+		n->operator = Neg_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_float32;
+		n->operator = Neg_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Neg_init;
 		n->exit = Neg_exit;
-		n->op = Neg_float64;
+		n->operator = Neg_float64;
 		break;
 	default:
 		break;

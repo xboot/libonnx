@@ -84,22 +84,22 @@ void resolver_default_op_Exp(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Exp_init;
 		n->exit = Exp_exit;
-		n->op = Exp_bfloat16;
+		n->operator = Exp_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Exp_init;
 		n->exit = Exp_exit;
-		n->op = Exp_float16;
+		n->operator = Exp_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Exp_init;
 		n->exit = Exp_exit;
-		n->op = Exp_float32;
+		n->operator = Exp_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Exp_init;
 		n->exit = Exp_exit;
-		n->op = Exp_float64;
+		n->operator = Exp_float64;
 		break;
 	default:
 		break;

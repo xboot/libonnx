@@ -68,17 +68,17 @@ void resolver_default_op_Sin(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Sin_init;
 		n->exit = Sin_exit;
-		n->op = Sin_float16;
+		n->operator = Sin_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Sin_init;
 		n->exit = Sin_exit;
-		n->op = Sin_float32;
+		n->operator = Sin_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Sin_init;
 		n->exit = Sin_exit;
-		n->op = Sin_float64;
+		n->operator = Sin_float64;
 		break;
 	default:
 		break;

@@ -84,22 +84,22 @@ void resolver_default_op_Floor(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		n->init = Floor_init;
 		n->exit = Floor_exit;
-		n->op = Floor_bfloat16;
+		n->operator = Floor_bfloat16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Floor_init;
 		n->exit = Floor_exit;
-		n->op = Floor_float16;
+		n->operator = Floor_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Floor_init;
 		n->exit = Floor_exit;
-		n->op = Floor_float32;
+		n->operator = Floor_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Floor_init;
 		n->exit = Floor_exit;
-		n->op = Floor_float64;
+		n->operator = Floor_float64;
 		break;
 	default:
 		break;

@@ -86,17 +86,17 @@ void resolver_default_op_ThresholdedRelu(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
-		n->op = ThresholdedRelu_float16;
+		n->operator = ThresholdedRelu_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
-		n->op = ThresholdedRelu_float32;
+		n->operator = ThresholdedRelu_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = ThresholdedRelu_init;
 		n->exit = ThresholdedRelu_exit;
-		n->op = ThresholdedRelu_float64;
+		n->operator = ThresholdedRelu_float64;
 		break;
 	default:
 		break;

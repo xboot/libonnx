@@ -69,7 +69,7 @@ void resolver_default_op_Identity(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Identity_init;
 		n->exit = Identity_exit;
-		n->op = Identity_operator;
+		n->operator = Identity_operator;
 		break;
 	default:
 		break;

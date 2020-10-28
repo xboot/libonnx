@@ -251,7 +251,7 @@ struct onnx_node_t {
 
 	int (*init)(struct onnx_node_t * n);
 	int (*exit)(struct onnx_node_t * n);
-	void (*op)(struct onnx_node_t * n);
+	void (*operator)(struct onnx_node_t * n);
 	void * priv;
 };
 

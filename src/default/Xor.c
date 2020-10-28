@@ -46,7 +46,7 @@ void resolver_default_op_Xor(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_BOOL:
 		n->init = Xor_init;
 		n->exit = Xor_exit;
-		n->op = Xor_bool;
+		n->operator = Xor_bool;
 		break;
 	default:
 		break;

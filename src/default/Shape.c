@@ -54,7 +54,7 @@ void resolver_default_op_Shape(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_STRING:
 		n->init = Shape_init;
 		n->exit = Shape_exit;
-		n->op = Shape_operator;
+		n->operator = Shape_operator;
 		break;
 	default:
 		break;

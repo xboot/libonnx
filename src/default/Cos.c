@@ -68,17 +68,17 @@ void resolver_default_op_Cos(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		n->init = Cos_init;
 		n->exit = Cos_exit;
-		n->op = Cos_float16;
+		n->operator = Cos_float16;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		n->init = Cos_init;
 		n->exit = Cos_exit;
-		n->op = Cos_float32;
+		n->operator = Cos_float32;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		n->init = Cos_init;
 		n->exit = Cos_exit;
-		n->op = Cos_float64;
+		n->operator = Cos_float64;
 		break;
 	default:
 		break;
