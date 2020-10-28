@@ -188,9 +188,6 @@ static void Div_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Div(struct onnx_node_t * n)
 {
-	//FIXME
-	return;
-
 	switch(n->inputs[0]->type)
 	{
 	case ONNX_TENSOR_TYPE_INT32:
