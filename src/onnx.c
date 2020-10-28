@@ -1311,19 +1311,25 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		memset(n, 0, sizeof(struct onnx_node_t));
 
 		n->proto = ctx->model->graph->node[i];
-		n->inputs = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_input);
-		if(n->inputs)
+		if(n->proto->n_input > 0)
 		{
-			n->ninput = n->proto->n_input;
-			for(j = 0; j < n->ninput; j++)
-				n->inputs[j] = onnx_search_tensor(ctx, n->proto->input[j]);
+			n->inputs = malloc(sizeof(struct onnx_tensor_t *) * n->proto->n_input);
+			if(n->inputs)
+			{
+				n->ninput = n->proto->n_input;
+				for(j = 0; j < n->ninput; j++)
+					n->inputs[j] = onnx_search_tensor(ctx, n->proto->input[j]);
+			}
 		}
-		n->outputs = malloc(sizeof(Onnx__TensorProto *) * n->proto->n_output);
-		if(n->outputs)
+		if(n->proto->n_output > 0)
 		{
-			n->noutput = n->proto->n_output;
-			for(j = 0; j < n->noutput; j++)
-				n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
+			n->outputs = malloc(sizeof(struct onnx_tensor_t *) * n->proto->n_output);
+			if(n->outputs)
+			{
+				n->noutput = n->proto->n_output;
+				for(j = 0; j < n->noutput; j++)
+					n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
+			}
 		}
 		for(j = 0; j < ctx->rlen; j++)
 		{
