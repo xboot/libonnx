@@ -49,6 +49,10 @@ static int ArgMin_reshape(struct onnx_node_t * n)
 
 	if(axis < 0)
 		axis += x->ndim;
+	pdat->dim = x->dims[axis];
+	pdat->stride = 1;
+	for(i = ndim - 1; i > axis; i--)
+		pdat->stride *= x->dims[i];
 	if(pdat->keepdims)
 	{
 		memcpy(dims, x->dims, sizeof(int) * ndim);
@@ -56,13 +60,12 @@ static int ArgMin_reshape(struct onnx_node_t * n)
 	}
 	else
 	{
-		memcpy(dims, x->dims, sizeof(int) * ndim);
-		dims[axis] = 1;
+		for(i = 0, ndim = 0; i < x->ndim; i++)
+		{
+			if(i != axis)
+				dims[ndim++]= x->dims[i];
+		}
 	}
-	pdat->dim = x->dims[axis];
-	pdat->stride = 1;
-	for(i = ndim - 1; i > axis; i--)
-		pdat->stride *= x->dims[i];
 	return onnx_tensor_reshape(y, dims, ndim, ONNX_TENSOR_TYPE_INT64);
 }
 
