@@ -49,10 +49,10 @@ static int ArgMax_reshape(struct onnx_node_t * n)
 
 	if(axis < 0)
 		axis += x->ndim;
+	if(axis < 0 || axis >= x->ndim)
+		return 0;
 	pdat->dim = x->dims[axis];
-	pdat->stride = 1;
-	for(i = ndim - 1; i > axis; i--)
-		pdat->stride *= x->dims[i];
+	pdat->stride = x->strides[axis];
 	if(pdat->keepdims)
 	{
 		memcpy(dims, x->dims, sizeof(int) * ndim);
