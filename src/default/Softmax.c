@@ -167,7 +167,7 @@ static void Softmax_float64(struct onnx_node_t * n)
 
 	for(i = 0, o = 0; i < pdat->N; i++, o += pdat->D)
 	{
-		for(j = 0, maxv = FLT_MIN; j < pdat->D; j++)
+		for(j = 0, maxv = DBL_MIN; j < pdat->D; j++)
 		{
 			if(px[o + j] > maxv)
 				maxv = px[o + j];
