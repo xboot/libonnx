@@ -47,7 +47,7 @@ TBD.
 
 ## Notes
 
-This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree/rel-1.8.0) with the newest opsets support.
+This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree/rel-1.8.0) with the newest `operator sets 13` support.
 
 ## Links
 
