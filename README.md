@@ -53,8 +53,8 @@ This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree
 
 * [The chinese discussion posts](https://whycan.com/t_5440.html)
 * [The onnx operators documentation](https://github.com/onnx/onnx/blob/master/docs/Operators.md)
+* [The tutorials for creating ONNX models](https://github.com/onnx/tutorials)
 * [The pre-trained onnx models](https://github.com/onnx/models)
-* [The tutorials for creating ONNX models](https://github.com/onnx/tutorials).
 
 ## License
 
