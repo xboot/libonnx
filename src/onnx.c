@@ -1228,7 +1228,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	for(i = 0; i < ctx->model->graph->n_input; i++)
 	{
 		v = ctx->model->graph->input[i];
-		if(!onnx_search_tensor(ctx, v->name))
+		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
 			if(t)
@@ -1246,7 +1246,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	for(i = 0; i < ctx->model->graph->n_output; i++)
 	{
 		v = ctx->model->graph->output[i];
-		if(!onnx_search_tensor(ctx, v->name))
+		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
 			if(t)
@@ -1257,7 +1257,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	for(i = 0; i < ctx->model->graph->n_value_info; i++)
 	{
 		v = ctx->model->graph->value_info[i];
-		if(!onnx_search_tensor(ctx, v->name))
+		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
 			if(t)
@@ -1270,7 +1270,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		for(j = 0; j < ctx->model->graph->node[i]->n_output; j++)
 		{
 			name = ctx->model->graph->node[i]->output[j];
-			if(!onnx_search_tensor(ctx, name))
+			if(!onnx_tensor_search(ctx, name))
 			{
 				t = onnx_tensor_alloc(name, ONNX_TENSOR_TYPE_UNDEFINED, NULL, 0);
 				if(t)
@@ -1284,7 +1284,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		for(j = 0; j < ctx->model->graph->node[i]->n_input; j++)
 		{
 			name = ctx->model->graph->node[i]->input[j];
-			if(!onnx_search_tensor(ctx, name))
+			if(!onnx_tensor_search(ctx, name))
 			{
 				if(ctx->map)
 					hmap_free(ctx->map, hmap_entry_callback);
@@ -1323,7 +1323,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			{
 				n->ninput = n->proto->n_input;
 				for(j = 0; j < n->ninput; j++)
-					n->inputs[j] = onnx_search_tensor(ctx, n->proto->input[j]);
+					n->inputs[j] = onnx_tensor_search(ctx, n->proto->input[j]);
 			}
 		}
 		if(n->proto->n_output > 0)
@@ -1333,7 +1333,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			{
 				n->noutput = n->proto->n_output;
 				for(j = 0; j < n->noutput; j++)
-					n->outputs[j] = onnx_search_tensor(ctx, n->proto->output[j]);
+					n->outputs[j] = onnx_tensor_search(ctx, n->proto->output[j]);
 			}
 		}
 		for(j = 0; j < ctx->rlen; j++)
@@ -1517,7 +1517,7 @@ int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type)
 	return typesz[0];
 }
 
-struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name)
+struct onnx_tensor_t * onnx_tensor_search(struct onnx_context_t * ctx, const char * name)
 {
 	if(ctx)
 		return hmap_search(ctx->map, name);

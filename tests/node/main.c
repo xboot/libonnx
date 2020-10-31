@@ -177,7 +177,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 					break;
 				if(ninput > ctx->model->graph->n_input)
 					break;
-				t = onnx_search_tensor(ctx, ctx->model->graph->input[ninput]->name);
+				t = onnx_tensor_search(ctx, ctx->model->graph->input[ninput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
 				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_sizeof(o->type), &o->scalar);
 				onnx_tensor_free(o);
@@ -192,7 +192,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 					break;
 				if(noutput > ctx->model->graph->n_output)
 					break;
-				t = onnx_search_tensor(ctx, ctx->model->graph->output[noutput]->name);
+				t = onnx_tensor_search(ctx, ctx->model->graph->output[noutput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
 				if(onnx_tensor_equal(t, o))
 					okay++;

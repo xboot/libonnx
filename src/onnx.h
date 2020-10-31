@@ -434,7 +434,7 @@ void onnx_context_free(struct onnx_context_t * ctx);
 
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type);
 int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type);
-struct onnx_tensor_t * onnx_search_tensor(struct onnx_context_t * ctx, const char * name);
+struct onnx_tensor_t * onnx_tensor_search(struct onnx_context_t * ctx, const char * name);
 struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_type_t type, int * dims, int ndim);
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
