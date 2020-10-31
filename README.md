@@ -34,7 +34,7 @@ onnx_context_free(ctx);
 
 ## Examples
 
-Just type `make` at the root directory, you will see a static library and some binary of [examples](examples) for usage.
+Just type `make` at the root directory, you will see a static library and some binary of [examples](examples) and [tests](tests) for usage.
 
 ```shell
 cd libonnx
@@ -45,11 +45,16 @@ make
 
 TBD.
 
+## Notes
+
+This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree/rel-1.8.0) with the newest opsets support.
+
 ## Links
 
 * [The chinese discussion posts](https://whycan.com/t_5440.html)
-* [The repo of onnx spec](https://github.com/onnx/onnx)
+* [The onnx operators documentation](https://github.com/onnx/onnx/blob/master/docs/Operators.md)
 * [The pre-trained onnx models](https://github.com/onnx/models)
+* [The tutorials for creating ONNX models](https://github.com/onnx/tutorials).
 
 ## License
 
