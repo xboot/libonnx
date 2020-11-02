@@ -1,10 +1,13 @@
 #include <onnx.h>
 
-struct operator_pdata_t {
+struct operator_pdata_t
+{
 	int axis;
 
-	int N;
-	int D;
+	int caxis;
+	int current;
+	int outter;
+	int inner;
 };
 
 static int Softmax_init(struct onnx_node_t * n)
@@ -38,19 +41,21 @@ static int Softmax_reshape(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
-	int axis = pdat->axis;
 	int i;
 
-	if(axis < 0)
-		axis += x->ndim;
-	if(axis < 0 || axis >= x->ndim)
+	pdat->caxis = pdat->axis;
+	if(pdat->caxis < 0)
+		pdat->caxis += x->ndim;
+	if(pdat->caxis < 0 || pdat->caxis >= x->ndim)
 		return 0;
-	for(i = 0, pdat->N = 1, pdat->D = 1; i < x->ndim; i++)
+	for(i = 0, pdat->outter = 1, pdat->inner = 1; i < x->ndim; i++)
 	{
-		if(i < axis)
-			pdat->N *= x->dims[i];
+		if(i == pdat->caxis)
+			pdat->current = x->dims[i];
+		else if(i < pdat->caxis)
+			pdat->outter *= x->dims[i];
 		else
-			pdat->D *= x->dims[i];
+			pdat->inner *= x->dims[i];
 	}
 	return onnx_tensor_reshape_identity(y, x, x->type);
 }
@@ -63,28 +68,36 @@ static void Softmax_bfloat16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	float maxv, sum, v;
-	int i, j, o;
+	int i, j, k, o, oo, io;
 
-	for(i = 0, o = 0; i < pdat->N; i++, o += pdat->D)
+	for(i = 0; i < pdat->outter; i++)
 	{
-		for(j = 0, maxv = FLT_MIN; j < pdat->D; j++)
+		oo = i * pdat->current * pdat->inner;
+		for(k = 0; k < pdat->inner; k++)
 		{
-			v = bfloat16_to_float32(px[o + j]);
-			if(v > maxv)
-				maxv = v;
-		}
-		for(j = 0, sum = 0; j < pdat->D; j++)
-		{
-			v = expf(bfloat16_to_float32(px[o + j]) - maxv);
-			py[o + j] = float32_to_bfloat16(v);
-			sum += v;
-		}
-		if(sum != 0)
-		{
-			for(j = 0; j < pdat->D; j++)
+			io = oo + k;
+			for(j = 0, maxv = bfloat16_to_float32(px[io]); j < pdat->current; j++)
 			{
-				v = bfloat16_to_float32(py[o + j]);
-				py[o + j] = float32_to_bfloat16(v / sum);
+				o = io + j * pdat->inner;
+				v = bfloat16_to_float32(px[o]);
+				if(v > maxv)
+					maxv = v;
+			}
+			for(j = 0, sum = 0; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				v = expf(bfloat16_to_float32(px[o]) - maxv);
+				py[o] = float32_to_bfloat16(v);
+				sum += v;
+			}
+			if(sum != 0)
+			{
+				for(j = 0; j < pdat->current; j++)
+				{
+					io = oo + j * pdat->inner + k;
+					v = bfloat16_to_float32(py[io]);
+					py[io] = float32_to_bfloat16(v / sum);
+				}
 			}
 		}
 	}
@@ -98,28 +111,36 @@ static void Softmax_float16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	float maxv, sum, v;
-	int i, j, o;
+	int i, j, k, o, oo, io;
 
-	for(i = 0, o = 0; i < pdat->N; i++, o += pdat->D)
+	for(i = 0; i < pdat->outter; i++)
 	{
-		for(j = 0, maxv = FLT_MIN; j < pdat->D; j++)
+		oo = i * pdat->current * pdat->inner;
+		for(k = 0; k < pdat->inner; k++)
 		{
-			v = float16_to_float32(px[o + j]);
-			if(v > maxv)
-				maxv = v;
-		}
-		for(j = 0, sum = 0; j < pdat->D; j++)
-		{
-			v = expf(float16_to_float32(px[o + j]) - maxv);
-			py[o + j] = float32_to_float16(v);
-			sum += v;
-		}
-		if(sum != 0)
-		{
-			for(j = 0; j < pdat->D; j++)
+			io = oo + k;
+			for(j = 0, maxv = float16_to_float32(px[io]); j < pdat->current; j++)
 			{
-				v = float16_to_float32(py[o + j]);
-				py[o + j] = float32_to_float16(v / sum);
+				o = io + j * pdat->inner;
+				v = float16_to_float32(px[o]);
+				if(v > maxv)
+					maxv = v;
+			}
+			for(j = 0, sum = 0; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				v = expf(float16_to_float32(px[o]) - maxv);
+				py[o] = float32_to_float16(v);
+				sum += v;
+			}
+			if(sum != 0)
+			{
+				for(j = 0; j < pdat->current; j++)
+				{
+					io = oo + j * pdat->inner + k;
+					v = float16_to_float32(py[io]);
+					py[io] = float32_to_float16(v / sum);
+				}
 			}
 		}
 	}
@@ -133,24 +154,34 @@ static void Softmax_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 	float maxv, sum;
-	int i, j, o;
+	int i, j, k, o, oo, io;
 
-	for(i = 0, o = 0; i < pdat->N; i++, o += pdat->D)
+	for(i = 0; i < pdat->outter; i++)
 	{
-		for(j = 0, maxv = FLT_MIN; j < pdat->D; j++)
+		oo = i * pdat->current * pdat->inner;
+		for(k = 0; k < pdat->inner; k++)
 		{
-			if(px[o + j] > maxv)
-				maxv = px[o + j];
-		}
-		for(j = 0, sum = 0; j < pdat->D; j++)
-		{
-			py[o + j] = expf(px[o + j] - maxv);
-			sum += py[o + j];
-		}
-		if(sum != 0)
-		{
-			for(j = 0; j < pdat->D; j++)
-				py[o + j] /= sum;
+			io = oo + k;
+			for(j = 0, maxv = px[io]; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				if(px[o] > maxv)
+					maxv = px[o];
+			}
+			for(j = 0, sum = 0; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				py[o] = expf(px[o] - maxv);
+				sum += py[o];
+			}
+			if(sum != 0)
+			{
+				for(j = 0; j < pdat->current; j++)
+				{
+					io = oo + j * pdat->inner + k;
+					py[io] /= sum;
+				}
+			}
 		}
 	}
 }
@@ -163,24 +194,34 @@ static void Softmax_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 	double maxv, sum;
-	int i, j, o;
+	int i, j, k, o, oo, io;
 
-	for(i = 0, o = 0; i < pdat->N; i++, o += pdat->D)
+	for(i = 0; i < pdat->outter; i++)
 	{
-		for(j = 0, maxv = DBL_MIN; j < pdat->D; j++)
+		oo = i * pdat->current * pdat->inner;
+		for(k = 0; k < pdat->inner; k++)
 		{
-			if(px[o + j] > maxv)
-				maxv = px[o + j];
-		}
-		for(j = 0, sum = 0; j < pdat->D; j++)
-		{
-			py[o + j] = exp(px[o + j] - maxv);
-			sum += py[o + j];
-		}
-		if(sum != 0)
-		{
-			for(j = 0; j < pdat->D; j++)
-				py[o + j] /= sum;
+			io = oo + k;
+			for(j = 0, maxv = px[io]; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				if(px[o] > maxv)
+					maxv = px[o];
+			}
+			for(j = 0, sum = 0; j < pdat->current; j++)
+			{
+				o = io + j * pdat->inner;
+				py[o] = exp(px[o] - maxv);
+				sum += py[o];
+			}
+			if(sum != 0)
+			{
+				for(j = 0; j < pdat->current; j++)
+				{
+					io = oo + j * pdat->inner + k;
+					py[io] /= sum;
+				}
+			}
 		}
 	}
 }
