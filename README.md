@@ -47,7 +47,7 @@ TBD.
 
 ## Notes
 
-This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree/rel-1.8.0) with the newest `operator sets 13` support.
+This library based on the onnx version [1.8.0](https://github.com/onnx/onnx/tree/rel-1.8.0) with the newest `operator set 13` support. [The supported operator table](documents/the-supported-operator-table.md) in the [documents](documents) directory.
 
 ## Links
 
