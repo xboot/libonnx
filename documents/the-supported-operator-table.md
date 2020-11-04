@@ -44,7 +44,7 @@
 |Expand|√|
 |EyeLike||
 |Flatten|√|
-|Floor||
+|Floor|√|
 |GRU||
 |Gather||
 |GatherElements||
@@ -61,7 +61,7 @@
 |InstanceNormalization|√|
 |IsInf|√|
 |IsNaN|√|
-|LRN|√|
+|LRN||
 |LSTM||
 |LeakyRelu|√|
 |Less|√|
