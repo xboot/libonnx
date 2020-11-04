@@ -93,10 +93,10 @@
 |QLinearMatMul||
 |QuantizeLinear||
 |RNN||
-|RandomNormal||
-|RandomNormalLike||
-|RandomUniform||
-|RandomUniformLike||
+|RandomNormal|√|
+|RandomNormalLike|√|
+|RandomUniform|√|
+|RandomUniformLike|√|
 |Reciprocal|√|
 |ReduceL1||
 |ReduceL2||
