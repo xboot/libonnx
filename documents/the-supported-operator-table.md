@@ -61,7 +61,7 @@
 |InstanceNormalization|√|
 |IsInf|√|
 |IsNaN|√|
-|LRN||
+|LRN|√|
 |LSTM||
 |LeakyRelu|√|
 |Less|√|
