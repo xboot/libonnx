@@ -145,7 +145,7 @@
 |Tan|√|
 |Tanh|√|
 |TfIdfVectorizer||
-|ThresholdedRelu|             |
+|ThresholdedRelu| √ |
 | Tile                      ||
 |TopK|             |
 | Transpose                 |√|
@@ -162,6 +162,6 @@
 |MeanVarianceNormalization||
 |NegativeLogLikelihoodLoss||
 |Range|√|
-|Softmax|√|
+|Softmax||
 |SoftmaxCrossEntropyLoss||
 
