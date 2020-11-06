@@ -79,7 +79,7 @@
 |Min|√|
 |Mod|√|
 |Mul|√|
-|Multinomial||
+|Multinomial|√|
 |Neg|√|
 |NonMaxSuppression||
 |NonZero||
