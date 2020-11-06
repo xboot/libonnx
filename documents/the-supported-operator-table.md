@@ -131,7 +131,7 @@
 |Sin|√|
 |Sinh|√|
 |Size|√|
-|Slice|√|
+|Slice||
 |Softplus|√|
 |Softsign|√|
 |SpaceToDepth||
@@ -162,6 +162,6 @@
 |MeanVarianceNormalization||
 |NegativeLogLikelihoodLoss||
 |Range|√|
-|Softmax||
+|Softmax|√|
 |SoftmaxCrossEntropyLoss||
 
