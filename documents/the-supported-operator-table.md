@@ -150,7 +150,7 @@
 |TopK|             |
 | Transpose                 |√|
 |Unique||
-|Unsqueeze||
+|Unsqueeze|√|
 |Where|             |
 | Xor                       |√|
 |**Function**||
