@@ -138,7 +138,7 @@
 |Split|             |
 | SplitToSequence           ||
 |Sqrt|√|
-|Squeeze||
+|Squeeze|√|
 |StringNormalizer||
 |Sub|√|
 |Sum|√|
