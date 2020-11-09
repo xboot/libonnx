@@ -35,7 +35,7 @@
 |DequantizeLinear||
 |Det||
 |Div|√|
-|Dropout||
+|Dropout|√|
 |Einsum||
 |Elu|√|
 |Equal|√|
@@ -146,7 +146,7 @@
 |Tanh|√|
 |TfIdfVectorizer||
 |ThresholdedRelu| √ |
-| Tile                      ||
+| Tile                      |√|
 |TopK|             |
 | Transpose                 |√|
 |Unique||
