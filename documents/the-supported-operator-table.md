@@ -151,7 +151,7 @@
 | Transpose                 |√|
 |Unique||
 |Unsqueeze|√|
-|Where|             |
+|Where| √ |
 | Xor                       |√|
 |**Function**||
 |Celu|√|
