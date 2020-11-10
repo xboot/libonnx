@@ -446,6 +446,20 @@ static inline int onnx_tensor_is_scalar(struct onnx_tensor_t * t)
 	return (t->ndim > 0) ? 0 : 1;
 }
 
+static inline int onnx_tensor_broadcast_is_valid(struct onnx_tensor_t * x, int * dims, int ndim)
+{
+	int i;
+
+	if(x->ndim > ndim)
+		return 0;
+	for(i = 1; i <= x->ndim; i++)
+	{
+		if((x->dims[x->ndim - i] != 1) && (x->dims[x->ndim - i] != dims[ndim - i]))
+			return 0;
+	}
+	return 1;
+}
+
 static inline int onnx_tensor_indices_to_offset(struct onnx_tensor_t * t, int * indices)
 {
 	int offset, i;

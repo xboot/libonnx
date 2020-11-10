@@ -49,7 +49,7 @@
 |Gather||
 |GatherElements||
 |GatherND||
-|Gemm||
+|Gemm|√|
 |GlobalAveragePool|√|
 |GlobalLpPool|√|
 |GlobalMaxPool|√|
