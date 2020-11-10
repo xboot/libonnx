@@ -69,7 +69,7 @@
 |Loop||
 |LpNormalization||
 |LpPool||
-|MatMul||
+|MatMul|√|
 |MatMulInteger||
 |Max|√|
 |MaxPool||
