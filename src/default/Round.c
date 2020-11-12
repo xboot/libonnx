@@ -32,7 +32,7 @@ static void Round_float16(struct onnx_node_t * n)
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
-		py[i] = float32_to_float16(roundf(v));
+		py[i] = float32_to_float16(rintf(v));
 	}
 }
 
@@ -45,7 +45,7 @@ static void Round_float32(struct onnx_node_t * n)
 	int i, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
-		py[i] = roundf(px[i]);
+		py[i] = rintf(px[i]);
 }
 
 static void Round_float64(struct onnx_node_t * n)
@@ -57,7 +57,7 @@ static void Round_float64(struct onnx_node_t * n)
 	int i, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
-		py[i] = round(px[i]);
+		py[i] = rint(px[i]);
 }
 
 void resolver_default_op_Round(struct onnx_node_t * n)
