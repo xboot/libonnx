@@ -101,7 +101,7 @@
 |ReduceL1|√|
 |ReduceL2|√|
 |ReduceLogSum|√|
-|ReduceLogSumExp||
+|ReduceLogSumExp|√|
 |ReduceMax||
 |ReduceMean|√|
 |ReduceMin||
