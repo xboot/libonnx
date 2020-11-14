@@ -160,8 +160,8 @@ static void ReduceMean_int8(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -210,8 +210,8 @@ static void ReduceMean_int32(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -260,8 +260,8 @@ static void ReduceMean_int64(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -310,8 +310,8 @@ static void ReduceMean_uint8(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -360,8 +360,8 @@ static void ReduceMean_uint32(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -410,8 +410,8 @@ static void ReduceMean_uint64(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -460,8 +460,8 @@ static void ReduceMean_bfloat16(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -510,8 +510,8 @@ static void ReduceMean_float16(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -560,8 +560,8 @@ static void ReduceMean_float32(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
@@ -610,8 +610,8 @@ static void ReduceMean_float64(struct onnx_node_t * n)
 	int iter_in_axes_max[pdat->naxes];
 	int in_axes_axis_dis[pdat->naxes];
 	int iter_in_axes[pdat->naxes];
-	int mask, o;
-	int i, j, k;
+	uint32_t mask;
+	int i, j, k, o;
 
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
