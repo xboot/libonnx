@@ -104,7 +104,7 @@
 |ReduceLogSumExp|√|
 |ReduceMax||
 |ReduceMean|√|
-|ReduceMin||
+|ReduceMin|√|
 |ReduceProd|√|
 |ReduceSum|√|
 |ReduceSumSquare|√|
