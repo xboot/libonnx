@@ -106,7 +106,7 @@
 |ReduceMean|√|
 |ReduceMin||
 |ReduceProd|√|
-|ReduceSum||
+|ReduceSum|√|
 |ReduceSumSquare|√|
 |Relu|      √      |
 | Reshape                   |√|
