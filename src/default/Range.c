@@ -34,50 +34,50 @@ static int Range_exit(struct onnx_node_t * n)
 	return 1;
 }
 
-static double scalar_get(union onnx_scalar_t * scalar, enum onnx_tensor_type_t type)
+static double tensor_get_value(void * p, enum onnx_tensor_type_t type)
 {
 	double v;
 
 	switch(type)
 	{
 	case ONNX_TENSOR_TYPE_BOOL:
-		v = scalar->v_bool;
+		v = *((uint8_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_INT8:
-		v = scalar->v_int8;
+		v = *((int8_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_INT16:
-		v = scalar->v_int16;
+		v = *((int16_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_INT32:
-		v = scalar->v_int32;
+		v = *((int32_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_INT64:
-		v = scalar->v_int64;
+		v = *((int64_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_UINT8:
-		v = scalar->v_uint8;
+		v = *((uint8_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_UINT16:
-		v = scalar->v_uint16;
+		v = *((uint16_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_UINT32:
-		v = scalar->v_uint32;
+		v = *((uint32_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_UINT64:
-		v = scalar->v_uint64;
+		v = *((uint64_t *)p);
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
-		v = bfloat16_to_float32(scalar->v_bfloat16);
+		v = bfloat16_to_float32(*((uint16_t *)p));
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
-		v = float16_to_float32(scalar->v_bfloat16);
+		v = float16_to_float32(*((uint16_t *)p));
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
-		v = scalar->v_float32;
+		v = *((float *)p);
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
-		v = scalar->v_float64;
+		v = *((double *)p);
 		break;
 	default:
 		v = 0;
@@ -92,9 +92,9 @@ static int Range_reshape(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	int ndim;
 
-	pdat->start = scalar_get(&n->inputs[0]->scalar, n->inputs[0]->type);
-	pdat->limit = scalar_get(&n->inputs[1]->scalar, n->inputs[1]->type);
-	pdat->delta = scalar_get(&n->inputs[2]->scalar, n->inputs[2]->type);
+	pdat->start = tensor_get_value(n->inputs[0]->datas, n->inputs[0]->type);
+	pdat->limit = tensor_get_value(n->inputs[1]->datas, n->inputs[1]->type);
+	pdat->delta = tensor_get_value(n->inputs[2]->datas, n->inputs[2]->type);
 	ndim = fmax(ceil((pdat->limit - pdat->start) / pdat->delta), 0);
 	return onnx_tensor_reshape(y, (int[]){ ndim }, 1, n->inputs[0]->type);
 }

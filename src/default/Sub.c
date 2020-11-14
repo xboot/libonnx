@@ -31,22 +31,11 @@ static void Sub_int32(struct onnx_node_t * n)
 	int32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_int32;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 
@@ -60,22 +49,11 @@ static void Sub_int64(struct onnx_node_t * n)
 	int64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_int64;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 
@@ -89,22 +67,11 @@ static void Sub_uint32(struct onnx_node_t * n)
 	uint32_t * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_uint32;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 
@@ -118,22 +85,11 @@ static void Sub_uint64(struct onnx_node_t * n)
 	uint64_t * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_uint64;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 
@@ -145,26 +101,13 @@ static void Sub_bfloat16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * pa;
 	uint16_t * pb;
-	float v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = bfloat16_to_float32(b->scalar.v_bfloat16);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = float32_to_bfloat16(bfloat16_to_float32(*pa) - v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = float32_to_bfloat16(bfloat16_to_float32(*pa) - bfloat16_to_float32(*pb));
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = float32_to_bfloat16(bfloat16_to_float32(*pa) - bfloat16_to_float32(*pb));
 	}
 }
 
@@ -176,26 +119,13 @@ static void Sub_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * pa;
 	uint16_t * pb;
-	float v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = float16_to_float32(b->scalar.v_float16);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = float32_to_float16(float16_to_float32(*pa) - v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = float32_to_float16(float16_to_float32(*pa) - float16_to_float32(*pb));
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = float32_to_float16(float16_to_float32(*pa) - float16_to_float32(*pb));
 	}
 }
 
@@ -209,22 +139,11 @@ static void Sub_float32(struct onnx_node_t * n)
 	float * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_float32;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 
@@ -238,22 +157,11 @@ static void Sub_float64(struct onnx_node_t * n)
 	double * pb;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = *pa - b->scalar.v_float64;
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			py[i] = *pa - *pb;
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
 	}
 }
 

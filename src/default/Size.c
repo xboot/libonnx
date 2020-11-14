@@ -23,8 +23,9 @@ static void Size_operator(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
+	int64_t * py = (int64_t *)y->datas;
 
-	y->scalar.v_int64 = x->ndata;
+	py[0] = x->ndata;
 }
 
 void resolver_default_op_Size(struct onnx_node_t * n)

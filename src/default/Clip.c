@@ -8,7 +8,6 @@ struct operator_pdata_t {
 static int Clip_init(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat;
-	int i;
 
 	if((n->ninput >= 1) && (n->noutput == 1))
 	{
@@ -17,16 +16,6 @@ static int Clip_init(struct onnx_node_t * n)
 		{
 			pdat->pmin = NULL;
 			pdat->pmax = NULL;
-			for(i = 1; i < min(3, n->ninput); i++)
-			{
-				if(n->inputs[i]->ndim == 0)
-				{
-					if(strcmp(n->inputs[i]->name, "min") == 0)
-						pdat->pmin = &n->inputs[i]->scalar;
-					else if(strcmp(n->inputs[i]->name, "max") == 0)
-						pdat->pmax = &n->inputs[i]->scalar;
-				}
-			}
 			n->priv = pdat;
 			return 1;
 		}
@@ -45,9 +34,23 @@ static int Clip_exit(struct onnx_node_t * n)
 
 static int Clip_reshape(struct onnx_node_t * n)
 {
+	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
+	int i;
 
+	pdat->pmin = NULL;
+	pdat->pmax = NULL;
+	for(i = 1; i < min(3, n->ninput); i++)
+	{
+		if(n->inputs[i]->ndim == 0)
+		{
+			if(strcmp(n->inputs[i]->name, "min") == 0)
+				pdat->pmin = n->inputs[i]->datas;
+			else if(strcmp(n->inputs[i]->name, "max") == 0)
+				pdat->pmax = n->inputs[i]->datas;
+		}
+	}
 	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 

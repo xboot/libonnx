@@ -18,7 +18,7 @@ static int Constant_init(struct onnx_node_t * n)
 				{
 					if((y->ndim != 0) || (y->type != ONNX_TENSOR_TYPE_FLOAT32))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_FLOAT32, NULL, 0);
-					y->scalar.v_float32 = attr->f;
+					onnx_tensor_apply(y, &attr->f, sizeof(float));
 					return 1;
 				}
 				break;
@@ -27,7 +27,7 @@ static int Constant_init(struct onnx_node_t * n)
 				{
 					if((y->ndim != 0) || (y->type != ONNX_TENSOR_TYPE_INT64))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, NULL, 0);
-					y->scalar.v_int64 = attr->i;
+					onnx_tensor_apply(y, &attr->i, sizeof(int64_t));
 					return 1;
 				}
 				break;
@@ -38,7 +38,7 @@ static int Constant_init(struct onnx_node_t * n)
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_floats) || (y->type != ONNX_TENSOR_TYPE_FLOAT32))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_FLOAT32, (int[]){ attr->n_floats }, 1);
-					onnx_tensor_apply(y, attr->floats, attr->n_floats * sizeof(float), NULL);
+					onnx_tensor_apply(y, attr->floats, attr->n_floats * sizeof(float));
 					return 1;
 				}
 				break;
@@ -47,7 +47,7 @@ static int Constant_init(struct onnx_node_t * n)
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_ints) || (y->type != ONNX_TENSOR_TYPE_INT64))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, (int[]){ attr->n_ints }, 1);
-					onnx_tensor_apply(y, attr->ints, attr->n_ints * sizeof(int64_t), NULL);
+					onnx_tensor_apply(y, attr->ints, attr->n_ints * sizeof(int64_t));
 					return 1;
 				}
 				break;

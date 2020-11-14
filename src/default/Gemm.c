@@ -114,14 +114,8 @@ static void Gemm_int32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -149,14 +143,8 @@ static void Gemm_int32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -184,14 +172,8 @@ static void Gemm_int32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -219,14 +201,8 @@ static void Gemm_int32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -273,14 +249,8 @@ static void Gemm_int64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -308,14 +278,8 @@ static void Gemm_int64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -343,14 +307,8 @@ static void Gemm_int64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -378,14 +336,8 @@ static void Gemm_int64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_int64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -432,14 +384,8 @@ static void Gemm_uint32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -467,14 +413,8 @@ static void Gemm_uint32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -502,14 +442,8 @@ static void Gemm_uint32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -537,14 +471,8 @@ static void Gemm_uint32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -591,14 +519,8 @@ static void Gemm_uint64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -626,14 +548,8 @@ static void Gemm_uint64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -661,14 +577,8 @@ static void Gemm_uint64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -696,14 +606,8 @@ static void Gemm_uint64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_uint64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -750,14 +654,8 @@ static void Gemm_bfloat16(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(c->scalar.v_bfloat16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_bfloat16(pdat->alpha * sum);
@@ -785,14 +683,8 @@ static void Gemm_bfloat16(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(c->scalar.v_bfloat16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_bfloat16(pdat->alpha * sum);
@@ -820,14 +712,8 @@ static void Gemm_bfloat16(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(c->scalar.v_bfloat16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_bfloat16(pdat->alpha * sum);
@@ -855,14 +741,8 @@ static void Gemm_bfloat16(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(c->scalar.v_bfloat16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_bfloat16(pdat->alpha * sum + pdat->beta * bfloat16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_bfloat16(pdat->alpha * sum);
@@ -909,14 +789,8 @@ static void Gemm_float16(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(c->scalar.v_float16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_float16(pdat->alpha * sum);
@@ -944,14 +818,8 @@ static void Gemm_float16(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(c->scalar.v_float16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_float16(pdat->alpha * sum);
@@ -979,14 +847,8 @@ static void Gemm_float16(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(c->scalar.v_float16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_float16(pdat->alpha * sum);
@@ -1014,14 +876,8 @@ static void Gemm_float16(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
-
-					}
-					else
-						py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(c->scalar.v_float16));
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = float32_to_float16(pdat->alpha * sum + pdat->beta * float16_to_float32(*pc));
 				}
 				else
 					py[oy] = float32_to_float16(pdat->alpha * sum);
@@ -1068,14 +924,8 @@ static void Gemm_float32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1103,14 +953,8 @@ static void Gemm_float32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1138,14 +982,8 @@ static void Gemm_float32(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1173,14 +1011,8 @@ static void Gemm_float32(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float32;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1227,14 +1059,8 @@ static void Gemm_float64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1262,14 +1088,8 @@ static void Gemm_float64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1297,14 +1117,8 @@ static void Gemm_float64(struct onnx_node_t * n)
 				ob -= pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;
@@ -1332,14 +1146,8 @@ static void Gemm_float64(struct onnx_node_t * n)
 				ob -= pdat->n * pdat->k;
 				if(c)
 				{
-					if(!onnx_tensor_is_scalar(c))
-					{
-						pc = onnx_tensor_broadcast_map_address(c, y, oy);
-						py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
-
-					}
-					else
-						py[oy] = pdat->alpha * sum + pdat->beta * c->scalar.v_float64;
+					pc = onnx_tensor_broadcast_map_address(c, y, oy);
+					py[oy] = pdat->alpha * sum + pdat->beta * (*pc);
 				}
 				else
 					py[oy] = pdat->alpha * sum;

@@ -39,10 +39,7 @@ static void Identity_operator(struct onnx_node_t * n)
 	}
 	else
 	{
-		if(x->ndim > 0)
-			memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
-		else
-			memcpy(&y->scalar, &x->scalar, sizeof(union onnx_scalar_t));
+		memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
 	}
 }
 

@@ -21,7 +21,7 @@ static int Pow_reshape(struct onnx_node_t * n)
 	return onnx_tensor_reshape_multi_broadcast(y, a, b, a->type);
 }
 
-static double tensor_get(void * p, enum onnx_tensor_type_t type)
+static double tensor_get_value(void * p, enum onnx_tensor_type_t type)
 {
 	double v;
 
@@ -73,58 +73,6 @@ static double tensor_get(void * p, enum onnx_tensor_type_t type)
 	return v;
 }
 
-static double scalar_get(union onnx_scalar_t * scalar, enum onnx_tensor_type_t type)
-{
-	double v;
-
-	switch(type)
-	{
-	case ONNX_TENSOR_TYPE_BOOL:
-		v = scalar->v_bool;
-		break;
-	case ONNX_TENSOR_TYPE_INT8:
-		v = scalar->v_int8;
-		break;
-	case ONNX_TENSOR_TYPE_INT16:
-		v = scalar->v_int16;
-		break;
-	case ONNX_TENSOR_TYPE_INT32:
-		v = scalar->v_int32;
-		break;
-	case ONNX_TENSOR_TYPE_INT64:
-		v = scalar->v_int64;
-		break;
-	case ONNX_TENSOR_TYPE_UINT8:
-		v = scalar->v_uint8;
-		break;
-	case ONNX_TENSOR_TYPE_UINT16:
-		v = scalar->v_uint16;
-		break;
-	case ONNX_TENSOR_TYPE_UINT32:
-		v = scalar->v_uint32;
-		break;
-	case ONNX_TENSOR_TYPE_UINT64:
-		v = scalar->v_uint64;
-		break;
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		v = bfloat16_to_float32(scalar->v_bfloat16);
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		v = float16_to_float32(scalar->v_bfloat16);
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		v = scalar->v_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		v = scalar->v_float64;
-		break;
-	default:
-		v = 0;
-		break;
-	}
-	return v;
-}
-
 static void Pow_int32(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * y = n->outputs[0];
@@ -136,24 +84,12 @@ static void Pow_int32(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = pow(*pa, v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = pow(*pa, v);
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = pow(*pa, v);
 	}
 }
 
@@ -168,24 +104,12 @@ static void Pow_int64(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = pow(*pa, v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = pow(*pa, v);
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = pow(*pa, v);
 	}
 }
 
@@ -200,24 +124,12 @@ static void Pow_bfloat16(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = float32_to_bfloat16(pow(bfloat16_to_float32(*pa), v));
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = float32_to_bfloat16(pow(bfloat16_to_float32(*pa), v));
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = float32_to_bfloat16(pow(bfloat16_to_float32(*pa), v));
 	}
 }
 
@@ -232,24 +144,12 @@ static void Pow_float16(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = float32_to_float16(pow(float16_to_float32(*pa), v));
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = float32_to_float16(pow(float16_to_float32(*pa), v));
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = float32_to_float16(pow(float16_to_float32(*pa), v));
 	}
 }
 
@@ -264,24 +164,12 @@ static void Pow_float32(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = pow(*pa, v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = pow(*pa, v);
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = pow(*pa, v);
 	}
 }
 
@@ -296,24 +184,12 @@ static void Pow_float64(struct onnx_node_t * n)
 	double v;
 	int i, l;
 
-	if(onnx_tensor_is_scalar(b))
+	for(i = 0, l = y->ndata; i < l; i++)
 	{
-		v = scalar_get(&b->scalar, b->type);
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			py[i] = pow(*pa, v);
-		}
-	}
-	else
-	{
-		for(i = 0, l = y->ndata; i < l; i++)
-		{
-			pa = onnx_tensor_broadcast_map_address(a, y, i);
-			pb = onnx_tensor_broadcast_map_address(b, y, i);
-			v = tensor_get(pb, b->type);
-			py[i] = pow(*pa, v);
-		}
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		v = tensor_get_value(pb, b->type);
+		py[i] = pow(*pa, v);
 	}
 }
 

@@ -68,7 +68,6 @@ struct onnx_tensor_t {
 	int ndim;
 	void * datas;
 	int ndata;
-	union onnx_scalar_t scalar;
 };
 
 struct onnx_resolver_t {
@@ -439,7 +438,7 @@ struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_typ
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim);
-void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len, union onnx_scalar_t * s);
+void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len);
 
 static inline int onnx_tensor_is_scalar(struct onnx_tensor_t * t)
 {
@@ -530,15 +529,20 @@ static inline void * onnx_tensor_broadcast_map_address(struct onnx_tensor_t * x,
 {
 	int xndim = x->ndim;
 	int yndim = y->ndim;
-	int dndim = yndim - xndim;
-	int ix[xndim];
-	int iy[yndim];
-	int i;
 
-	onnx_tensor_offset_to_indices(y, offset, iy);
-	for(i = 0; i < xndim; i++)
-		ix[i] = iy[dndim + i] % x->dims[i];
-	return x->datas + onnx_tensor_indices_to_offset(x, ix) * onnx_tensor_type_sizeof(x->type);
+	if((xndim > 0) && (yndim > 0))
+	{
+		int dndim = yndim - xndim;
+		int ix[xndim];
+		int iy[yndim];
+		int i;
+
+		onnx_tensor_offset_to_indices(y, offset, iy);
+		for(i = 0; i < xndim; i++)
+			ix[i] = iy[dndim + i] % x->dims[i];
+		return x->datas + onnx_tensor_indices_to_offset(x, ix) * onnx_tensor_type_sizeof(x->type);
+	}
+	return x->datas;
 }
 
 float onnx_attribute_read_float(struct onnx_node_t * n, const char * name, float def);

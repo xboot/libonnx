@@ -26,122 +26,116 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 		return 0;
 	if(a->ndim > 0)
 	{
-		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) == 0)
-		{
-			switch(a->type)
-			{
-			case ONNX_TENSOR_TYPE_BOOL:
-			case ONNX_TENSOR_TYPE_INT8:
-			case ONNX_TENSOR_TYPE_INT16:
-			case ONNX_TENSOR_TYPE_INT32:
-			case ONNX_TENSOR_TYPE_INT64:
-			case ONNX_TENSOR_TYPE_UINT8:
-			case ONNX_TENSOR_TYPE_UINT16:
-			case ONNX_TENSOR_TYPE_UINT32:
-			case ONNX_TENSOR_TYPE_UINT64:
-				if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) == 0)
-					result = 1;
-				break;
-			case ONNX_TENSOR_TYPE_BFLOAT16:
-				{
-					uint16_t * p = (uint16_t *)a->datas;
-					uint16_t * q = (uint16_t *)b->datas;
-					for(i = 0; i < a->ndata; i++)
-					{
-						if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_FLOAT16:
-				{
-					uint16_t * p = (uint16_t *)a->datas;
-					uint16_t * q = (uint16_t *)b->datas;
-					for(i = 0; i < a->ndata; i++)
-					{
-						if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_FLOAT32:
-				{
-					float * p = (float *)a->datas;
-					float * q = (float *)b->datas;
-					for(i = 0; i < a->ndata; i++)
-					{
-						if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_FLOAT64:
-				{
-					double * p = (double *)a->datas;
-					double * q = (double *)b->datas;
-					for(i = 0; i < a->ndata; i++)
-					{
-						if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_COMPLEX64:
-				{
-					float * p = (float *)a->datas;
-					float * q = (float *)b->datas;
-					for(i = 0; i < a->ndata * 2; i++)
-					{
-						if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata * 2)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_COMPLEX128:
-				{
-					double * p = (double *)a->datas;
-					double * q = (double *)b->datas;
-					for(i = 0; i < a->ndata * 2; i++)
-					{
-						if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
-							break;
-					}
-					if(i == a->ndata * 2)
-						result = 1;
-				}
-				break;
-			case ONNX_TENSOR_TYPE_STRING:
-				{
-					char ** p = (char **)a->datas;
-					char ** q = (char **)b->datas;
-					for(i = 0; i < a->ndata; i++)
-					{
-						if(p[i] && q[i] && (strcmp(p[i], q[i]) != 0))
-							break;
-					}
-					if(i == a->ndata)
-						result = 1;
-				}
-				break;
-			default:
-				break;
-			}
-		}
+		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) != 0)
+			return 0;
 	}
-	else
+	switch(a->type)
 	{
-		if(memcmp(&a->scalar, &b->scalar, sizeof(union onnx_scalar_t)) == 0)
+	case ONNX_TENSOR_TYPE_BOOL:
+	case ONNX_TENSOR_TYPE_INT8:
+	case ONNX_TENSOR_TYPE_INT16:
+	case ONNX_TENSOR_TYPE_INT32:
+	case ONNX_TENSOR_TYPE_INT64:
+	case ONNX_TENSOR_TYPE_UINT8:
+	case ONNX_TENSOR_TYPE_UINT16:
+	case ONNX_TENSOR_TYPE_UINT32:
+	case ONNX_TENSOR_TYPE_UINT64:
+		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) == 0)
 			result = 1;
+		break;
+	case ONNX_TENSOR_TYPE_BFLOAT16:
+		{
+			uint16_t * p = (uint16_t *)a->datas;
+			uint16_t * q = (uint16_t *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT16:
+		{
+			uint16_t * p = (uint16_t *)a->datas;
+			uint16_t * q = (uint16_t *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT32:
+		{
+			float * p = (float *)a->datas;
+			float * q = (float *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT64:
+		{
+			double * p = (double *)a->datas;
+			double * q = (double *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_COMPLEX64:
+		{
+			float * p = (float *)a->datas;
+			float * q = (float *)b->datas;
+			for(i = 0; i < a->ndata * 2; i++)
+			{
+				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata * 2)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_COMPLEX128:
+		{
+			double * p = (double *)a->datas;
+			double * q = (double *)b->datas;
+			for(i = 0; i < a->ndata * 2; i++)
+			{
+				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
+					break;
+			}
+			if(i == a->ndata * 2)
+				result = 1;
+		}
+		break;
+	case ONNX_TENSOR_TYPE_STRING:
+		{
+			char ** p = (char **)a->datas;
+			char ** q = (char **)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(p[i] && q[i] && (strcmp(p[i], q[i]) != 0))
+					break;
+			}
+			if(i == a->ndata)
+				result = 1;
+		}
+		break;
+	default:
+		break;
 	}
 	return result;
 }
@@ -179,7 +173,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 					break;
 				t = onnx_tensor_search(ctx, ctx->model->graph->input[ninput]->name);
 				o = onnx_tensor_alloc_from_file(tmp);
-				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_sizeof(o->type), &o->scalar);
+				onnx_tensor_apply(t, o->datas, o->ndata * onnx_tensor_type_sizeof(o->type));
 				onnx_tensor_free(o);
 				okay++;
 				ninput++;
