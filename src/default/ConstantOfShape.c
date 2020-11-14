@@ -1,5 +1,29 @@
 #include <onnx.h>
 
+union onnx_scalar_t {
+	uint8_t v_bool;
+	int8_t v_int8;
+	int16_t v_int16;
+	int32_t v_int32;
+	int64_t v_int64;
+	uint8_t v_uint8;
+	uint16_t v_uint16;
+	uint32_t v_uint32;
+	uint64_t v_uint64;
+	uint16_t v_bfloat16;
+	uint16_t v_float16;
+	float v_float32;
+	double v_float64;
+	struct {
+		float real;
+		float imaginary;
+	} v_complex64;
+	struct {
+		double real;
+		double imaginary;
+	} v_complex128;
+};
+
 struct operator_pdata_t {
 	enum onnx_tensor_type_t type;
 	union onnx_scalar_t scalar;

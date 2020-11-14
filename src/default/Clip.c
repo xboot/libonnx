@@ -1,5 +1,29 @@
 #include <onnx.h>
 
+union onnx_scalar_t {
+	uint8_t v_bool;
+	int8_t v_int8;
+	int16_t v_int16;
+	int32_t v_int32;
+	int64_t v_int64;
+	uint8_t v_uint8;
+	uint16_t v_uint16;
+	uint32_t v_uint32;
+	uint64_t v_uint64;
+	uint16_t v_bfloat16;
+	uint16_t v_float16;
+	float v_float32;
+	double v_float64;
+	struct {
+		float real;
+		float imaginary;
+	} v_complex64;
+	struct {
+		double real;
+		double imaginary;
+	} v_complex128;
+};
+
 struct operator_pdata_t {
 	union onnx_scalar_t * pmin;
 	union onnx_scalar_t * pmax;
@@ -46,9 +70,9 @@ static int Clip_reshape(struct onnx_node_t * n)
 		if(n->inputs[i]->ndim == 0)
 		{
 			if(strcmp(n->inputs[i]->name, "min") == 0)
-				pdat->pmin = n->inputs[i]->datas;
+				pdat->pmin = (union onnx_scalar_t *)n->inputs[i]->datas;
 			else if(strcmp(n->inputs[i]->name, "max") == 0)
-				pdat->pmax = n->inputs[i]->datas;
+				pdat->pmax = (union onnx_scalar_t *)n->inputs[i]->datas;
 		}
 	}
 	return onnx_tensor_reshape_identity(y, x, x->type);
