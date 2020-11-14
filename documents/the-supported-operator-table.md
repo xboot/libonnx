@@ -103,7 +103,7 @@
 |ReduceLogSum||
 |ReduceLogSumExp||
 |ReduceMax||
-|ReduceMean||
+|ReduceMean|√|
 |ReduceMin||
 |ReduceProd||
 |ReduceSum||
