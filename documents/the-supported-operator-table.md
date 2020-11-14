@@ -99,7 +99,7 @@
 |RandomUniformLike|√|
 |Reciprocal|√|
 |ReduceL1|√|
-|ReduceL2||
+|ReduceL2|√|
 |ReduceLogSum||
 |ReduceLogSumExp||
 |ReduceMax||
