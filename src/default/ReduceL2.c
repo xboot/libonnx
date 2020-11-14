@@ -164,6 +164,8 @@ static void ReduceL2_int8(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_int8;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -214,6 +216,8 @@ static void ReduceL2_int32(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_int32;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -264,6 +268,8 @@ static void ReduceL2_int64(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_int64;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -314,6 +320,8 @@ static void ReduceL2_uint8(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_uint8;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -364,6 +372,8 @@ static void ReduceL2_uint32(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_uint32;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -414,6 +424,8 @@ static void ReduceL2_uint64(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_uint64;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -463,6 +475,8 @@ static void ReduceL2_bfloat16(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_bfloat16;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -512,6 +526,8 @@ static void ReduceL2_float16(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_float16;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -561,6 +577,8 @@ static void ReduceL2_float32(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_float32;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
@@ -610,6 +628,8 @@ static void ReduceL2_float64(struct onnx_node_t * n)
 	uint32_t mask;
 	int i, j, k, o;
 
+	if(onnx_tensor_is_scalar(y))
+		py = &y->scalar.v_float64;
 	for(i = 0, mask = 0; i < pdat->naxes; i++)
 		mask |= (1 << pdat->caxes[i]);
 	for(i = 0, j = 0, k = 0; i < x->ndim; i++)
