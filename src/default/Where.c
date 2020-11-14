@@ -385,9 +385,6 @@ static void Where_string(struct onnx_node_t * n)
 
 void resolver_default_op_Where(struct onnx_node_t * n)
 {
-	//FIXME
-	return;
-
 	if(n->ninput == 3)
 	{
 		switch(n->inputs[2]->type)
