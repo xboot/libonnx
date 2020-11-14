@@ -107,7 +107,7 @@
 |ReduceMin||
 |ReduceProd|√|
 |ReduceSum||
-|ReduceSumSquare||
+|ReduceSumSquare|√|
 |Relu|      √      |
 | Reshape                   |√|
 |Resize||
