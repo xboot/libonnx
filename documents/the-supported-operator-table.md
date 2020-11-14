@@ -98,7 +98,7 @@
 |RandomUniform|√|
 |RandomUniformLike|√|
 |Reciprocal|√|
-|ReduceL1||
+|ReduceL1|√|
 |ReduceL2||
 |ReduceLogSum||
 |ReduceLogSumExp||
