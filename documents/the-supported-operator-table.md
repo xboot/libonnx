@@ -100,7 +100,7 @@
 |Reciprocal|√|
 |ReduceL1|√|
 |ReduceL2|√|
-|ReduceLogSum||
+|ReduceLogSum|√|
 |ReduceLogSumExp||
 |ReduceMax||
 |ReduceMean|√|
