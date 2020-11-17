@@ -1968,64 +1968,70 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 				ONNX_LOG("\r\n");
 			}
 		}
-		else
+		else if(t->ndata == 1)
 		{
 			ONNX_LOG(" = ");
 			p = (void *)(t->datas);
 			switch(t->type)
 			{
 			case ONNX_TENSOR_TYPE_BOOL:
-				ONNX_LOG("%s,", *((uint8_t *)p) ? "true" : "false");
+				ONNX_LOG("%s", *((uint8_t *)p) ? "true" : "false");
 				break;
 			case ONNX_TENSOR_TYPE_INT8:
-				ONNX_LOG("%d,", *((int8_t *)p));
+				ONNX_LOG("%d", *((int8_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_INT16:
-				ONNX_LOG("%d,", *((int16_t *)p));
+				ONNX_LOG("%d", *((int16_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_INT32:
-				ONNX_LOG("%d,", *((int32_t *)p));
+				ONNX_LOG("%d", *((int32_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_INT64:
-				ONNX_LOG("%ld,", *((int64_t *)p));
+				ONNX_LOG("%ld", *((int64_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_UINT8:
-				ONNX_LOG("%u,", *((uint8_t *)p));
+				ONNX_LOG("%u", *((uint8_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_UINT16:
-				ONNX_LOG("%u,", *((uint16_t *)p));
+				ONNX_LOG("%u", *((uint16_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_UINT32:
-				ONNX_LOG("%u,", *((uint32_t *)p));
+				ONNX_LOG("%u", *((uint32_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_UINT64:
-				ONNX_LOG("%lu,", *((uint64_t *)p));
+				ONNX_LOG("%lu", *((uint64_t *)p));
 				break;
 			case ONNX_TENSOR_TYPE_BFLOAT16:
-				ONNX_LOG("%g,", bfloat16_to_float32(*((uint16_t *)p)));
+				ONNX_LOG("%g", bfloat16_to_float32(*((uint16_t *)p)));
 				break;
 			case ONNX_TENSOR_TYPE_FLOAT16:
-				ONNX_LOG("%g,", float16_to_float32(*((uint16_t *)p)));
+				ONNX_LOG("%g", float16_to_float32(*((uint16_t *)p)));
 				break;
 			case ONNX_TENSOR_TYPE_FLOAT32:
-				ONNX_LOG("%g,", *((float *)p));
+				ONNX_LOG("%g", *((float *)p));
 				break;
 			case ONNX_TENSOR_TYPE_FLOAT64:
-				ONNX_LOG("%g,", *((double *)p));
+				ONNX_LOG("%g", *((double *)p));
 				break;
 			case ONNX_TENSOR_TYPE_COMPLEX64:
-				ONNX_LOG("%g + %gi,", *((float *)p), *((float *)(p + sizeof(float))));
+				ONNX_LOG("%g + %gi", *((float *)p), *((float *)(p + sizeof(float))));
 				break;
 			case ONNX_TENSOR_TYPE_COMPLEX128:
-				ONNX_LOG("%g + %gi,", *((double *)p), *((double *)(p + sizeof(double))));
+				ONNX_LOG("%g + %gi", *((double *)p), *((double *)(p + sizeof(double))));
 				break;
 			case ONNX_TENSOR_TYPE_STRING:
-				ONNX_LOG("%s,", (char *)(((char **)p)[0]));
+				ONNX_LOG("%s", (char *)(((char **)p)[0]));
 				break;
 			default:
-				ONNX_LOG("?,");
+				ONNX_LOG("?");
 				break;
 			}
+			ONNX_LOG("\r\n");
+		}
+		else
+		{
+			ONNX_LOG(" = ");
+			ONNX_LOG("null");
 			ONNX_LOG("\r\n");
 		}
 	}
