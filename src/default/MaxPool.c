@@ -69,7 +69,7 @@ static int MaxPool_init(struct onnx_node_t * n)
 				l = onnx_attribute_read_ints(n, "dilations", &ints);
 				for(i = 0; i < l; i++)
 					pdat->dilations[i] = ints[i];
-				for(; i < pdat->npad; i++)
+				for(; i < pdat->ndilation; i++)
 					pdat->dilations[i] = 1;
 			}
 			pdat->npad = pdat->nkernel * 2;
