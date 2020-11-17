@@ -130,12 +130,12 @@ static int MaxPool_reshape(struct onnx_node_t * n)
 	int i;
 
 	memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
-    for(i = 0; i < ndim; i++)
-    {
-    	if(i < 2)
-    		dims[i] = x->dims[i];
-    	else
-    	{
+	for(i = 0; i < ndim; i++)
+	{
+		if(i < 2)
+			dims[i] = x->dims[i];
+		else
+		{
 			begin = i - 2;
 			end = begin + pdat->nkernel;
 			stride = pdat->strides[begin];
@@ -168,9 +168,9 @@ static int MaxPool_reshape(struct onnx_node_t * n)
 			default:
 				break;
 			}
-    	}
-    }
-    return onnx_tensor_reshape(y, dims, ndim, x->type);
+		}
+	}
+	return onnx_tensor_reshape(y, dims, ndim, x->type);
 }
 
 static inline int dim_next(int ndim, int * dims, int * dim_max)
