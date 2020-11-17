@@ -25,7 +25,7 @@
 |ConcatFromSequence||
 |Constant|√|
 |ConstantOfShape|√|
-|Conv||
+|Conv|√|
 |ConvInteger||
 |ConvTranspose||
 |Cos|√|
