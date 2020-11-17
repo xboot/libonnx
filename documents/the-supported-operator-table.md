@@ -14,7 +14,7 @@
 |Asinh|√|
 |Atan|√|
 |Atanh|√|
-|AveragePool||
+|AveragePool|√|
 |BatchNormalization|√|
 |BitShift|√|
 |Cast|√|
@@ -72,7 +72,7 @@
 |MatMul|√|
 |MatMulInteger||
 |Max|√|
-|MaxPool||
+|MaxPool|√|
 |MaxRoiPool||
 |MaxUnpool||
 |Mean|√|
