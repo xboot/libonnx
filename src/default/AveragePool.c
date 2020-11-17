@@ -27,7 +27,7 @@ static int AveragePool_init(struct onnx_node_t * n)
 	int64_t * ints;
 	int i, l;
 
-	if((n->ninput == 1) && (n->noutput >= 1))
+	if((n->ninput == 1) && (n->noutput == 1))
 	{
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
