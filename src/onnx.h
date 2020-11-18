@@ -218,6 +218,7 @@ struct onnx_resolver_t {
 struct onnx_node_t {
 	struct onnx_resolver_t * r;
 	void * rctx;
+	int opset;
 	struct onnx_tensor_t ** inputs;
 	int ninput;
 	struct onnx_tensor_t ** outputs;
@@ -233,6 +234,7 @@ struct onnx_node_t {
 
 struct onnx_context_t {
 	Onnx__ModelProto * model;
+	int opset;
 	struct onnx_node_t * nodes;
 	int nlen;
 	struct onnx_resolver_t ** r;
