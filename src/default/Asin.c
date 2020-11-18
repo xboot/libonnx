@@ -62,27 +62,30 @@ static void Asin_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Asin(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 7)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Asin_init;
-		n->exit = Asin_exit;
-		n->reshape = Asin_reshape;
-		n->operator = Asin_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Asin_init;
-		n->exit = Asin_exit;
-		n->reshape = Asin_reshape;
-		n->operator = Asin_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Asin_init;
-		n->exit = Asin_exit;
-		n->reshape = Asin_reshape;
-		n->operator = Asin_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -661,81 +661,93 @@ static void ArgMin_float64(struct onnx_node_t * n)
 
 void resolver_default_op_ArgMin(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_INT8:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_int8;
-		break;
-	case ONNX_TENSOR_TYPE_INT16:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_int16;
-		break;
-	case ONNX_TENSOR_TYPE_INT32:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_int32;
-		break;
-	case ONNX_TENSOR_TYPE_INT64:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_int64;
-		break;
-	case ONNX_TENSOR_TYPE_UINT8:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_uint8;
-		break;
-	case ONNX_TENSOR_TYPE_UINT16:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_uint16;
-		break;
-	case ONNX_TENSOR_TYPE_UINT32:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_uint32;
-		break;
-	case ONNX_TENSOR_TYPE_UINT64:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_uint64;
-		break;
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_bfloat16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = ArgMin_init;
-		n->exit = ArgMin_exit;
-		n->reshape = ArgMin_reshape;
-		n->operator = ArgMin_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = ArgMin_init;
+			n->exit = ArgMin_exit;
+			n->reshape = ArgMin_reshape;
+			n->operator = ArgMin_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 12)
+	{
+	}
+	else if(n->opset >= 11)
+	{
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

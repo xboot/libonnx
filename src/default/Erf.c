@@ -174,81 +174,87 @@ static void Erf_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Erf(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_INT8:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_int8;
-		break;
-	case ONNX_TENSOR_TYPE_INT16:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_int16;
-		break;
-	case ONNX_TENSOR_TYPE_INT32:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_int32;
-		break;
-	case ONNX_TENSOR_TYPE_INT64:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_int64;
-		break;
-	case ONNX_TENSOR_TYPE_UINT8:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_uint8;
-		break;
-	case ONNX_TENSOR_TYPE_UINT16:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_uint16;
-		break;
-	case ONNX_TENSOR_TYPE_UINT32:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_uint32;
-		break;
-	case ONNX_TENSOR_TYPE_UINT64:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_uint64;
-		break;
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_bfloat16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Erf_init;
-		n->exit = Erf_exit;
-		n->reshape = Erf_reshape;
-		n->operator = Erf_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Erf_init;
+			n->exit = Erf_exit;
+			n->reshape = Erf_reshape;
+			n->operator = Erf_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 9)
+	{
 	}
 }

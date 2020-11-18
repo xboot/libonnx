@@ -165,33 +165,36 @@ static void BitShift_uint64(struct onnx_node_t * n)
 
 void resolver_default_op_BitShift(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 11)
 	{
-	case ONNX_TENSOR_TYPE_UINT8:
-		n->init = BitShift_init;
-		n->exit = BitShift_exit;
-		n->reshape = BitShift_reshape;
-		n->operator = BitShift_uint8;
-		break;
-	case ONNX_TENSOR_TYPE_UINT16:
-		n->init = BitShift_init;
-		n->exit = BitShift_exit;
-		n->reshape = BitShift_reshape;
-		n->operator = BitShift_uint16;
-		break;
-	case ONNX_TENSOR_TYPE_UINT32:
-		n->init = BitShift_init;
-		n->exit = BitShift_exit;
-		n->reshape = BitShift_reshape;
-		n->operator = BitShift_uint32;
-		break;
-	case ONNX_TENSOR_TYPE_UINT64:
-		n->init = BitShift_init;
-		n->exit = BitShift_exit;
-		n->reshape = BitShift_reshape;
-		n->operator = BitShift_uint64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = BitShift_init;
+			n->exit = BitShift_exit;
+			n->reshape = BitShift_reshape;
+			n->operator = BitShift_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = BitShift_init;
+			n->exit = BitShift_exit;
+			n->reshape = BitShift_reshape;
+			n->operator = BitShift_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = BitShift_init;
+			n->exit = BitShift_exit;
+			n->reshape = BitShift_reshape;
+			n->operator = BitShift_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = BitShift_init;
+			n->exit = BitShift_exit;
+			n->reshape = BitShift_reshape;
+			n->operator = BitShift_uint64;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -424,27 +424,33 @@ static void Conv_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Conv(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 11)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Conv_init;
-		n->exit = Conv_exit;
-		n->reshape = Conv_reshape;
-		n->operator = Conv_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Conv_init;
-		n->exit = Conv_exit;
-		n->reshape = Conv_reshape;
-		n->operator = Conv_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Conv_init;
-		n->exit = Conv_exit;
-		n->reshape = Conv_reshape;
-		n->operator = Conv_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Conv_init;
+			n->exit = Conv_exit;
+			n->reshape = Conv_reshape;
+			n->operator = Conv_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Conv_init;
+			n->exit = Conv_exit;
+			n->reshape = Conv_reshape;
+			n->operator = Conv_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Conv_init;
+			n->exit = Conv_exit;
+			n->reshape = Conv_reshape;
+			n->operator = Conv_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

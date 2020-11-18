@@ -62,27 +62,30 @@ static void Atan_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Atan(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 7)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Atan_init;
-		n->exit = Atan_exit;
-		n->reshape = Atan_reshape;
-		n->operator = Atan_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Atan_init;
-		n->exit = Atan_exit;
-		n->reshape = Atan_reshape;
-		n->operator = Atan_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Atan_init;
-		n->exit = Atan_exit;
-		n->reshape = Atan_reshape;
-		n->operator = Atan_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Atan_init;
+			n->exit = Atan_exit;
+			n->reshape = Atan_reshape;
+			n->operator = Atan_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Atan_init;
+			n->exit = Atan_exit;
+			n->reshape = Atan_reshape;
+			n->operator = Atan_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Atan_init;
+			n->exit = Atan_exit;
+			n->reshape = Atan_reshape;
+			n->operator = Atan_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

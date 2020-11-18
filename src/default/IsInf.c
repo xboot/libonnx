@@ -92,21 +92,24 @@ static void IsInf_float64(struct onnx_node_t * n)
 
 void resolver_default_op_IsInf(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 10)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = IsInf_init;
-		n->exit = IsInf_exit;
-		n->reshape = IsInf_reshape;
-		n->operator = IsInf_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = IsInf_init;
-		n->exit = IsInf_exit;
-		n->reshape = IsInf_reshape;
-		n->operator = IsInf_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = IsInf_init;
+			n->exit = IsInf_exit;
+			n->reshape = IsInf_reshape;
+			n->operator = IsInf_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = IsInf_init;
+			n->exit = IsInf_exit;
+			n->reshape = IsInf_reshape;
+			n->operator = IsInf_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

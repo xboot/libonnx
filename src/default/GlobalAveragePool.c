@@ -122,27 +122,30 @@ static void GlobalAveragePool_float64(struct onnx_node_t * n)
 
 void resolver_default_op_GlobalAveragePool(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 1)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = GlobalAveragePool_init;
-		n->exit = GlobalAveragePool_exit;
-		n->reshape = GlobalAveragePool_reshape;
-		n->operator = GlobalAveragePool_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = GlobalAveragePool_init;
-		n->exit = GlobalAveragePool_exit;
-		n->reshape = GlobalAveragePool_reshape;
-		n->operator = GlobalAveragePool_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = GlobalAveragePool_init;
-		n->exit = GlobalAveragePool_exit;
-		n->reshape = GlobalAveragePool_reshape;
-		n->operator = GlobalAveragePool_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = GlobalAveragePool_init;
+			n->exit = GlobalAveragePool_exit;
+			n->reshape = GlobalAveragePool_reshape;
+			n->operator = GlobalAveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = GlobalAveragePool_init;
+			n->exit = GlobalAveragePool_exit;
+			n->reshape = GlobalAveragePool_reshape;
+			n->operator = GlobalAveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = GlobalAveragePool_init;
+			n->exit = GlobalAveragePool_exit;
+			n->reshape = GlobalAveragePool_reshape;
+			n->operator = GlobalAveragePool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

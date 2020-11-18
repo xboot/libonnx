@@ -167,57 +167,69 @@ static void Div_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Div(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_INT32:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_int32;
-		break;
-	case ONNX_TENSOR_TYPE_INT64:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_int64;
-		break;
-	case ONNX_TENSOR_TYPE_UINT32:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_uint32;
-		break;
-	case ONNX_TENSOR_TYPE_UINT64:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_uint64;
-		break;
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_bfloat16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Div_init;
-		n->exit = Div_exit;
-		n->reshape = Div_reshape;
-		n->operator = Div_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Div_init;
+			n->exit = Div_exit;
+			n->reshape = Div_reshape;
+			n->operator = Div_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 7)
+	{
+	}
+	else if(n->opset >= 6)
+	{
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

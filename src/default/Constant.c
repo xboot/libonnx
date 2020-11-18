@@ -110,8 +110,23 @@ static void Constant_operator(struct onnx_node_t * n)
 
 void resolver_default_op_Constant(struct onnx_node_t * n)
 {
-	n->init = Constant_init;
-	n->exit = Constant_exit;
-	n->reshape = Constant_reshape;
-	n->operator = Constant_operator;
+	if(n->opset >= 13)
+	{
+		n->init = Constant_init;
+		n->exit = Constant_exit;
+		n->reshape = Constant_reshape;
+		n->operator = Constant_operator;
+	}
+	else if(n->opset >= 12)
+	{
+	}
+	else if(n->opset >= 11)
+	{
+	}
+	else if(n->opset >= 9)
+	{
+	}
+	else if(n->opset >= 1)
+	{
+	}
 }

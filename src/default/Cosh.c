@@ -62,27 +62,30 @@ static void Cosh_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Cosh(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 9)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Cosh_init;
-		n->exit = Cosh_exit;
-		n->reshape = Cosh_reshape;
-		n->operator = Cosh_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Cosh_init;
-		n->exit = Cosh_exit;
-		n->reshape = Cosh_reshape;
-		n->operator = Cosh_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Cosh_init;
-		n->exit = Cosh_exit;
-		n->reshape = Cosh_reshape;
-		n->operator = Cosh_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Cosh_init;
+			n->exit = Cosh_exit;
+			n->reshape = Cosh_reshape;
+			n->operator = Cosh_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Cosh_init;
+			n->exit = Cosh_exit;
+			n->reshape = Cosh_reshape;
+			n->operator = Cosh_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Cosh_init;
+			n->exit = Cosh_exit;
+			n->reshape = Cosh_reshape;
+			n->operator = Cosh_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

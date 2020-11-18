@@ -103,27 +103,30 @@ static void GlobalMaxPool_float64(struct onnx_node_t * n)
 
 void resolver_default_op_GlobalMaxPool(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 1)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = GlobalMaxPool_init;
-		n->exit = GlobalMaxPool_exit;
-		n->reshape = GlobalMaxPool_reshape;
-		n->operator = GlobalMaxPool_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = GlobalMaxPool_init;
-		n->exit = GlobalMaxPool_exit;
-		n->reshape = GlobalMaxPool_reshape;
-		n->operator = GlobalMaxPool_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = GlobalMaxPool_init;
-		n->exit = GlobalMaxPool_exit;
-		n->reshape = GlobalMaxPool_reshape;
-		n->operator = GlobalMaxPool_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = GlobalMaxPool_init;
+			n->exit = GlobalMaxPool_exit;
+			n->reshape = GlobalMaxPool_reshape;
+			n->operator = GlobalMaxPool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = GlobalMaxPool_init;
+			n->exit = GlobalMaxPool_exit;
+			n->reshape = GlobalMaxPool_reshape;
+			n->operator = GlobalMaxPool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = GlobalMaxPool_init;
+			n->exit = GlobalMaxPool_exit;
+			n->reshape = GlobalMaxPool_reshape;
+			n->operator = GlobalMaxPool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
