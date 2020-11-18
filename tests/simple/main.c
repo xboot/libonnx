@@ -150,6 +150,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 	int data_set_index;
 	int ninput, noutput;
 	int okay;
+	int len;
 
 	sprintf(tmp, "%s/%s", path, "model.onnx");
 	ctx = onnx_context_alloc_from_file(tmp, r, rlen);
@@ -194,11 +195,16 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 				noutput++;
 			}
 
-			int len = printf("[%s](test_data_set_%d)", path, data_set_index);
+			len = printf("[%s](test_data_set_%d)", path, data_set_index);
 			printf("%*s\r\n", 100 + 12 - 6 - len, ((ninput + noutput == okay) && (okay > 0)) ? "\033[42;37m[OKAY]\033[0m" : "\033[41;37m[FAIL]\033[0m");
 			data_set_index++;
 		}
 		onnx_context_free(ctx);
+	}
+	else
+	{
+		len = printf("[%s]", path);
+		printf("%*s\r\n", 100 + 12 - 6 - len, "\033[41;37m[FAIL]\033[0m");
 	}
 }
 
