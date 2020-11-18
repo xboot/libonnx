@@ -6,8 +6,8 @@
 |Abs-13                                           | √ |
 |Abs-6 | √ |
 |Abs-1 | √ |
-| Acos | √ |
-|Acosh                                       | √ |
+| Acos-7 | √ |
+|Acosh-9                                       | √ |
 |Add|√|
 |And|√|
 |ArgMax|√|
