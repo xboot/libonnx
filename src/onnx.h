@@ -236,7 +236,6 @@ struct onnx_node_t {
 
 struct onnx_context_t {
 	Onnx__ModelProto * model;
-	int opset;
 	struct onnx_node_t * nodes;
 	int nlen;
 	struct onnx_resolver_t ** r;

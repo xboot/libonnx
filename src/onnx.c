@@ -1087,7 +1087,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	struct onnx_tensor_t * t;
 	Onnx__TensorProto * o;
 	Onnx__ValueInfoProto * v;
-	char * domain;
+	char * p, * domain;
 	char * name;
 	int i, j, k, l;
 
@@ -1101,27 +1101,6 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	ctx->model = onnx__model_proto__unpack(NULL, len, buf);
 	if(!ctx->model)
 	{
-		if(ctx)
-			free(ctx);
-		return NULL;
-	}
-
-	for(i = 0, ctx->opset = 0; i < ctx->model->n_opset_import; i++)
-	{
-		domain = ctx->model->opset_import[i]->domain;
-		if(domain)
-		{
-			if((strlen(domain) == 0) || (strcmp(domain, "ai.onnx") == 0))
-			{
-				ctx->opset = ctx->model->opset_import[i]->version;
-				break;
-			}
-		}
-	}
-	if(ctx->opset <= 0)
-	{
-		if(ctx->model)
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		if(ctx)
 			free(ctx);
 		return NULL;
@@ -1293,9 +1272,21 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	{
 		n = &ctx->nodes[i];
 		memset(n, 0, sizeof(struct onnx_node_t));
-
-		n->opset = ctx->opset;
 		n->proto = ctx->model->graph->node[i];
+		domain = n->proto->domain;
+		if(!domain || (strlen(domain) == 0))
+			domain = "ai.onnx";
+		for(j = 0; j < ctx->model->n_opset_import; j++)
+		{
+			p = ctx->model->opset_import[j]->domain;
+			if(!p || (strlen(p) == 0))
+				p = "ai.onnx";
+			if(strcmp(domain, p) == 0)
+			{
+				n->opset = ctx->model->opset_import[j]->version;
+				break;
+			}
+		}
 		if(n->proto->n_input > 0)
 		{
 			n->inputs = malloc(sizeof(struct onnx_tensor_t *) * n->proto->n_input);
@@ -2099,7 +2090,7 @@ void onnx_node_dump(struct onnx_node_t * n, int detail)
 
 	if(n)
 	{
-		ONNX_LOG("%s: %s\r\n", n->proto->name, n->proto->op_type);
+		ONNX_LOG("%s: %s-%d (%s)\r\n", n->proto->name, n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
 		if(n->ninput > 0)
 		{
 			ONNX_LOG("\tInputs:\r\n");
