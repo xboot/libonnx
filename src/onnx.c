@@ -1272,6 +1272,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	{
 		n = &ctx->nodes[i];
 		memset(n, 0, sizeof(struct onnx_node_t));
+
 		n->proto = ctx->model->graph->node[i];
 		domain = n->proto->domain;
 		if(!domain || (strlen(domain) == 0))
@@ -1321,7 +1322,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		{
 			resolver_solve_operator(&resolver_default, n);
 			if(n->operator)
+			{
 				n->r = &resolver_default;
+				n->rctx = NULL;
+			}
 		}
 		if(!n->reshape)
 			n->reshape = reshape_dummy;
@@ -1335,9 +1339,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 					hmap_free(ctx->map, hmap_entry_callback);
 				if(ctx->nodes)
 				{
-					for(i = 0; i < ctx->nlen; i++)
+					for(j = 0; j < ctx->nlen; j++)
 					{
-						n = &ctx->nodes[i];
+						n = &ctx->nodes[j];
 						if(n->exit)
 							n->exit(n);
 						if(n->inputs)
@@ -1347,10 +1351,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 					}
 					free(ctx->nodes);
 				}
-				for(i = 0; i < ctx->rlen; i++)
+				for(j = 0; j < ctx->rlen; j++)
 				{
-					if(ctx->r[i] && ctx->r[i]->destroy)
-						ctx->r[i]->destroy(ctx->rctx[i]);
+					if(ctx->r[j] && ctx->r[j]->destroy)
+						ctx->r[j]->destroy(ctx->rctx[j]);
 				}
 				if(ctx->rctx)
 					free(ctx->rctx);
