@@ -41,15 +41,21 @@ static void Xor_bool(struct onnx_node_t * n)
 
 void resolver_default_op_Xor(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 7)
 	{
-	case ONNX_TENSOR_TYPE_BOOL:
-		n->init = Xor_init;
-		n->exit = Xor_exit;
-		n->reshape = Xor_reshape;
-		n->operator = Xor_bool;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+			n->init = Xor_init;
+			n->exit = Xor_exit;
+			n->reshape = Xor_reshape;
+			n->operator = Xor_bool;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

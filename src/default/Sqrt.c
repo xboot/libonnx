@@ -78,33 +78,42 @@ static void Sqrt_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Sqrt(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-		n->init = Sqrt_init;
-		n->exit = Sqrt_exit;
-		n->reshape = Sqrt_reshape;
-		n->operator = Sqrt_bfloat16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Sqrt_init;
-		n->exit = Sqrt_exit;
-		n->reshape = Sqrt_reshape;
-		n->operator = Sqrt_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Sqrt_init;
-		n->exit = Sqrt_exit;
-		n->reshape = Sqrt_reshape;
-		n->operator = Sqrt_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Sqrt_init;
-		n->exit = Sqrt_exit;
-		n->reshape = Sqrt_reshape;
-		n->operator = Sqrt_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Sqrt_init;
+			n->exit = Sqrt_exit;
+			n->reshape = Sqrt_reshape;
+			n->operator = Sqrt_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sqrt_init;
+			n->exit = Sqrt_exit;
+			n->reshape = Sqrt_reshape;
+			n->operator = Sqrt_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sqrt_init;
+			n->exit = Sqrt_exit;
+			n->reshape = Sqrt_reshape;
+			n->operator = Sqrt_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sqrt_init;
+			n->exit = Sqrt_exit;
+			n->reshape = Sqrt_reshape;
+			n->operator = Sqrt_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 6)
+	{
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

@@ -101,8 +101,11 @@ static void RandomUniform_operator(struct onnx_node_t * n)
 
 void resolver_default_op_RandomUniform(struct onnx_node_t * n)
 {
-	n->init = RandomUniform_init;
-	n->exit = RandomUniform_exit;
-	n->reshape = RandomUniform_reshape;
-	n->operator = RandomUniform_operator;
+	if(n->opset >= 1)
+	{
+		n->init = RandomUniform_init;
+		n->exit = RandomUniform_exit;
+		n->reshape = RandomUniform_reshape;
+		n->operator = RandomUniform_operator;
+	}
 }

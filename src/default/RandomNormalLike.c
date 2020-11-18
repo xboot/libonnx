@@ -112,8 +112,11 @@ static void RandomNormalLike_operator(struct onnx_node_t * n)
 
 void resolver_default_op_RandomNormalLike(struct onnx_node_t * n)
 {
-	n->init = RandomNormalLike_init;
-	n->exit = RandomNormalLike_exit;
-	n->reshape = RandomNormalLike_reshape;
-	n->operator = RandomNormalLike_operator;
+	if(n->opset >= 1)
+	{
+		n->init = RandomNormalLike_init;
+		n->exit = RandomNormalLike_exit;
+		n->reshape = RandomNormalLike_reshape;
+		n->operator = RandomNormalLike_operator;
+	}
 }

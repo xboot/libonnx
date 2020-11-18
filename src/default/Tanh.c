@@ -62,27 +62,36 @@ static void Tanh_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Tanh(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Tanh_init;
-		n->exit = Tanh_exit;
-		n->reshape = Tanh_reshape;
-		n->operator = Tanh_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Tanh_init;
-		n->exit = Tanh_exit;
-		n->reshape = Tanh_reshape;
-		n->operator = Tanh_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Tanh_init;
-		n->exit = Tanh_exit;
-		n->reshape = Tanh_reshape;
-		n->operator = Tanh_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Tanh_init;
+			n->exit = Tanh_exit;
+			n->reshape = Tanh_reshape;
+			n->operator = Tanh_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Tanh_init;
+			n->exit = Tanh_exit;
+			n->reshape = Tanh_reshape;
+			n->operator = Tanh_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Tanh_init;
+			n->exit = Tanh_exit;
+			n->reshape = Tanh_reshape;
+			n->operator = Tanh_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 6)
+	{
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

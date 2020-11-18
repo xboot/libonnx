@@ -62,27 +62,30 @@ static void Softsign_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Softsign(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 1)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Softsign_init;
-		n->exit = Softsign_exit;
-		n->reshape = Softsign_reshape;
-		n->operator = Softsign_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Softsign_init;
-		n->exit = Softsign_exit;
-		n->reshape = Softsign_reshape;
-		n->operator = Softsign_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Softsign_init;
-		n->exit = Softsign_exit;
-		n->reshape = Softsign_reshape;
-		n->operator = Softsign_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Softsign_init;
+			n->exit = Softsign_exit;
+			n->reshape = Softsign_reshape;
+			n->operator = Softsign_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Softsign_init;
+			n->exit = Softsign_exit;
+			n->reshape = Softsign_reshape;
+			n->operator = Softsign_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Softsign_init;
+			n->exit = Softsign_exit;
+			n->reshape = Softsign_reshape;
+			n->operator = Softsign_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

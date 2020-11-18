@@ -85,30 +85,39 @@ static void Squeeze_operator(struct onnx_node_t * n)
 
 void resolver_default_op_Squeeze(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 13)
 	{
-	case ONNX_TENSOR_TYPE_BOOL:
-	case ONNX_TENSOR_TYPE_INT8:
-	case ONNX_TENSOR_TYPE_INT16:
-	case ONNX_TENSOR_TYPE_INT32:
-	case ONNX_TENSOR_TYPE_INT64:
-	case ONNX_TENSOR_TYPE_UINT8:
-	case ONNX_TENSOR_TYPE_UINT16:
-	case ONNX_TENSOR_TYPE_UINT32:
-	case ONNX_TENSOR_TYPE_UINT64:
-	case ONNX_TENSOR_TYPE_BFLOAT16:
-	case ONNX_TENSOR_TYPE_FLOAT16:
-	case ONNX_TENSOR_TYPE_FLOAT32:
-	case ONNX_TENSOR_TYPE_FLOAT64:
-	case ONNX_TENSOR_TYPE_COMPLEX64:
-	case ONNX_TENSOR_TYPE_COMPLEX128:
-	case ONNX_TENSOR_TYPE_STRING:
-		n->init = Squeeze_init;
-		n->exit = Squeeze_exit;
-		n->reshape = Squeeze_reshape;
-		n->operator = Squeeze_operator;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Squeeze_init;
+			n->exit = Squeeze_exit;
+			n->reshape = Squeeze_reshape;
+			n->operator = Squeeze_operator;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 11)
+	{
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

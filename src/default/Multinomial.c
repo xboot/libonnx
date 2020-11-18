@@ -252,27 +252,30 @@ static void Multinomial_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Multinomial(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 7)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Multinomial_init;
-		n->exit = Multinomial_exit;
-		n->reshape = Multinomial_reshape;
-		n->operator = Multinomial_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Multinomial_init;
-		n->exit = Multinomial_exit;
-		n->reshape = Multinomial_reshape;
-		n->operator = Multinomial_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Multinomial_init;
-		n->exit = Multinomial_exit;
-		n->reshape = Multinomial_reshape;
-		n->operator = Multinomial_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Multinomial_init;
+			n->exit = Multinomial_exit;
+			n->reshape = Multinomial_reshape;
+			n->operator = Multinomial_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Multinomial_init;
+			n->exit = Multinomial_exit;
+			n->reshape = Multinomial_reshape;
+			n->operator = Multinomial_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Multinomial_init;
+			n->exit = Multinomial_exit;
+			n->reshape = Multinomial_reshape;
+			n->operator = Multinomial_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

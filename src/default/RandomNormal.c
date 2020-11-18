@@ -116,8 +116,11 @@ static void RandomNormal_operator(struct onnx_node_t * n)
 
 void resolver_default_op_RandomNormal(struct onnx_node_t * n)
 {
-	n->init = RandomNormal_init;
-	n->exit = RandomNormal_exit;
-	n->reshape = RandomNormal_reshape;
-	n->operator = RandomNormal_operator;
+	if(n->opset >= 1)
+	{
+		n->init = RandomNormal_init;
+		n->exit = RandomNormal_exit;
+		n->reshape = RandomNormal_reshape;
+		n->operator = RandomNormal_operator;
+	}
 }

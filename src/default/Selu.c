@@ -98,27 +98,33 @@ static void Selu_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Selu(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 6)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Selu_init;
-		n->exit = Selu_exit;
-		n->reshape = Selu_reshape;
-		n->operator = Selu_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Selu_init;
-		n->exit = Selu_exit;
-		n->reshape = Selu_reshape;
-		n->operator = Selu_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Selu_init;
-		n->exit = Selu_exit;
-		n->reshape = Selu_reshape;
-		n->operator = Selu_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Selu_init;
+			n->exit = Selu_exit;
+			n->reshape = Selu_reshape;
+			n->operator = Selu_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Selu_init;
+			n->exit = Selu_exit;
+			n->reshape = Selu_reshape;
+			n->operator = Selu_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Selu_init;
+			n->exit = Selu_exit;
+			n->reshape = Selu_reshape;
+			n->operator = Selu_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 1)
+	{
 	}
 }

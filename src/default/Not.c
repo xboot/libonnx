@@ -34,15 +34,18 @@ static void Not_bool(struct onnx_node_t * n)
 
 void resolver_default_op_Not(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 1)
 	{
-	case ONNX_TENSOR_TYPE_BOOL:
-		n->init = Not_init;
-		n->exit = Not_exit;
-		n->reshape = Not_reshape;
-		n->operator = Not_bool;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+			n->init = Not_init;
+			n->exit = Not_exit;
+			n->reshape = Not_reshape;
+			n->operator = Not_bool;
+			break;
+		default:
+			break;
+		}
 	}
 }

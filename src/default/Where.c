@@ -385,108 +385,111 @@ static void Where_string(struct onnx_node_t * n)
 
 void resolver_default_op_Where(struct onnx_node_t * n)
 {
-	if(n->ninput == 3)
+	if(n->opset >= 9)
 	{
-		switch(n->inputs[2]->type)
+		if(n->ninput == 3)
 		{
-		case ONNX_TENSOR_TYPE_BOOL:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_bool;
-			break;
-		case ONNX_TENSOR_TYPE_INT8:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_int8;
-			break;
-		case ONNX_TENSOR_TYPE_INT16:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_int16;
-			break;
-		case ONNX_TENSOR_TYPE_INT32:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_int32;
-			break;
-		case ONNX_TENSOR_TYPE_INT64:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_int64;
-			break;
-		case ONNX_TENSOR_TYPE_UINT8:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_uint8;
-			break;
-		case ONNX_TENSOR_TYPE_UINT16:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_uint16;
-			break;
-		case ONNX_TENSOR_TYPE_UINT32:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_uint32;
-			break;
-		case ONNX_TENSOR_TYPE_UINT64:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_uint64;
-			break;
-		case ONNX_TENSOR_TYPE_BFLOAT16:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_bfloat16;
-			break;
-		case ONNX_TENSOR_TYPE_FLOAT16:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_float16;
-			break;
-		case ONNX_TENSOR_TYPE_FLOAT32:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_float32;
-			break;
-		case ONNX_TENSOR_TYPE_FLOAT64:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_float64;
-			break;
-		case ONNX_TENSOR_TYPE_COMPLEX64:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_complex64;
-			break;
-		case ONNX_TENSOR_TYPE_COMPLEX128:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_complex128;
-			break;
-		case ONNX_TENSOR_TYPE_STRING:
-			n->init = Where_init;
-			n->exit = Where_exit;
-			n->reshape = Where_reshape;
-			n->operator = Where_string;
-			break;
-		default:
-			break;
+			switch(n->inputs[2]->type)
+			{
+			case ONNX_TENSOR_TYPE_BOOL:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_bool;
+				break;
+			case ONNX_TENSOR_TYPE_INT8:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_int8;
+				break;
+			case ONNX_TENSOR_TYPE_INT16:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_int16;
+				break;
+			case ONNX_TENSOR_TYPE_INT32:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_int32;
+				break;
+			case ONNX_TENSOR_TYPE_INT64:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_int64;
+				break;
+			case ONNX_TENSOR_TYPE_UINT8:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_uint8;
+				break;
+			case ONNX_TENSOR_TYPE_UINT16:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_uint16;
+				break;
+			case ONNX_TENSOR_TYPE_UINT32:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_uint32;
+				break;
+			case ONNX_TENSOR_TYPE_UINT64:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_uint64;
+				break;
+			case ONNX_TENSOR_TYPE_BFLOAT16:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_bfloat16;
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT16:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_float16;
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT32:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_float32;
+				break;
+			case ONNX_TENSOR_TYPE_FLOAT64:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_float64;
+				break;
+			case ONNX_TENSOR_TYPE_COMPLEX64:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_complex64;
+				break;
+			case ONNX_TENSOR_TYPE_COMPLEX128:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_complex128;
+				break;
+			case ONNX_TENSOR_TYPE_STRING:
+				n->init = Where_init;
+				n->exit = Where_exit;
+				n->reshape = Where_reshape;
+				n->operator = Where_string;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

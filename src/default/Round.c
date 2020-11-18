@@ -62,27 +62,30 @@ static void Round_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Round(struct onnx_node_t * n)
 {
-	switch(n->inputs[0]->type)
+	if(n->opset >= 11)
 	{
-	case ONNX_TENSOR_TYPE_FLOAT16:
-		n->init = Round_init;
-		n->exit = Round_exit;
-		n->reshape = Round_reshape;
-		n->operator = Round_float16;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT32:
-		n->init = Round_init;
-		n->exit = Round_exit;
-		n->reshape = Round_reshape;
-		n->operator = Round_float32;
-		break;
-	case ONNX_TENSOR_TYPE_FLOAT64:
-		n->init = Round_init;
-		n->exit = Round_exit;
-		n->reshape = Round_reshape;
-		n->operator = Round_float64;
-		break;
-	default:
-		break;
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Round_init;
+			n->exit = Round_exit;
+			n->reshape = Round_reshape;
+			n->operator = Round_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Round_init;
+			n->exit = Round_exit;
+			n->reshape = Round_reshape;
+			n->operator = Round_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Round_init;
+			n->exit = Round_exit;
+			n->reshape = Round_reshape;
+			n->operator = Round_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
