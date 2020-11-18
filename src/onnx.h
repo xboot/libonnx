@@ -164,6 +164,7 @@ struct onnx_resolver_t {
 	void (*op_RoiAlign)(struct onnx_node_t * n);
 	void (*op_Round)(struct onnx_node_t * n);
 	void (*op_Scan)(struct onnx_node_t * n);
+	void (*op_Scatter)(struct onnx_node_t * n);
 	void (*op_ScatterElements)(struct onnx_node_t * n);
 	void (*op_ScatterND)(struct onnx_node_t * n);
 	void (*op_Selu)(struct onnx_node_t * n);
@@ -200,6 +201,7 @@ struct onnx_resolver_t {
 	void (*op_Transpose)(struct onnx_node_t * n);
 	void (*op_Unique)(struct onnx_node_t * n);
 	void (*op_Unsqueeze)(struct onnx_node_t * n);
+	void (*op_Upsample)(struct onnx_node_t * n);
 	void (*op_Where)(struct onnx_node_t * n);
 	void (*op_Xor)(struct onnx_node_t * n);
 
@@ -355,6 +357,7 @@ void resolver_default_op_ReverseSequence(struct onnx_node_t * n);
 void resolver_default_op_RoiAlign(struct onnx_node_t * n);
 void resolver_default_op_Round(struct onnx_node_t * n);
 void resolver_default_op_Scan(struct onnx_node_t * n);
+void resolver_default_op_Scatter(struct onnx_node_t * n);
 void resolver_default_op_ScatterElements(struct onnx_node_t * n);
 void resolver_default_op_ScatterND(struct onnx_node_t * n);
 void resolver_default_op_Selu(struct onnx_node_t * n);
@@ -391,6 +394,7 @@ void resolver_default_op_TopK(struct onnx_node_t * n);
 void resolver_default_op_Transpose(struct onnx_node_t * n);
 void resolver_default_op_Unique(struct onnx_node_t * n);
 void resolver_default_op_Unsqueeze(struct onnx_node_t * n);
+void resolver_default_op_Upsample(struct onnx_node_t * n);
 void resolver_default_op_Where(struct onnx_node_t * n);
 void resolver_default_op_Xor(struct onnx_node_t * n);
 

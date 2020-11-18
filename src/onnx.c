@@ -156,6 +156,7 @@ static struct onnx_resolver_t resolver_default = {
 	.op_RoiAlign					= resolver_default_op_RoiAlign,
 	.op_Round						= resolver_default_op_Round,
 	.op_Scan						= resolver_default_op_Scan,
+	.op_Scatter						= resolver_default_op_Scatter,
 	.op_ScatterElements				= resolver_default_op_ScatterElements,
 	.op_ScatterND					= resolver_default_op_ScatterND,
 	.op_Selu						= resolver_default_op_Selu,
@@ -192,6 +193,7 @@ static struct onnx_resolver_t resolver_default = {
 	.op_Transpose					= resolver_default_op_Transpose,
 	.op_Unique						= resolver_default_op_Unique,
 	.op_Unsqueeze					= resolver_default_op_Unsqueeze,
+	.op_Upsample					= resolver_default_op_Upsample,
 	.op_Where						= resolver_default_op_Where,
 	.op_Xor							= resolver_default_op_Xor,
 
@@ -551,6 +553,9 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x7c8c450a: /* "Scan" */
 			rop = r->op_Scan;
 			break;
+		case 0xe6ece5fb: /* "Scatter" */
+			rop = r->op_Scatter;
+			break;
 		case 0xb4db6f18: /* "ScatterElements" */
 			rop = r->op_ScatterElements;
 			break;
@@ -658,6 +663,9 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 			break;
 		case 0xc836156a: /* "Unsqueeze" */
 			rop = r->op_Unsqueeze;
+			break;
+		case 0xae63c66c: /* "Upsample" */
+			rop = r->op_Upsample;
 			break;
 		case 0x0e601820: /* "Where" */
 			rop = r->op_Where;

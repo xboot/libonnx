@@ -115,6 +115,7 @@
 |RoiAlign||
 |Round|√|
 |Scan||
+|Scatter||
 |ScatterElements||
 |ScatterND||
 |Selu|      √      |
@@ -151,6 +152,7 @@
 | Transpose                 |√|
 |Unique||
 |Unsqueeze|√|
+|Upsample||
 |Where| √ |
 | Xor                       |√|
 |**Function**||
