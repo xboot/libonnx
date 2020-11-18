@@ -3,7 +3,9 @@
 
 |**Operator**|**default**|
 |:--|:-:|
-|Abs                                           | √ |
+|Abs-13                                           | √ |
+|Abs-6 | √ |
+|Abs-1 | √ |
 | Acos | √ |
 |Acosh                                       | √ |
 |Add|√|
