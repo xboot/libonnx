@@ -1077,9 +1077,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 	struct onnx_context_t * ctx;
 	struct onnx_node_t * n;
 	struct onnx_tensor_t * t;
+	Onnx__TensorProto * o;
 	Onnx__ValueInfoProto * v;
 	char * name;
-	int i, j;
+	int i, j, k, l;
 
 	if(!buf || len <= 0)
 		return NULL;
@@ -1210,19 +1211,43 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			name = ctx->model->graph->node[i]->input[j];
 			if(!onnx_tensor_search(ctx, name))
 			{
-				if(ctx->map)
-					hmap_free(ctx->map, hmap_entry_callback);
-				if(ctx->rctx)
-					free(ctx->rctx);
-				if(ctx->r)
-					free(ctx->r);
-				if(ctx->nodes)
-					free(ctx->nodes);
-				if(ctx->model)
-					onnx__model_proto__free_unpacked(ctx->model, NULL);
-				if(ctx)
-					free(ctx);
-				return NULL;
+				for(k = 0; k < ctx->model->graph->n_initializer; k++)
+				{
+					if(strcmp(ctx->model->graph->initializer[k]->name, name) == 0)
+					{
+						o = ctx->model->graph->initializer[k];
+						if(o)
+						{
+							int ndim = o->n_dims;
+							int dims[ndim];
+							for(l = 0; l < ndim; l++)
+								dims[l] = o->dims[l];
+							t = onnx_tensor_alloc(name, (enum onnx_tensor_type_t)o->data_type, dims, ndim);
+							if(t)
+							{
+								onnx_tensor_copy_from_tensor_proto(t, o);
+								hmap_add(ctx->map, name, t);
+							}
+							break;
+						}
+					}
+				}
+				if(!onnx_tensor_search(ctx, name))
+				{
+					if(ctx->map)
+						hmap_free(ctx->map, hmap_entry_callback);
+					if(ctx->rctx)
+						free(ctx->rctx);
+					if(ctx->r)
+						free(ctx->r);
+					if(ctx->nodes)
+						free(ctx->nodes);
+					if(ctx->model)
+						onnx__model_proto__free_unpacked(ctx->model, NULL);
+					if(ctx)
+						free(ctx);
+					return NULL;
+				}
 			}
 		}
 	}
