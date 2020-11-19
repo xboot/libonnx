@@ -175,9 +175,14 @@
 |Max-8|√|
 |Max-6|√|
 |Max-1|√|
-|MaxPool|√|
-|MaxRoiPool||
-|MaxUnpool||
+|MaxPool-12|√|
+|MaxPool-11|√|
+|MaxPool-10|√|
+|MaxPool-8|√|
+|MaxPool-1|√|
+|MaxRoiPool-1||
+|MaxUnpool-11||
+|MaxUnpool-9||
 |Mean|√|
 |Min|√|
 |Mod|√|
