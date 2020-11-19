@@ -170,7 +170,11 @@
 |MatMul-9|√|
 |MatMul-1|√|
 |MatMulInteger-10||
-|Max|√|
+|Max-13|√|
+|Max-12|√|
+|Max-8|√|
+|Max-6|√|
+|Max-1|√|
 |MaxPool|√|
 |MaxRoiPool||
 |MaxUnpool||

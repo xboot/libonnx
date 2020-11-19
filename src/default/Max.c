@@ -379,14 +379,154 @@ void resolver_default_op_Max(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 12)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 8)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 6)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Max_init;
+			n->exit = Max_exit;
+			n->reshape = Max_reshape;
+			n->operator = Max_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
