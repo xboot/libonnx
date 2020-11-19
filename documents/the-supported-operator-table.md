@@ -307,7 +307,8 @@
 |Sign-9|√|
 |Sin-7|√|
 |Sinh-9|√|
-|Size|√|
+|Size-13|√|
+|Size-1|√|
 |Slice-13||
 |Slice-11||
 |Slice-10||
