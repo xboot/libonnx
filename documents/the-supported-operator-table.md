@@ -357,7 +357,8 @@
 |Upsample-9||
 |Upsample-7||
 |Where-9| √ |
-| Xor                       |√|
+|Xor-7|√|
+|Xor-1||
 |**Function**||
 |Celu-12|√|
 |DynamicQuantizeLinear-11||
