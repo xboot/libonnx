@@ -299,7 +299,7 @@
 |SequenceLength-11||
 |Shape-13|√|
 |Shape-1|√|
-|Shrink|√|
+|Shrink-9|√|
 |Sigmoid|√|
 |Sign|√|
 |Sin|√|
