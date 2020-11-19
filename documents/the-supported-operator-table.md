@@ -148,7 +148,8 @@
 |IsNaN-9|√|
 |LRN-13|√|
 |LRN-1|√|
-|LSTM||
+|LSTM-7||
+|LSTM-1||
 |LeakyRelu|√|
 |Less|√|
 |Log|√|
