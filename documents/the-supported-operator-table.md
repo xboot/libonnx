@@ -152,7 +152,10 @@
 |LSTM-1||
 |LeakyRelu-6|√|
 |LeakyRelu-1|√|
-|Less|√|
+|Less-13|√|
+|Less-9|√|
+|Less-7|√|
+|Less-1||
 |Log|√|
 |Loop||
 |LpNormalization||
