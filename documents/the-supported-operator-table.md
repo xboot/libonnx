@@ -211,7 +211,10 @@
 |OneHot-9||
 |Or-7|√|
 |Or-1||
-|PRelu|√|
+|PRelu-9|√|
+|PRelu-7|√|
+|PRelu-6|√|
+|PRelu-1|√|
 |Pad-13||
 |Pad-11||
 |Pad-2||
