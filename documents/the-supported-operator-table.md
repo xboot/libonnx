@@ -325,7 +325,9 @@
 |Sqrt-13|√|
 |Sqrt-6|√|
 |Sqrt-1|√|
-|Squeeze|√|
+|Squeeze-13|√|
+|Squeeze-11||
+|Squeeze-1||
 |StringNormalizer-10||
 |Sub|√|
 |Sum|√|
