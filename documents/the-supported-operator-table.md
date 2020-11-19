@@ -289,7 +289,8 @@
 |ScatterElements-11||
 |ScatterND-13||
 |ScatterND-11||
-|Selu|      √      |
+|Selu-6|√|
+|Selu-1|√|
 | SequenceAt-11             ||
 |SequenceConstruct-11||
 |SequenceEmpty-11||
