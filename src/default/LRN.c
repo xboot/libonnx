@@ -236,5 +236,28 @@ void resolver_default_op_LRN(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = LRN_init;
+			n->exit = LRN_exit;
+			n->reshape = LRN_reshape;
+			n->operator = LRN_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = LRN_init;
+			n->exit = LRN_exit;
+			n->reshape = LRN_reshape;
+			n->operator = LRN_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = LRN_init;
+			n->exit = LRN_exit;
+			n->reshape = LRN_reshape;
+			n->operator = LRN_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

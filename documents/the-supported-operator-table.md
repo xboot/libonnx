@@ -146,7 +146,8 @@
 |IsInf-10|√|
 |IsNaN-13|√|
 |IsNaN-9|√|
-|LRN|√|
+|LRN-13|√|
+|LRN-1|√|
 |LSTM||
 |LeakyRelu|√|
 |Less|√|
