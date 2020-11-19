@@ -356,7 +356,7 @@
 |Upsample-10(deprecated)|√|
 |Upsample-9||
 |Upsample-7||
-|Where| √ |
+|Where-9| √ |
 | Xor                       |√|
 |**Function**||
 |Celu-12|√|
