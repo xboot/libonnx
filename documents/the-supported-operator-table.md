@@ -127,7 +127,10 @@
 |GlobalLpPool-2|√|
 |GlobalLpPool-1|√|
 |GlobalMaxPool-1|√|
-|Greater|√|
+|Greater-13|√|
+|Greater-9|√|
+|Greater-7|√|
+|Greater-1||
 |HardSigmoid|√|
 |Hardmax||
 |Identity|√|
