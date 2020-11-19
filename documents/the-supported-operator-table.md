@@ -59,7 +59,7 @@
 |Constant-11|√|
 |Constant-9|√|
 |Constant-1|√|
-|ConstantOfShape|√|
+|ConstantOfShape-9|√|
 |Conv|√|
 |ConvInteger||
 |ConvTranspose||
