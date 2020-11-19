@@ -8,7 +8,10 @@
 |Abs-1 | √ |
 | Acos-7 | √ |
 |Acosh-9                                       | √ |
-|Add|√|
+|Add-13|√|
+|Add-7|√|
+|Add-6||
+|Add-1||
 |And|√|
 |ArgMax|√|
 |ArgMin|√|
