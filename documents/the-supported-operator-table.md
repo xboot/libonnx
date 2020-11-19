@@ -87,7 +87,10 @@
 |Einsum-12||
 |Elu-6|√|
 |Elu-1|√|
-|Equal|√|
+|Equal-13|√|
+|Equal-11|√|
+|Equal-7|√|
+|Equal-1||
 |Erf|√|
 |Exp|√|
 |Expand|√|
