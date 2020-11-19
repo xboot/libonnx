@@ -14,8 +14,14 @@
 |Add-1||
 |And-7|√|
 |And-1||
-|ArgMax|√|
-|ArgMin|√|
+|ArgMax-13|√|
+|ArgMax-12|√|
+|ArgMax-11|√|
+|ArgMax-1|√|
+|ArgMin-13|√|
+|ArgMin-12|√|
+|ArgMin-11|√|
+|ArgMin-1|√|
 |Asin|√|
 |Asinh|√|
 |Atan|√|
