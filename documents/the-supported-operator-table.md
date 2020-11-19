@@ -26,7 +26,10 @@
 |Asinh-9|√|
 |Atan-7|√|
 |Atanh-9|√|
-|AveragePool|√|
+|AveragePool-11|√|
+|AveragePool-10|√|
+|AveragePool-7|√|
+|AveragePool-1|√|
 |BatchNormalization|√|
 |BitShift|√|
 |Cast|√|

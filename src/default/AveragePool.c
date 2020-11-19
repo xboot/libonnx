@@ -374,11 +374,80 @@ void resolver_default_op_AveragePool(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 10)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 7)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
