@@ -313,8 +313,8 @@
 |Slice-11||
 |Slice-10||
 |Slice-1||
-|Softplus|√|
-|Softsign|√|
+|Softplus-1|√|
+|Softsign-1|√|
 |SpaceToDepth-13||
 |SpaceToDepth-1||
 |Split-13||
