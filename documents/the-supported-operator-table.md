@@ -126,7 +126,7 @@
 |GlobalAveragePool-1|√|
 |GlobalLpPool-2|√|
 |GlobalLpPool-1|√|
-|GlobalMaxPool|√|
+|GlobalMaxPool-1|√|
 |Greater|√|
 |HardSigmoid|√|
 |Hardmax||
