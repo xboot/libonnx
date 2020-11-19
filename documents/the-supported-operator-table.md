@@ -235,12 +235,15 @@
 |**Function**||
 |Celu-12|√|
 |DynamicQuantizeLinear-11||
-|GreaterOrEqual|√|
-|LessOrEqual|√|
+|GreaterOrEqual-12|√|
+|LessOrEqual-12|√|
 |LogSoftmax|√|
-|MeanVarianceNormalization||
-|NegativeLogLikelihoodLoss||
-|Range|√|
+|MeanVarianceNormalization-13||
+|MeanVarianceNormalization-9||
+|NegativeLogLikelihoodLoss-13||
+|NegativeLogLikelihoodLoss-12||
+|Range-11|√|
 |Softmax|√|
-|SoftmaxCrossEntropyLoss||
+|SoftmaxCrossEntropyLoss-13||
+|SoftmaxCrossEntropyLoss-12||
 
