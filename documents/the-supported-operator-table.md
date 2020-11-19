@@ -150,7 +150,8 @@
 |LRN-1|√|
 |LSTM-7||
 |LSTM-1||
-|LeakyRelu|√|
+|LeakyRelu-6|√|
+|LeakyRelu-1|√|
 |Less|√|
 |Log|√|
 |Loop||

@@ -113,5 +113,28 @@ void resolver_default_op_LeakyRelu(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = LeakyRelu_init;
+			n->exit = LeakyRelu_exit;
+			n->reshape = LeakyRelu_reshape;
+			n->operator = LeakyRelu_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = LeakyRelu_init;
+			n->exit = LeakyRelu_exit;
+			n->reshape = LeakyRelu_reshape;
+			n->operator = LeakyRelu_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = LeakyRelu_init;
+			n->exit = LeakyRelu_exit;
+			n->reshape = LeakyRelu_reshape;
+			n->operator = LeakyRelu_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
