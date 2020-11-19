@@ -54,7 +54,11 @@
 |Concat-4|√|
 |Concat-1|√|
 |ConcatFromSequence-11||
-|Constant|√|
+|Constant-13|√|
+|Constant-12|√|
+|Constant-11|√|
+|Constant-9|√|
+|Constant-1|√|
 |ConstantOfShape|√|
 |Conv|√|
 |ConvInteger||
