@@ -233,7 +233,9 @@
 |RandomNormalLike-1|√|
 |RandomUniform-1|√|
 |RandomUniformLike-1|√|
-|Reciprocal|√|
+|Reciprocal-13|√|
+|Reciprocal-6|√|
+|Reciprocal-1|√|
 |ReduceL1|√|
 |ReduceL2|√|
 |ReduceLogSum|√|

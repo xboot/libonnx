@@ -112,8 +112,54 @@ void resolver_default_op_Reciprocal(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 6)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Reciprocal_init;
+			n->exit = Reciprocal_exit;
+			n->reshape = Reciprocal_reshape;
+			n->operator = Reciprocal_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
