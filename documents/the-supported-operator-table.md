@@ -183,7 +183,7 @@
 |Where| √ |
 | Xor                       |√|
 |**Function**||
-|Celu|√|
+|Celu-12|√|
 |DynamicQuantizeLinear||
 |GreaterOrEqual|√|
 |LessOrEqual|√|
