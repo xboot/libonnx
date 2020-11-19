@@ -39,7 +39,9 @@
 |Cast-9|√|
 |Cast-6|√|
 |Cast-1||
-|Ceil|√|
+|Ceil-13|√|
+|Ceil-6|√|
+|Ceil-1|√|
 |Clip|√|
 |Compress||
 |Concat|√|
