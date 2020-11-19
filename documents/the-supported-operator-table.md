@@ -229,10 +229,10 @@
 |QuantizeLinear-10||
 |RNN-7||
 |RNN-1||
-|RandomNormal|√|
-|RandomNormalLike|√|
-|RandomUniform|√|
-|RandomUniformLike|√|
+|RandomNormal-1|√|
+|RandomNormalLike-1|√|
+|RandomUniform-1|√|
+|RandomUniformLike-1|√|
 |Reciprocal|√|
 |ReduceL1|√|
 |ReduceL2|√|
