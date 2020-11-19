@@ -114,11 +114,74 @@ void resolver_default_op_Flatten(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 11)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Flatten_init;
+			n->exit = Flatten_exit;
+			n->reshape = Flatten_reshape;
+			n->operator = Flatten_operator;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 9)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Flatten_init;
+			n->exit = Flatten_exit;
+			n->reshape = Flatten_reshape;
+			n->operator = Flatten_operator;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Flatten_init;
+			n->exit = Flatten_exit;
+			n->reshape = Flatten_reshape;
+			n->operator = Flatten_operator;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -99,7 +99,10 @@
 |Expand-13|√|
 |Expand-8|√|
 |EyeLike-9||
-|Flatten|√|
+|Flatten-13|√|
+|Flatten-11|√|
+|Flatten-9|√|
+|Flatten-1|√|
 |Floor|√|
 |GRU||
 |Gather||
