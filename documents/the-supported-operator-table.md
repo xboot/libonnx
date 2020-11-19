@@ -199,7 +199,9 @@
 |Mul-6||
 |Mul-1||
 |Multinomial-7|√|
-|Neg|√|
+|Neg-13|√|
+|Neg-6|√|
+|Neg-1|√|
 |NonMaxSuppression||
 |NonZero||
 |Not|√|
