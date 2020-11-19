@@ -141,7 +141,8 @@
 |If-13||
 |If-11||
 |If-1||
-|InstanceNormalization|√|
+|InstanceNormalization-6|√|
+|InstanceNormalization-1|√|
 |IsInf|√|
 |IsNaN|√|
 |LRN|√|

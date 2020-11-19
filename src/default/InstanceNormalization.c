@@ -182,5 +182,28 @@ void resolver_default_op_InstanceNormalization(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = InstanceNormalization_init;
+			n->exit = InstanceNormalization_exit;
+			n->reshape = InstanceNormalization_reshape;
+			n->operator = InstanceNormalization_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = InstanceNormalization_init;
+			n->exit = InstanceNormalization_exit;
+			n->reshape = InstanceNormalization_reshape;
+			n->operator = InstanceNormalization_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = InstanceNormalization_init;
+			n->exit = InstanceNormalization_exit;
+			n->reshape = InstanceNormalization_reshape;
+			n->operator = InstanceNormalization_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }
