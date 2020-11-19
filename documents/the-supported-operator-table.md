@@ -12,7 +12,8 @@
 |Add-7|√|
 |Add-6||
 |Add-1||
-|And|√|
+|And-7|√|
+|And-1||
 |ArgMax|√|
 |ArgMin|√|
 |Asin|√|
