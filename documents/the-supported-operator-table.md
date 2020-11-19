@@ -157,7 +157,9 @@
 |Less-7|√|
 |Less-1||
 |Log|√|
-|Loop||
+|Loop-13||
+|Loop-11||
+|Loop-1||
 |LpNormalization||
 |LpPool||
 |MatMul|√|
