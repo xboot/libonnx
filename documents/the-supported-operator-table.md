@@ -303,7 +303,8 @@
 |Sigmoid-13|√|
 |Sigmoid-6|√|
 |Sigmoid-1|√|
-|Sign|√|
+|Sign-13|√|
+|Sign-9|√|
 |Sin|√|
 |Sinh|√|
 |Size|√|
