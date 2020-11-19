@@ -147,11 +147,80 @@ void resolver_default_op_Sum(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 8)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 6)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sum_init;
+			n->exit = Sum_exit;
+			n->reshape = Sum_reshape;
+			n->operator = Sum_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -333,7 +333,10 @@
 |Sub-7|√|
 |Sub-6||
 |Sub-1||
-|Sum|√|
+|Sum-13|√|
+|Sum-8|√|
+|Sum-6|√|
+|Sum-1|√|
 |Tan|√|
 |Tanh|√|
 |TfIdfVectorizer-9||
