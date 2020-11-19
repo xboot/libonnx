@@ -42,7 +42,11 @@
 |Ceil-13|√|
 |Ceil-6|√|
 |Ceil-1|√|
-|Clip|√|
+|Clip-13|√|
+|Clip-12|√|
+|Clip-11|√|
+|Clip-6||
+|Clip-1||
 |Compress||
 |Concat|√|
 |ConcatFromSequence||
