@@ -138,7 +138,9 @@
 |Hardmax-1||
 |Identity-13|√|
 |Identity-1|√|
-|If||
+|If-13||
+|If-11||
+|If-1||
 |InstanceNormalization|√|
 |IsInf|√|
 |IsNaN|√|
