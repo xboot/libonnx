@@ -14,7 +14,7 @@ static int Concat_init(struct onnx_node_t * n)
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			pdat->axis = onnx_attribute_read_int(n, "axis", 0);
+			pdat->axis = onnx_attribute_read_int(n, "axis", 1);
 			n->priv = pdat;
 			return 1;
 		}
@@ -160,11 +160,74 @@ void resolver_default_op_Concat(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 11)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Concat_init;
+			n->exit = Concat_exit;
+			n->reshape = Concat_reshape;
+			n->operator = Concat_operator;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 4)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Concat_init;
+			n->exit = Concat_exit;
+			n->reshape = Concat_reshape;
+			n->operator = Concat_operator;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Concat_init;
+			n->exit = Concat_exit;
+			n->reshape = Concat_reshape;
+			n->operator = Concat_operator;
+			break;
+		default:
+			break;
+		}
 	}
 }
