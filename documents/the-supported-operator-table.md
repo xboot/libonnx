@@ -84,7 +84,7 @@
 |Dropout-7||
 |Dropout-6||
 |Dropout-1||
-|Einsum||
+|Einsum-12||
 |Elu|√|
 |Equal|√|
 |Erf|√|
@@ -205,7 +205,7 @@
 | Xor                       |√|
 |**Function**||
 |Celu-12|√|
-|DynamicQuantizeLinear||
+|DynamicQuantizeLinear-11||
 |GreaterOrEqual|√|
 |LessOrEqual|√|
 |LogSoftmax|√|
