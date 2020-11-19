@@ -166,7 +166,9 @@
 |LpPool-11||
 |LpPool-2||
 |LpPool-1||
-|MatMul|√|
+|MatMul-13|√|
+|MatMul-9|√|
+|MatMul-1|√|
 |MatMulInteger-10||
 |Max|√|
 |MaxPool|√|
