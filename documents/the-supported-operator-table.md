@@ -117,7 +117,12 @@
 |GatherND-13||
 |GatherND-12||
 |GatherND-11||
-|Gemm|√|
+|Gemm-13|√|
+|Gemm-11|√|
+|Gemm-9|√|
+|Gemm-7|√|
+|Gemm-6||
+|Gemm-1||
 |GlobalAveragePool|√|
 |GlobalLpPool|√|
 |GlobalMaxPool|√|
