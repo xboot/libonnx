@@ -93,7 +93,9 @@
 |Equal-1||
 |Erf-13|√|
 |Erf-9|√|
-|Exp|√|
+|Exp-13|√|
+|Exp-6|√|
+|Exp-1|√|
 |Expand|√|
 |EyeLike||
 |Flatten|√|
