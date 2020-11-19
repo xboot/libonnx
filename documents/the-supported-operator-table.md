@@ -187,7 +187,11 @@
 |Mean-8|√|
 |Mean-6|√|
 |Mean-1|√|
-|Min|√|
+|Min-13|√|
+|Min-12|√|
+|Min-8|√|
+|Min-6|√|
+|Min-1|√|
 |Mod|√|
 |Mul|√|
 |Multinomial|√|
