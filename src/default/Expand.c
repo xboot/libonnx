@@ -395,5 +395,100 @@ void resolver_default_op_Expand(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 8)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_bool;
+			break;
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_float64;
+			break;
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_complex64;
+			break;
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_complex128;
+			break;
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Expand_init;
+			n->exit = Expand_exit;
+			n->reshape = Expand_reshape;
+			n->operator = Expand_string;
+			break;
+		default:
+			break;
+		}
 	}
 }

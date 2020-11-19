@@ -96,7 +96,8 @@
 |Exp-13|√|
 |Exp-6|√|
 |Exp-1|√|
-|Expand|√|
+|Expand-13|√|
+|Expand-8|√|
 |EyeLike||
 |Flatten|√|
 |Floor|√|
