@@ -183,7 +183,10 @@
 |MaxRoiPool-1||
 |MaxUnpool-11||
 |MaxUnpool-9||
-|Mean|√|
+|Mean-13|√|
+|Mean-8|√|
+|Mean-6|√|
+|Mean-1|√|
 |Min|√|
 |Mod|√|
 |Mul|√|
