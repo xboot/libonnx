@@ -322,7 +322,9 @@
 |Split-2||
 |Split-1||
 | SplitToSequence-11        ||
-|Sqrt|√|
+|Sqrt-13|√|
+|Sqrt-6|√|
+|Sqrt-1|√|
 |Squeeze|√|
 |StringNormalizer-10||
 |Sub|√|
