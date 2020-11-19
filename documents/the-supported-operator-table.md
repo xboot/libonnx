@@ -163,7 +163,9 @@
 |Loop-11||
 |Loop-1||
 |LpNormalization-1||
-|LpPool||
+|LpPool-11||
+|LpPool-2||
+|LpPool-1||
 |MatMul|√|
 |MatMulInteger||
 |Max|√|
