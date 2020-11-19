@@ -349,7 +349,8 @@
 |TopK-11||
 |TopK-10||
 |TopK-1||
-| Transpose                 |√|
+|Transpose-13|√|
+|Transpose-1|√|
 |Unique-11||
 |Unsqueeze|√|
 |Upsample-10(deprecated)|√|
