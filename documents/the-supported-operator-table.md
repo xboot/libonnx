@@ -338,7 +338,9 @@
 |Sum-6|√|
 |Sum-1|√|
 |Tan-7|√|
-|Tanh|√|
+|Tanh-13|√|
+|Tanh-6|√|
+|Tanh-1|√|
 |TfIdfVectorizer-9||
 |ThresholdedRelu| √ |
 | Tile                      |√|
