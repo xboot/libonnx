@@ -206,7 +206,7 @@
 |NonMaxSuppression-10||
 |NonZero-13||
 |NonZero-9||
-|Not|√|
+|Not-1|√|
 |OneHot-11||
 |OneHot-9||
 |Or|√|
