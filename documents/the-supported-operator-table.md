@@ -342,7 +342,7 @@
 |Tanh-6|√|
 |Tanh-1|√|
 |TfIdfVectorizer-9||
-|ThresholdedRelu| √ |
+|ThresholdedRelu-10| √ |
 | Tile                      |√|
 |TopK-11||
 |TopK-10||
