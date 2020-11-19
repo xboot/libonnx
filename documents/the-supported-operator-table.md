@@ -343,7 +343,9 @@
 |Tanh-1|√|
 |TfIdfVectorizer-9||
 |ThresholdedRelu-10| √ |
-| Tile                      |√|
+|Tile-13|√|
+|Tile-6|√|
+|Tile-1||
 |TopK-11||
 |TopK-10||
 |TopK-1||
