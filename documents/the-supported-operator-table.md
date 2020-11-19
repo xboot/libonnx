@@ -337,7 +337,7 @@
 |Sum-8|√|
 |Sum-6|√|
 |Sum-1|√|
-|Tan|√|
+|Tan-7|√|
 |Tanh|√|
 |TfIdfVectorizer-9||
 |ThresholdedRelu| √ |
