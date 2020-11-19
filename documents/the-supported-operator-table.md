@@ -34,7 +34,7 @@
 |BatchNormalization-7||
 |BatchNormalization-6||
 |BatchNormalization-1||
-|BitShift|√|
+|BitShift-11|√|
 |Cast|√|
 |Ceil|√|
 |Clip|√|
