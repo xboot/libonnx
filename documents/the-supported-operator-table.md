@@ -131,8 +131,11 @@
 |Greater-9|√|
 |Greater-7|√|
 |Greater-1||
-|HardSigmoid|√|
-|Hardmax||
+|HardSigmoid-6|√|
+|HardSigmoid-1|√|
+|Hardmax-13||
+|Hardmax-11||
+|Hardmax-1||
 |Identity|√|
 |If||
 |InstanceNormalization|√|
