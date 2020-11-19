@@ -1,7 +1,7 @@
 #include <onnx.h>
 
 struct operator_pdata_t {
-	int p;
+	float p;
 };
 
 static int GlobalLpPool_init(struct onnx_node_t * n)
@@ -13,7 +13,10 @@ static int GlobalLpPool_init(struct onnx_node_t * n)
 		pdat = malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			pdat->p = onnx_attribute_read_int(n, "p", 2);
+			if(n->opset >= 2)
+				pdat->p = onnx_attribute_read_int(n, "p", 2);
+			else
+				pdat->p = onnx_attribute_read_float(n, "p", 2.0);
 			n->priv = pdat;
 			return 1;
 		}
@@ -151,5 +154,28 @@ void resolver_default_op_GlobalLpPool(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = GlobalLpPool_init;
+			n->exit = GlobalLpPool_exit;
+			n->reshape = GlobalLpPool_reshape;
+			n->operator = GlobalLpPool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = GlobalLpPool_init;
+			n->exit = GlobalLpPool_exit;
+			n->reshape = GlobalLpPool_reshape;
+			n->operator = GlobalLpPool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = GlobalLpPool_init;
+			n->exit = GlobalLpPool_exit;
+			n->reshape = GlobalLpPool_reshape;
+			n->operator = GlobalLpPool_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

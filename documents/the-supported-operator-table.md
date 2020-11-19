@@ -123,8 +123,9 @@
 |Gemm-7|√|
 |Gemm-6||
 |Gemm-1||
-|GlobalAveragePool|√|
-|GlobalLpPool|√|
+|GlobalAveragePool-1|√|
+|GlobalLpPool-2|√|
+|GlobalLpPool-1|√|
 |GlobalMaxPool|√|
 |Greater|√|
 |HardSigmoid|√|
