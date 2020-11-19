@@ -22,10 +22,10 @@
 |ArgMin-12|√|
 |ArgMin-11|√|
 |ArgMin-1|√|
-|Asin|√|
-|Asinh|√|
-|Atan|√|
-|Atanh|√|
+|Asin-7|√|
+|Asinh-9|√|
+|Atan-7|√|
+|Atanh-9|√|
 |AveragePool|√|
 |BatchNormalization|√|
 |BitShift|√|
