@@ -202,18 +202,26 @@
 |Neg-13|√|
 |Neg-6|√|
 |Neg-1|√|
-|NonMaxSuppression||
-|NonZero||
+|NonMaxSuppression-11||
+|NonMaxSuppression-10||
+|NonZero-13||
+|NonZero-9||
 |Not|√|
-|OneHot||
+|OneHot-11||
+|OneHot-9||
 |Or|√|
 |PRelu|√|
-|Pad||
+|Pad-13||
+|Pad-11||
+|Pad-2||
+|Pad-1||
 |Pow|√|
-|QLinearConv||
-|QLinearMatMul||
-|QuantizeLinear||
-|RNN||
+|QLinearConv-10||
+|QLinearMatMul-10||
+|QuantizeLinear-13||
+|QuantizeLinear-10||
+|RNN-7||
+|RNN-1||
 |RandomNormal|√|
 |RandomNormalLike|√|
 |RandomUniform|√|
@@ -231,21 +239,28 @@
 |ReduceSumSquare|√|
 |Relu|      √      |
 | Reshape                   |√|
-|Resize||
-|ReverseSequence||
-|RoiAlign||
+|Resize-13||
+|Resize-11||
+|Resize-10||
+|ReverseSequence-10||
+|RoiAlign-10||
 |Round|√|
-|Scan||
-|Scatter||
-|ScatterElements||
-|ScatterND||
+|Scan-11||
+|Scan-9||
+|Scan-8||
+|Scatter-11(deprecated)|√|
+|Scatter-9||
+|ScatterElements-13||
+|ScatterElements-11||
+|ScatterND-13||
+|ScatterND-11||
 |Selu|      √      |
-| SequenceAt                ||
-|SequenceConstruct||
-|SequenceEmpty||
-|SequenceErase||
-|SequenceInsert||
-|SequenceLength||
+| SequenceAt-11             ||
+|SequenceConstruct-11||
+|SequenceEmpty-11||
+|SequenceErase-11||
+|SequenceInsert-11||
+|SequenceLength-11||
 |Shape|√|
 |Shrink|√|
 |Sigmoid|√|
@@ -253,27 +268,38 @@
 |Sin|√|
 |Sinh|√|
 |Size|√|
-|Slice||
+|Slice-13||
+|Slice-11||
+|Slice-10||
+|Slice-1||
 |Softplus|√|
 |Softsign|√|
-|SpaceToDepth||
-|Split|             |
-| SplitToSequence           ||
+|SpaceToDepth-13||
+|SpaceToDepth-1||
+|Split-13||
+|Split-11||
+|Split-2||
+|Split-1||
+| SplitToSequence-11        ||
 |Sqrt|√|
 |Squeeze|√|
-|StringNormalizer||
+|StringNormalizer-10||
 |Sub|√|
 |Sum|√|
 |Tan|√|
 |Tanh|√|
-|TfIdfVectorizer||
+|TfIdfVectorizer-9||
 |ThresholdedRelu| √ |
 | Tile                      |√|
-|TopK|             |
+|TopK-11||
+|TopK-10||
+|TopK-1||
 | Transpose                 |√|
-|Unique||
+|Unique-11||
 |Unsqueeze|√|
-|Upsample||
+|Upsample-10(deprecated)|√|
+|Upsample-9||
+|Upsample-7||
 |Where| √ |
 | Xor                       |√|
 |**Function**||
