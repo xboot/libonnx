@@ -167,7 +167,7 @@
 |LpPool-2||
 |LpPool-1||
 |MatMul|√|
-|MatMulInteger||
+|MatMulInteger-10||
 |Max|√|
 |MaxPool|√|
 |MaxRoiPool||
