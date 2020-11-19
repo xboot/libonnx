@@ -198,7 +198,7 @@
 |Mul-7|√|
 |Mul-6||
 |Mul-1||
-|Multinomial|√|
+|Multinomial-7|√|
 |Neg|√|
 |NonMaxSuppression||
 |NonZero||
