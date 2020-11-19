@@ -74,7 +74,10 @@
 |DequantizeLinear-13||
 |DequantizeLinear-10||
 |Det-11||
-|Div|√|
+|Div-13|√|
+|Div-7|√|
+|Div-6||
+|Div-1||
 |Dropout|√|
 |Einsum||
 |Elu|√|
