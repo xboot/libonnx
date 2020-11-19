@@ -47,7 +47,8 @@
 |Clip-11|√|
 |Clip-6||
 |Clip-1||
-|Compress||
+|Compress-11||
+|Compress-9||
 |Concat|√|
 |ConcatFromSequence||
 |Constant|√|
