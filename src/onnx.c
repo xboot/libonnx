@@ -1078,6 +1078,7 @@ static int reshape_dummy(struct onnx_node_t * n)
 
 static void operator_dummy(struct onnx_node_t * n)
 {
+	ONNX_LOG("\033[45;37mUnsupported opset\033[0m => %s-%d (%s)\r\n", n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
 }
 
 struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen)
