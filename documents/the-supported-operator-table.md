@@ -194,7 +194,10 @@
 |Min-1|√|
 |Mod-13|√|
 |Mod-10|√|
-|Mul|√|
+|Mul-13|√|
+|Mul-7|√|
+|Mul-6||
+|Mul-1||
 |Multinomial|√|
 |Neg|√|
 |NonMaxSuppression||
