@@ -225,6 +225,53 @@ void resolver_default_op_Sub(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 7)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 6)
 	{
