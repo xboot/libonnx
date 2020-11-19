@@ -209,7 +209,8 @@
 |Not-1|√|
 |OneHot-11||
 |OneHot-9||
-|Or|√|
+|Or-7|√|
+|Or-1||
 |PRelu|√|
 |Pad-13||
 |Pad-11||
