@@ -35,7 +35,10 @@
 |BatchNormalization-6||
 |BatchNormalization-1||
 |BitShift-11|√|
-|Cast|√|
+|Cast-13|√|
+|Cast-9|√|
+|Cast-6|√|
+|Cast-1||
 |Ceil|√|
 |Clip|√|
 |Compress||
