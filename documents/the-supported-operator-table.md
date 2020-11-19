@@ -352,7 +352,9 @@
 |Transpose-13|√|
 |Transpose-1|√|
 |Unique-11||
-|Unsqueeze|√|
+|Unsqueeze-13|√|
+|Unsqueeze-11||
+|Unsqueeze-1||
 |Upsample-10(deprecated)|√|
 |Upsample-9||
 |Upsample-7||
