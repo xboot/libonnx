@@ -85,7 +85,8 @@
 |Dropout-6||
 |Dropout-1||
 |Einsum-12||
-|Elu|√|
+|Elu-6|√|
+|Elu-1|√|
 |Equal|√|
 |Erf|√|
 |Exp|√|
