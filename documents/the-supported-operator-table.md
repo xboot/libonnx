@@ -192,7 +192,8 @@
 |Min-8|√|
 |Min-6|√|
 |Min-1|√|
-|Mod|√|
+|Mod-13|√|
+|Mod-10|√|
 |Mul|√|
 |Multinomial|√|
 |Neg|√|
