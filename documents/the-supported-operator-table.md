@@ -143,8 +143,9 @@
 |If-1||
 |InstanceNormalization-6|√|
 |InstanceNormalization-1|√|
-|IsInf|√|
-|IsNaN|√|
+|IsInf-10|√|
+|IsNaN-13|√|
+|IsNaN-9|√|
 |LRN|√|
 |LSTM||
 |LeakyRelu|√|
