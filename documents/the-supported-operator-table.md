@@ -305,8 +305,8 @@
 |Sigmoid-1|√|
 |Sign-13|√|
 |Sign-9|√|
-|Sin|√|
-|Sinh|√|
+|Sin-7|√|
+|Sinh-9|√|
 |Size|√|
 |Slice-13||
 |Slice-11||
