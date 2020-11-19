@@ -60,9 +60,11 @@
 |Constant-9|√|
 |Constant-1|√|
 |ConstantOfShape-9|√|
-|Conv|√|
-|ConvInteger||
-|ConvTranspose||
+|Conv-11|√|
+|Conv-1|√|
+|ConvInteger-10||
+|ConvTranspose-11||
+|ConvTranspose-1||
 |Cos|√|
 |Cosh|√|
 |CumSum||
