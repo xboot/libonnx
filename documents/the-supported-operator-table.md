@@ -103,7 +103,9 @@
 |Flatten-11|√|
 |Flatten-9|√|
 |Flatten-1|√|
-|Floor|√|
+|Floor-13|√|
+|Floor-6|√|
+|Floor-1|√|
 |GRU||
 |Gather||
 |GatherElements||
