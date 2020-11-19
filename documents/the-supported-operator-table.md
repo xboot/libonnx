@@ -271,7 +271,9 @@
 |Relu-13|√|
 |Relu-6|√|
 |Relu-1|√|
-|Reshape|√|
+|Reshape-13|√|
+|Reshape-5|√|
+|Reshape-1||
 |Resize-13||
 |Resize-11||
 |Resize-10||
