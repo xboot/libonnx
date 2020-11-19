@@ -112,8 +112,54 @@ void resolver_default_op_Log(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 6)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 1)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Log_init;
+			n->exit = Log_exit;
+			n->reshape = Log_reshape;
+			n->operator = Log_float64;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -156,7 +156,9 @@
 |Less-9|√|
 |Less-7|√|
 |Less-1||
-|Log|√|
+|Log-13|√|
+|Log-6|√|
+|Log-1|√|
 |Loop-13||
 |Loop-11||
 |Loop-1||
