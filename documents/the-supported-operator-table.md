@@ -91,7 +91,8 @@
 |Equal-11|√|
 |Equal-7|√|
 |Equal-1||
-|Erf|√|
+|Erf-13|√|
+|Erf-9|√|
 |Exp|√|
 |Expand|√|
 |EyeLike||
