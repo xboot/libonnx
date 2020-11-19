@@ -268,7 +268,9 @@
 |ReduceSumSquare-13|√|
 |ReduceSumSquare-11|√|
 |ReduceSumSquare-1|√|
-|Relu|√|
+|Relu-13|√|
+|Relu-6|√|
+|Relu-1|√|
 |Reshape|√|
 |Resize-13||
 |Resize-11||
