@@ -219,7 +219,10 @@
 |Pad-11||
 |Pad-2||
 |Pad-1||
-|Pow|√|
+|Pow-13|√|
+|Pow-12|√|
+|Pow-7|√|
+|Pow-1||
 |QLinearConv-10||
 |QLinearMatMul-10||
 |QuantizeLinear-13||
