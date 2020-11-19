@@ -297,7 +297,8 @@
 |SequenceErase-11||
 |SequenceInsert-11||
 |SequenceLength-11||
-|Shape|√|
+|Shape-13|√|
+|Shape-1|√|
 |Shrink|√|
 |Sigmoid|√|
 |Sign|√|
