@@ -300,7 +300,9 @@
 |Shape-13|√|
 |Shape-1|√|
 |Shrink-9|√|
-|Sigmoid|√|
+|Sigmoid-13|√|
+|Sigmoid-6|√|
+|Sigmoid-1|√|
 |Sign|√|
 |Sin|√|
 |Sinh|√|
