@@ -30,7 +30,10 @@
 |AveragePool-10|√|
 |AveragePool-7|√|
 |AveragePool-1|√|
-|BatchNormalization|√|
+|BatchNormalization-9|√|
+|BatchNormalization-7||
+|BatchNormalization-6||
+|BatchNormalization-1||
 |BitShift|√|
 |Cast|√|
 |Ceil|√|
