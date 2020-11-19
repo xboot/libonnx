@@ -78,7 +78,12 @@
 |Div-7|√|
 |Div-6||
 |Div-1||
-|Dropout|√|
+|Dropout-13|√|
+|Dropout-12|√|
+|Dropout-10||
+|Dropout-7||
+|Dropout-6||
+|Dropout-1||
 |Einsum||
 |Elu|√|
 |Equal|√|

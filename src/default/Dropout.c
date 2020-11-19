@@ -136,6 +136,29 @@ void resolver_default_op_Dropout(struct onnx_node_t * n)
 	}
 	else if(n->opset >= 12)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Dropout_init;
+			n->exit = Dropout_exit;
+			n->reshape = Dropout_reshape;
+			n->operator = Dropout_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Dropout_init;
+			n->exit = Dropout_exit;
+			n->reshape = Dropout_reshape;
+			n->operator = Dropout_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Dropout_init;
+			n->exit = Dropout_exit;
+			n->reshape = Dropout_reshape;
+			n->operator = Dropout_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 10)
 	{
