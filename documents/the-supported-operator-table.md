@@ -366,13 +366,17 @@
 |DynamicQuantizeLinear-11||
 |GreaterOrEqual-12|√|
 |LessOrEqual-12|√|
-|LogSoftmax|√|
+|LogSoftmax-13|√|
+|LogSoftmax-11||
+|LogSoftmax-1||
 |MeanVarianceNormalization-13||
 |MeanVarianceNormalization-9||
 |NegativeLogLikelihoodLoss-13||
 |NegativeLogLikelihoodLoss-12||
 |Range-11|√|
-|Softmax|√|
+|Softmax-13|√|
+|Softmax-11||
+|Softmax-1||
 |SoftmaxCrossEntropyLoss-13||
 |SoftmaxCrossEntropyLoss-12||
 
