@@ -163,9 +163,9 @@ static int MaxPool_reshape(struct onnx_node_t * n)
 		{
 		case AUTO_PAD_NOTSET:
 			if(pdat->ceil_mode)
-				dims[i + 2] = ceilf(((x->dims[i + 2] + (pdat->cpads[i] + pdat->cpads[i + pdat->nkernel])) - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1)) / (float)pdat->strides[i] + 1);
+				dims[i + 2] = ceilf((x->dims[i + 2] + pdat->cpads[i] + pdat->cpads[i + pdat->nkernel] - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1)) / (float)pdat->strides[i] + 1);
 			else
-				dims[i + 2] = floorf(((x->dims[i + 2] + (pdat->cpads[i] + pdat->cpads[i + pdat->nkernel])) - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1)) / (float)pdat->strides[i] + 1);
+				dims[i + 2] = floorf((x->dims[i + 2] + pdat->cpads[i] + pdat->cpads[i + pdat->nkernel] - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1)) / (float)pdat->strides[i] + 1);
 			break;
 		case AUTO_PAD_SAME_UPPER:
 		case AUTO_PAD_SAME_LOWER:
