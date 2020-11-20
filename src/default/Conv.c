@@ -1,10 +1,10 @@
 #include <onnx.h>
 
 enum auto_pad_t {
-	AUTO_PAD_VALID		= 0,
-	AUTO_PAD_NOTSET		= 1,
-	AUTO_PAD_SAME_UPPER	= 2,
-	AUTO_PAD_SAME_LOWER	= 3,
+	AUTO_PAD_NOTSET		= 0,
+	AUTO_PAD_SAME_UPPER	= 1,
+	AUTO_PAD_SAME_LOWER	= 2,
+	AUTO_PAD_VALID		= 3,
 };
 
 struct operator_pdata_t {
@@ -36,9 +36,6 @@ static int Conv_init(struct onnx_node_t * n)
 			memset(pdat, 0, sizeof(struct operator_pdata_t));
 			switch(shash(onnx_attribute_read_string(n, "auto_pad", "NOTSET")))
 			{
-			case 0x0e382d15: /* "VALID" */
-				pdat->auto_pad = AUTO_PAD_VALID;
-				break;
 			case 0xc3966fc2: /* "NOTSET" */
 				pdat->auto_pad = AUTO_PAD_NOTSET;
 				break;
@@ -47,6 +44,9 @@ static int Conv_init(struct onnx_node_t * n)
 				break;
 			case 0xcb192d33: /* "SAME_LOWER" */
 				pdat->auto_pad = AUTO_PAD_SAME_LOWER;
+				break;
+			case 0x0e382d15: /* "VALID" */
+				pdat->auto_pad = AUTO_PAD_VALID;
 				break;
 			default:
 				pdat->auto_pad = AUTO_PAD_NOTSET;
@@ -119,53 +119,62 @@ static int Conv_exit(struct onnx_node_t * n)
 static int Conv_reshape(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
-	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * w = n->inputs[1];
 	int ndim = x->ndim;
 	int dims[ndim];
-	int begin, end;
-	int stride, kernel, needed;
+	int pad;
 	int i;
 
-	memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
-    for(i = 0; i < ndim; i++)
-    {
-    	if(i < 2)
-    		dims[i] = x->dims[i];
-    	else
-    	{
-			begin = i - 2;
-			end = begin + pdat->nkernel;
-			stride = pdat->strides[begin];
-			kernel = pdat->kernels[begin];
-			switch(pdat->auto_pad)
-			{
-			case AUTO_PAD_VALID:
-				pdat->cpads[begin] = 0;
-				pdat->cpads[end] = 0;
-				dims[i] = ceilf((x->dims[i] - kernel + 1) / stride);
-				break;
-			case AUTO_PAD_NOTSET:
-				dims[i] = ceilf((x->dims[i] + pdat->cpads[begin] + pdat->cpads[end] - kernel) / stride + 1);
-				break;
-			case AUTO_PAD_SAME_UPPER:
-				needed = ((x->dims[i] + stride - 1) / stride - 1) * stride + kernel - x->dims[i];
-				pdat->cpads[begin] = floorf(needed / 2);
-				pdat->cpads[end] = needed - pdat->cpads[begin];
-				dims[i] = ceilf(x->dims[i] / stride);
-				break;
-			case AUTO_PAD_SAME_LOWER:
-				needed = ((x->dims[i] + stride - 1) / stride - 1) * stride + kernel - x->dims[i];
-				pdat->cpads[begin] = floorf((needed + 1) / 2);
-				pdat->cpads[end] = needed - pdat->cpads[begin];
-				dims[i] = ceilf(x->dims[i] / stride);
-				break;
-			default:
-				break;
-			}
-    	}
-    }
-    return onnx_tensor_reshape(y, dims, ndim, x->type);
+	switch(pdat->auto_pad)
+	{
+	case AUTO_PAD_NOTSET:
+		memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
+		break;
+	case AUTO_PAD_SAME_UPPER:
+		for(i = 0; i < pdat->npad / 2; i++)
+		{
+			pad = (ceilf(x->dims[i + 2] / (float)pdat->strides[i]) - 1) * pdat->strides[i] + ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1) - x->dims[i + 2];
+			pdat->cpads[i] = pad / 2;
+			pdat->cpads[i + pdat->nkernel] = pad - pdat->cpads[i];
+		}
+		break;
+	case AUTO_PAD_SAME_LOWER:
+		for(i = 0; i < pdat->npad / 2; i++)
+		{
+			pad = (ceilf(x->dims[i + 2] / (float)pdat->strides[i]) - 1) * pdat->strides[i] + ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1) - x->dims[i + 2];
+			pdat->cpads[i + pdat->nkernel] = pad / 2;
+			pdat->cpads[i] = pad - pdat->cpads[i + pdat->nkernel];
+		}
+		break;
+	case AUTO_PAD_VALID:
+		memset(pdat->cpads, 0, sizeof(int) * pdat->npad);
+		break;
+	default:
+		break;
+	}
+	dims[0] = x->dims[0];
+	dims[1] = w->dims[0];
+	for(i = 0; i < ndim - 2; i++)
+	{
+		switch(pdat->auto_pad)
+		{
+		case AUTO_PAD_NOTSET:
+			dims[i + 2] = floorf((x->dims[i + 2] + pdat->cpads[i] + pdat->cpads[i + pdat->nkernel] - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1)) / (float)pdat->strides[i] + 1);
+			break;
+		case AUTO_PAD_SAME_UPPER:
+		case AUTO_PAD_SAME_LOWER:
+			dims[i + 2] = ceilf(x->dims[i + 2] / (float)pdat->strides[i]);
+			break;
+		case AUTO_PAD_VALID:
+			dims[i + 2] = ceilf((x->dims[i + 2] - ((pdat->kernels[i] - 1) * pdat->dilations[i] + 1) + 1) / (float)pdat->strides[i]);
+			break;
+		default:
+			break;
+		}
+	}
+	return onnx_tensor_reshape(y, dims, ndim, x->type);
 }
 
 static inline int dim_next(int ndim, int * dims, int * dim_max)
