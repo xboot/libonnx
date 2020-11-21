@@ -3,16 +3,11 @@
 
 struct profiler_t
 {
-	struct hlist_node node;
-	char * name;
 	uint64_t begin;
 	uint64_t end;
 	uint64_t elapsed;
 	uint64_t count;
 };
-
-#define CONFIG_PROFILER_HASH_SIZE	(4095)
-static struct hlist_head __profiler_hash[CONFIG_PROFILER_HASH_SIZE];
 
 static inline uint64_t time_get(void)
 {
@@ -22,64 +17,40 @@ static inline uint64_t time_get(void)
 	return (uint64_t)(time.tv_sec * 1000000000ULL + time.tv_usec * 1000);
 }
 
-static inline struct profiler_t * profiler_search(const char * name)
+static struct hmap_t * profiler_alloc(int size)
 {
-	struct profiler_t * p;
-	struct hlist_node * n;
-
-	if(!name)
-		return NULL;
-
-	hlist_for_each_entry_safe(p, n, &__profiler_hash[shash(name) % CONFIG_PROFILER_HASH_SIZE], node)
-	{
-		if(strcmp(p->name, name) == 0)
-			return p;
-	}
-	return NULL;
+	return hmap_alloc(size);
 }
 
-static void profiler_init(void)
+static void hmap_entry_callback(struct hmap_entry_t * e)
 {
-	int i;
-
-	for(i = 0; i < CONFIG_PROFILER_HASH_SIZE; i++)
-		init_hlist_head(&__profiler_hash[i]);
+	if(e && e->value)
+		free(e->value);
 }
 
-static void profiler_reset(void)
+static void profiler_free(struct hmap_t * m)
 {
-	struct profiler_t * p;
-	struct hlist_node * n;
-	int i;
+	hmap_free(m, hmap_entry_callback);
+}
 
-	for(i = 0; i < CONFIG_PROFILER_HASH_SIZE; i++)
+static struct profiler_t * profiler_search(struct hmap_t * m, const char * name)
+{
+	struct profiler_t * p = NULL;
+
+	if(m && name)
 	{
-		hlist_for_each_entry_safe(p, n, &__profiler_hash[i], node)
+		p = hmap_search(m, name);
+		if(!p)
 		{
-			hlist_del(&p->node);
-			free(p->name);
-			free(p);
-		}
-	}
-}
-
-static struct profiler_t * profiler_get(const char * name)
-{
-	struct profiler_t * p;
-
-	p = profiler_search(name);
-	if(!p)
-	{
-		p = malloc(sizeof(struct profiler_t));
-		if(p)
-		{
-			init_hlist_node(&p->node);
-			p->name = strdup(name);
-			p->begin = 0;
-			p->end = 0;
-			p->elapsed = 0;
-			p->count = 0;
-			hlist_add_head(&p->node, &__profiler_hash[shash(name) % CONFIG_PROFILER_HASH_SIZE]);
+			p = malloc(sizeof(struct profiler_t));
+			if(p)
+			{
+				p->begin = 0;
+				p->end = 0;
+				p->elapsed = 0;
+				p->count = 0;
+				hmap_add(m, name, p);
+			}
 		}
 	}
 	return p;
@@ -87,67 +58,64 @@ static struct profiler_t * profiler_get(const char * name)
 
 static inline void profiler_begin(struct profiler_t * p)
 {
-	p->begin = time_get();
+	if(p)
+		p->begin = time_get();
 }
 
 static inline void profiler_end(struct profiler_t * p)
 {
-	p->end = time_get();
-	p->elapsed += p->end - p->begin;
-	p->count++;
+	if(p)
+	{
+		p->end = time_get();
+		p->elapsed += p->end - p->begin;
+		p->count++;
+	}
 }
 
-static void profiler_dump(void)
+static void profiler_dump(struct hmap_t * m)
 {
-	struct profiler_t * p;
-	struct hlist_node * n;
-	struct hmap_t * m;
 	struct hmap_entry_t * e;
-	int i;
+	struct profiler_t * p;
 
-	printf("Profiler analysis:\r\n");
-	m = hmap_alloc(0);
-	for(i = 0; i < CONFIG_PROFILER_HASH_SIZE; i++)
+	if(m)
 	{
-		hlist_for_each_entry_safe(p, n, &__profiler_hash[i], node)
+		printf("Profiler analysis:\r\n");
+		hmap_sort(m);
+		hmap_for_each_entry(e, m)
 		{
-			hmap_add(m, p->name, p);
+			p = (struct profiler_t *)e->value;
+		    printf("%-32s %ld %12.3f(us)\r\n", e->key, p->count, (p->count > 0) ? ((double)p->elapsed / 1000.0f) / (double)p->count : 0);
 		}
 	}
-	hmap_sort(m);
-	hmap_for_each_entry(e, m)
-	{
-		p = (struct profiler_t *)e->value;
-	    printf("%-24s %ld %12.3f(us)\r\n", p->name, p->count, (p->count > 0) ? ((double)p->elapsed / 1000.0f) / (double)p->count : 0);
-	}
-	hmap_free(m, NULL);
 }
 
 static void onnx_run_benchmark(struct onnx_context_t * ctx, int count)
 {
 	struct onnx_node_t * n;
+	struct hmap_t * m;
 	struct profiler_t * p;
 	char name[256];
-	int i;
+	int len, i;
 
 	if(ctx)
 	{
-		profiler_init();
+		m = profiler_alloc(0);
 		while(count-- > 0)
 		{
 			for(i = 0; i < ctx->nlen; i++)
 			{
 				n = &ctx->nodes[i];
-				sprintf(name, "%s-%d", n->proto->op_type, n->opset);
-				p = profiler_get(name);
+				len = sprintf(name, "%s-%d", n->proto->op_type, n->opset);
+				len += sprintf(name + len, "%*s", 24 - len, n->r->name);
+				p = profiler_search(m, name);
 				profiler_begin(p);
 				if(n->reshape(n))
 					n->operator(n);
 				profiler_end(p);
 			}
 		}
-		profiler_dump();
-		profiler_reset();
+		profiler_dump(m);
+		profiler_free(m);
 	}
 }
 int main(int argc, char * argv[])
