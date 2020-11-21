@@ -5,9 +5,9 @@
 .PHONY: all clean
 
 all:
-	@$(MAKE) -C hello all
 	@$(MAKE) -C benchmark all
+	@$(MAKE) -C hello all
 
 clean:
-	@$(MAKE) -C hello clean
 	@$(MAKE) -C benchmark clean
+	@$(MAKE) -C hello clean
