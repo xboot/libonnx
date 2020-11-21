@@ -2211,18 +2211,51 @@ static const unsigned char mnist_onnx[] = {
 int main(int argc, char * argv[])
 {
 	struct onnx_context_t * ctx;
-	const char * filename = NULL;
+	struct onnx_tensor_t * input;
+	struct onnx_tensor_t * output;
 
-	if(argc > 1)
-		filename = argv[1];
-	if(filename)
-		ctx = onnx_context_alloc_from_file(filename, NULL, 0);
-	else
-		ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL, 0);
+	/*
+	 * Alloc onnx context from buffer
+	 */
+	ctx = onnx_context_alloc(mnist_onnx, sizeof(mnist_onnx), NULL, 0);
 	if(ctx)
 	{
+		/*
+		 * Dump onnx context
+		 */
 		onnx_context_dump(ctx, 0);
+
+		/*
+		 * Get input tensor by name
+		 */
+		input = onnx_tensor_search(ctx, "Input3");
+
+		/*
+		 * Get output tensor by name
+		 */
+		output = onnx_tensor_search(ctx, "Plus214_Output_0");
+
+		/*
+		 * Fill some data to input tensor
+		 */
+		/* ... */
+
+		/*
+		 * Dump input tensor
+		 */
+		onnx_tensor_dump(input, 0);
+
+		/* Run inference */
 		onnx_run(ctx);
+
+		/*
+		 * Dump output tensor
+		 */
+		onnx_tensor_dump(output, 0);
+
+		/*
+		 * Free onnx context
+		 */
 		onnx_context_free(ctx);
 	}
 	return 0;
