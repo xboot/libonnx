@@ -224,10 +224,8 @@ static void Conv_float16(struct onnx_node_t * n)
 	int ndim = x->ndim;
 	int M = w->dims[0];
 	int C = w->dims[1];
-	int i_dim[ndim];
-	int o_dim[ndim];
-	int w_dim[ndim];
-	int b_dim[ndim];
+	int H = w->dims[2];
+	int W = w->dims[3];
 	int ch, i;
 
 	if(n->ninput > 2)
@@ -235,52 +233,114 @@ static void Conv_float16(struct onnx_node_t * n)
 		b = n->inputs[2];
 		pb = (uint16_t *)b->datas;
 	}
-	memset(o_dim, 0, sizeof(o_dim));
-	do {
-		b_dim[0] = o_dim[0];
-		for(i = 2; i < ndim; i++)
-			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
-		sum = 0;
-		memset(w_dim, 0, sizeof(w_dim));
-		w_dim[0] = o_dim[1];
-		do {
-			if(w_dim[1] == 1)
-				break;
-			i_dim[0] = b_dim[0];
-			for(i = 2; i < ndim; i++)
-				i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
-			for(ch = 0; ch < C; ch++)
+	if(ndim == 4)
+	{
+		int iC = x->dims[1];
+		int iH = x->dims[2];
+		int iW = x->dims[3];
+
+		int oN = y->dims[0];
+		int oC = w->dims[0];
+		int oH = y->dims[2];
+		int oW = y->dims[3];
+
+		typedef float (*pxtype)[iC][iH][iW];
+		typedef float (*pwtype)[C][H][W];
+		typedef float (*pytype)[M][oH][oW];
+
+		for(int n = 0; n < oN; ++n)
+		{
+			for(int c = 0; c < oC; ++c)
 			{
-				i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
-				w_dim[1] = ch;
-				for(i = 0; i < ndim; i++)
+				for(int h = 0; h < oH; ++h)
 				{
-					if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+					for(int w = 0; w < oW; ++w)
 					{
-						v = 0;
-						break;
+						int base_c = (c * pdat->group / M) * C;
+						int base_h = h * pdat->strides[0] - pdat->cpads[0];
+						int base_w = w * pdat->strides[1] - pdat->cpads[1];
+						sum = 0;
+						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+						{
+							int input_h = base_h + i * pdat->dilations[0];
+							if(input_h >= iH)
+								break;
+							for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+							{
+								int input_w = base_w + j * pdat->dilations[1];
+								if(input_w >= iW)
+									break;
+								for(int w_channel = 0; w_channel < C; ++w_channel)
+								{
+									ch = base_c + w_channel;
+									v = float16_to_float32(((pxtype)px)[n][ch][input_h][input_w]);
+									weight = float16_to_float32(((pwtype)pw)[c][w_channel][i][j]);
+									sum += v * weight;
+								}
+							}
+						}
+						if(pb)
+							sum += float16_to_float32(pb[c]);
+						((pytype)py)[n][c][h][w] = float32_to_float16(sum);
 					}
 				}
-				if(i >= ndim)
-					v = float16_to_float32(px[dim_offset(ndim, i_dim, x->dims)]);
-				for(i = 0; i < ndim; i++)
-				{
-					if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
-					{
-						weight = 0;
-						break;
-					}
-				}
-				if(i >= ndim)
-					weight = float16_to_float32(pw[dim_offset(ndim, w_dim, w->dims)]);
-				sum += v * weight;
 			}
-			w_dim[1] = 0;
-		} while(dim_next(ndim, w_dim, w->dims));
-		if(pb)
-			sum += float16_to_float32(pb[o_dim[1]]);
-		py[dim_offset(ndim, o_dim, y->dims)] = float32_to_float16(sum);
-	} while(dim_next(ndim, o_dim, y->dims));
+		}
+	}
+	else
+	{
+		int i_dim[ndim];
+		int o_dim[ndim];
+		int w_dim[ndim];
+		int b_dim[ndim];
+
+		memset(o_dim, 0, sizeof(o_dim));
+		do {
+			b_dim[0] = o_dim[0];
+			for(i = 2; i < ndim; i++)
+				b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
+			sum = 0;
+			memset(w_dim, 0, sizeof(w_dim));
+			w_dim[0] = o_dim[1];
+			do {
+				if(w_dim[1] == 1)
+					break;
+				i_dim[0] = b_dim[0];
+				for(i = 2; i < ndim; i++)
+					i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
+				for(ch = 0; ch < C; ch++)
+				{
+					i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
+					w_dim[1] = ch;
+					for(i = 0; i < ndim; i++)
+					{
+						if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+						{
+							v = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						v = float16_to_float32(px[dim_offset(ndim, i_dim, x->dims)]);
+					for(i = 0; i < ndim; i++)
+					{
+						if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
+						{
+							weight = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						weight = float16_to_float32(pw[dim_offset(ndim, w_dim, w->dims)]);
+					sum += v * weight;
+				}
+				w_dim[1] = 0;
+			} while(dim_next(ndim, w_dim, w->dims));
+			if(pb)
+				sum += float16_to_float32(pb[o_dim[1]]);
+			py[dim_offset(ndim, o_dim, y->dims)] = float32_to_float16(sum);
+		} while(dim_next(ndim, o_dim, y->dims));
+	}
 }
 
 static void Conv_float32(struct onnx_node_t * n)
@@ -298,10 +358,8 @@ static void Conv_float32(struct onnx_node_t * n)
 	int ndim = x->ndim;
 	int M = w->dims[0];
 	int C = w->dims[1];
-	int i_dim[ndim];
-	int o_dim[ndim];
-	int w_dim[ndim];
-	int b_dim[ndim];
+	int H = w->dims[2];
+	int W = w->dims[3];
 	int ch, i;
 
 	if(n->ninput > 2)
@@ -309,52 +367,114 @@ static void Conv_float32(struct onnx_node_t * n)
 		b = n->inputs[2];
 		pb = (float *)b->datas;
 	}
-	memset(o_dim, 0, sizeof(o_dim));
-	do {
-		b_dim[0] = o_dim[0];
-		for(i = 2; i < ndim; i++)
-			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
-		sum = 0;
-		memset(w_dim, 0, sizeof(w_dim));
-		w_dim[0] = o_dim[1];
-		do {
-			if(w_dim[1] == 1)
-				break;
-			i_dim[0] = b_dim[0];
-			for(i = 2; i < ndim; i++)
-				i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
-			for(ch = 0; ch < C; ch++)
+	if(ndim == 4)
+	{
+		int iC = x->dims[1];
+		int iH = x->dims[2];
+		int iW = x->dims[3];
+
+		int oN = y->dims[0];
+		int oC = w->dims[0];
+		int oH = y->dims[2];
+		int oW = y->dims[3];
+
+		typedef float (*pxtype)[iC][iH][iW];
+		typedef float (*pwtype)[C][H][W];
+		typedef float (*pytype)[M][oH][oW];
+
+		for(int n = 0; n < oN; ++n)
+		{
+			for(int c = 0; c < oC; ++c)
 			{
-				i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
-				w_dim[1] = ch;
-				for(i = 0; i < ndim; i++)
+				for(int h = 0; h < oH; ++h)
 				{
-					if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+					for(int w = 0; w < oW; ++w)
 					{
-						v = 0;
-						break;
+						int base_c = (c * pdat->group / M) * C;
+						int base_h = h * pdat->strides[0] - pdat->cpads[0];
+						int base_w = w * pdat->strides[1] - pdat->cpads[1];
+						sum = 0;
+						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+						{
+							int input_h = base_h + i * pdat->dilations[0];
+							if(input_h >= iH)
+								break;
+							for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+							{
+								int input_w = base_w + j * pdat->dilations[1];
+								if(input_w >= iW)
+									break;
+								for(int w_channel = 0; w_channel < C; ++w_channel)
+								{
+									ch = base_c + w_channel;
+									v = ((pxtype)px)[n][ch][input_h][input_w];
+									weight = ((pwtype)pw)[c][w_channel][i][j];
+									sum += v * weight;
+								}
+							}
+						}
+						if(pb)
+							sum += pb[c];
+						((pytype)py)[n][c][h][w] = sum;
 					}
 				}
-				if(i >= ndim)
-					v = px[dim_offset(ndim, i_dim, x->dims)];
-				for(i = 0; i < ndim; i++)
-				{
-					if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
-					{
-						weight = 0;
-						break;
-					}
-				}
-				if(i >= ndim)
-					weight = pw[dim_offset(ndim, w_dim, w->dims)];
-				sum += v * weight;
 			}
-			w_dim[1] = 0;
-		} while(dim_next(ndim, w_dim, w->dims));
-		if(pb)
-			sum += pb[o_dim[1]];
-		py[dim_offset(ndim, o_dim, y->dims)] = sum;
-	} while(dim_next(ndim, o_dim, y->dims));
+		}
+	}
+	else
+	{
+		int i_dim[ndim];
+		int o_dim[ndim];
+		int w_dim[ndim];
+		int b_dim[ndim];
+
+		memset(o_dim, 0, sizeof(o_dim));
+		do {
+			b_dim[0] = o_dim[0];
+			for(i = 2; i < ndim; i++)
+				b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
+			sum = 0;
+			memset(w_dim, 0, sizeof(w_dim));
+			w_dim[0] = o_dim[1];
+			do {
+				if(w_dim[1] == 1)
+					break;
+				i_dim[0] = b_dim[0];
+				for(i = 2; i < ndim; i++)
+					i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
+				for(ch = 0; ch < C; ch++)
+				{
+					i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
+					w_dim[1] = ch;
+					for(i = 0; i < ndim; i++)
+					{
+						if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+						{
+							v = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						v = px[dim_offset(ndim, i_dim, x->dims)];
+					for(i = 0; i < ndim; i++)
+					{
+						if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
+						{
+							weight = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						weight = pw[dim_offset(ndim, w_dim, w->dims)];
+					sum += v * weight;
+				}
+				w_dim[1] = 0;
+			} while(dim_next(ndim, w_dim, w->dims));
+			if(pb)
+				sum += pb[o_dim[1]];
+			py[dim_offset(ndim, o_dim, y->dims)] = sum;
+		} while(dim_next(ndim, o_dim, y->dims));
+	}
 }
 
 static void Conv_float64(struct onnx_node_t * n)
@@ -372,10 +492,8 @@ static void Conv_float64(struct onnx_node_t * n)
 	int ndim = x->ndim;
 	int M = w->dims[0];
 	int C = w->dims[1];
-	int i_dim[ndim];
-	int o_dim[ndim];
-	int w_dim[ndim];
-	int b_dim[ndim];
+	int H = w->dims[2];
+	int W = w->dims[3];
 	int ch, i;
 
 	if(n->ninput > 2)
@@ -383,52 +501,114 @@ static void Conv_float64(struct onnx_node_t * n)
 		b = n->inputs[2];
 		pb = (double *)b->datas;
 	}
-	memset(o_dim, 0, sizeof(o_dim));
-	do {
-		b_dim[0] = o_dim[0];
-		for(i = 2; i < ndim; i++)
-			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
-		sum = 0;
-		memset(w_dim, 0, sizeof(w_dim));
-		w_dim[0] = o_dim[1];
-		do {
-			if(w_dim[1] == 1)
-				break;
-			i_dim[0] = b_dim[0];
-			for(i = 2; i < ndim; i++)
-				i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
-			for(ch = 0; ch < C; ch++)
+	if(ndim == 4)
+	{
+		int iC = x->dims[1];
+		int iH = x->dims[2];
+		int iW = x->dims[3];
+
+		int oN = y->dims[0];
+		int oC = w->dims[0];
+		int oH = y->dims[2];
+		int oW = y->dims[3];
+
+		typedef double (*pxtype)[iC][iH][iW];
+		typedef double (*pwtype)[C][H][W];
+		typedef double (*pytype)[M][oH][oW];
+
+		for(int n = 0; n < oN; ++n)
+		{
+			for(int c = 0; c < oC; ++c)
 			{
-				i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
-				w_dim[1] = ch;
-				for(i = 0; i < ndim; i++)
+				for(int h = 0; h < oH; ++h)
 				{
-					if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+					for(int w = 0; w < oW; ++w)
 					{
-						v = 0;
-						break;
+						int base_c = (c * pdat->group / M) * C;
+						int base_h = h * pdat->strides[0] - pdat->cpads[0];
+						int base_w = w * pdat->strides[1] - pdat->cpads[1];
+						sum = 0;
+						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+						{
+							int input_h = base_h + i * pdat->dilations[0];
+							if(input_h >= iH)
+								break;
+							for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+							{
+								int input_w = base_w + j * pdat->dilations[1];
+								if(input_w >= iW)
+									break;
+								for(int w_channel = 0; w_channel < C; ++w_channel)
+								{
+									ch = base_c + w_channel;
+									v = ((pxtype)px)[n][ch][input_h][input_w];
+									weight = ((pwtype)pw)[c][w_channel][i][j];
+									sum += v * weight;
+								}
+							}
+						}
+						if(pb)
+							sum += pb[c];
+						((pytype)py)[n][c][h][w] = sum;
 					}
 				}
-				if(i >= ndim)
-					v = px[dim_offset(ndim, i_dim, x->dims)];
-				for(i = 0; i < ndim; i++)
-				{
-					if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
-					{
-						weight = 0;
-						break;
-					}
-				}
-				if(i >= ndim)
-					weight = pw[dim_offset(ndim, w_dim, w->dims)];
-				sum += v * weight;
 			}
-			w_dim[1] = 0;
-		} while(dim_next(ndim, w_dim, w->dims));
-		if(pb)
-			sum += pb[o_dim[1]];
-		py[dim_offset(ndim, o_dim, y->dims)] = sum;
-	} while(dim_next(ndim, o_dim, y->dims));
+		}
+	}
+	else
+	{
+		int i_dim[ndim];
+		int o_dim[ndim];
+		int w_dim[ndim];
+		int b_dim[ndim];
+
+		memset(o_dim, 0, sizeof(o_dim));
+		do {
+			b_dim[0] = o_dim[0];
+			for(i = 2; i < ndim; i++)
+				b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
+			sum = 0;
+			memset(w_dim, 0, sizeof(w_dim));
+			w_dim[0] = o_dim[1];
+			do {
+				if(w_dim[1] == 1)
+					break;
+				i_dim[0] = b_dim[0];
+				for(i = 2; i < ndim; i++)
+					i_dim[i] = b_dim[i] + w_dim[i] * pdat->dilations[i - 2];
+				for(ch = 0; ch < C; ch++)
+				{
+					i_dim[1] = (o_dim[1] * pdat->group / M) * C + ch;
+					w_dim[1] = ch;
+					for(i = 0; i < ndim; i++)
+					{
+						if((i_dim[i] < 0) || (i_dim[i] >= x->dims[i]))
+						{
+							v = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						v = px[dim_offset(ndim, i_dim, x->dims)];
+					for(i = 0; i < ndim; i++)
+					{
+						if((w_dim[i] < 0) || (w_dim[i] >= w->dims[i]))
+						{
+							weight = 0;
+							break;
+						}
+					}
+					if(i >= ndim)
+						weight = pw[dim_offset(ndim, w_dim, w->dims)];
+					sum += v * weight;
+				}
+				w_dim[1] = 0;
+			} while(dim_next(ndim, w_dim, w->dims));
+			if(pb)
+				sum += pb[o_dim[1]];
+			py[dim_offset(ndim, o_dim, y->dims)] = sum;
+		} while(dim_next(ndim, o_dim, y->dims));
+	}
 }
 
 void resolver_default_op_Conv(struct onnx_node_t * n)
