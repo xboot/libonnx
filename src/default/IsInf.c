@@ -50,7 +50,7 @@ static void IsInf_float32(struct onnx_node_t * n)
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
-		if(isinff(px[i]))
+		if(isinf(px[i]))
 		{
 			if((pdat->detect_negative && (px[i] < 0)) || (pdat->detect_positive && (px[i] > 0)))
 				py[i] = 1;
