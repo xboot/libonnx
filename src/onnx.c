@@ -1790,7 +1790,10 @@ char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, cha
 	if(attr && (attr->type == ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING))
 	{
 		if(attr->s.len > 0)
+		{
+			attr->s.data[attr->s.len] = 0;
 			return (char *)attr->s.data;
+		}
 	}
 	return def;
 }
