@@ -47,9 +47,8 @@ static void IsInf_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(isinff(px[i]))
 		{
@@ -72,9 +71,8 @@ static void IsInf_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(isinf(px[i]))
 		{

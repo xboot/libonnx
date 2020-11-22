@@ -29,9 +29,8 @@ static void Div_7_int32(struct onnx_node_t * n)
 	int32_t * py = (int32_t *)y->datas;
 	int32_t * pa;
 	int32_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -47,9 +46,8 @@ static void Div_7_int64(struct onnx_node_t * n)
 	int64_t * py = (int64_t *)y->datas;
 	int64_t * pa;
 	int64_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -65,9 +63,8 @@ static void Div_7_uint32(struct onnx_node_t * n)
 	uint32_t * py = (uint32_t *)y->datas;
 	uint32_t * pa;
 	uint32_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -83,9 +80,8 @@ static void Div_7_uint64(struct onnx_node_t * n)
 	uint64_t * py = (uint64_t *)y->datas;
 	uint64_t * pa;
 	uint64_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -101,9 +97,8 @@ static void Div_7_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * pa;
 	uint16_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -119,9 +114,8 @@ static void Div_7_float32(struct onnx_node_t * n)
 	float * py = (float *)y->datas;
 	float * pa;
 	float * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -137,9 +131,8 @@ static void Div_7_float64(struct onnx_node_t * n)
 	double * py = (double *)y->datas;
 	double * pa;
 	double * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -155,9 +148,8 @@ static void Div_13_bfloat16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * pa;
 	uint16_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);

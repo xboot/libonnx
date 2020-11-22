@@ -29,9 +29,8 @@ static void Xor_bool(struct onnx_node_t * n)
 	uint8_t * py = (uint8_t *)y->datas;
 	uint8_t * pa;
 	uint8_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);

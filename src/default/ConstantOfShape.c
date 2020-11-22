@@ -141,7 +141,7 @@ static void ConstantOfShape_operator(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	char * p;
-	int i, l;
+	size_t i, l;
 
 	if(x->ndata > 0)
 	{

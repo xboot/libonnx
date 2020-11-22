@@ -41,7 +41,7 @@ static void GlobalAveragePool_float16(struct onnx_node_t * n)
 	int avgsz = x->ndata / (N * C);
 	float sum[N][C];
 	int idx[2], cnt;
-	int i, j, l;
+	size_t i, j, l;
 
 	memset(sum, 0, sizeof(sum));
 	for(i = 0, l = x->ndata; i < l; i++)
@@ -71,7 +71,7 @@ static void GlobalAveragePool_float32(struct onnx_node_t * n)
 	int avgsz = x->ndata / (N * C);
 	float sum[N][C];
 	int idx[2], cnt;
-	int i, j, l;
+	size_t i, j, l;
 
 	memset(sum, 0, sizeof(sum));
 	for(i = 0, l = x->ndata; i < l; i++)
@@ -101,7 +101,7 @@ static void GlobalAveragePool_float64(struct onnx_node_t * n)
 	int avgsz = x->ndata / (N * C);
 	double sum[N][C];
 	int idx[2], cnt;
-	int i, j, l;
+	size_t i, j, l;
 
 	memset(sum, 0, sizeof(sum));
 	for(i = 0, l = x->ndata; i < l; i++)

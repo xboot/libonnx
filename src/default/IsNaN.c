@@ -27,9 +27,8 @@ static void IsNaN_bfloat16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
 	float v;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = bfloat16_to_float32(px[i]);
 		py[i] = isnanf(v) ? 1 : 0;
@@ -43,9 +42,8 @@ static void IsNaN_float16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
 	float v;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		py[i] = isnanf(v) ? 1 : 0;
@@ -58,9 +56,8 @@ static void IsNaN_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = isnanf(px[i]) ? 1 : 0;
 }
 
@@ -70,9 +67,8 @@ static void IsNaN_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = isnan(px[i]) ? 1 : 0;
 }
 

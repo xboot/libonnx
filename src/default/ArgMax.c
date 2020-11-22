@@ -78,8 +78,8 @@ static void ArgMax_int8(struct onnx_node_t * n)
 	int8_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -127,8 +127,8 @@ static void ArgMax_int16(struct onnx_node_t * n)
 	int16_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -176,8 +176,8 @@ static void ArgMax_int32(struct onnx_node_t * n)
 	int32_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -225,8 +225,8 @@ static void ArgMax_int64(struct onnx_node_t * n)
 	int64_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -274,8 +274,8 @@ static void ArgMax_uint8(struct onnx_node_t * n)
 	uint8_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -323,8 +323,8 @@ static void ArgMax_uint16(struct onnx_node_t * n)
 	uint16_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -372,8 +372,8 @@ static void ArgMax_uint32(struct onnx_node_t * n)
 	uint32_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -421,8 +421,8 @@ static void ArgMax_uint64(struct onnx_node_t * n)
 	uint64_t maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -470,8 +470,8 @@ static void ArgMax_bfloat16(struct onnx_node_t * n)
 	float maxv, v;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -520,8 +520,8 @@ static void ArgMax_float16(struct onnx_node_t * n)
 	float maxv, v;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -570,8 +570,8 @@ static void ArgMax_float32(struct onnx_node_t * n)
 	float maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 
@@ -619,8 +619,8 @@ static void ArgMax_float64(struct onnx_node_t * n)
 	double maxv;
 	int64_t * py = y->datas;
 	int64_t maxi;
-	int len = x->ndata;
-	int idx = 0;
+	size_t len = x->ndata;
+	size_t idx = 0;
 	int cnt = 0;
 	int i;
 

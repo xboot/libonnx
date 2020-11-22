@@ -67,7 +67,6 @@ static void RandomNormal_operator(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 	struct onnx_tensor_t * y = n->outputs[0];
-	int i, l;
 
 	if(pdat->seed != 0.0)
 		srand(pdat->seed);
@@ -77,7 +76,7 @@ static void RandomNormal_operator(struct onnx_node_t * n)
 		{
 			uint16_t * py = (uint16_t *)y->datas;
 			float ty, tx;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (float)rand() / (RAND_MAX + 1.0f);
 				tx = (float)rand() / (RAND_MAX + 1.0f);
@@ -89,7 +88,7 @@ static void RandomNormal_operator(struct onnx_node_t * n)
 		{
 			float * py = (float *)y->datas;
 			float ty, tx;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (float)rand() / (RAND_MAX + 1.0f);
 				tx = (float)rand() / (RAND_MAX + 1.0f);
@@ -101,7 +100,7 @@ static void RandomNormal_operator(struct onnx_node_t * n)
 		{
 			double * py = (double *)y->datas;
 			double ty, tx;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (double)rand() / (RAND_MAX + 1.0f);
 				tx = (double)rand() / (RAND_MAX + 1.0f);

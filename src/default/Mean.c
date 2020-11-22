@@ -34,7 +34,7 @@ static void Mean_bfloat16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px;
 	float sum;
-	int i, j, l;
+	size_t i, j, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
@@ -55,7 +55,7 @@ static void Mean_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px;
 	float sum;
-	int i, j, l;
+	size_t i, j, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
@@ -76,7 +76,7 @@ static void Mean_float32(struct onnx_node_t * n)
 	float * py = (float *)y->datas;
 	float * px;
 	float sum;
-	int i, j, l;
+	size_t i, j, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
@@ -97,7 +97,7 @@ static void Mean_float64(struct onnx_node_t * n)
 	double * py = (double *)y->datas;
 	double * px;
 	double sum;
-	int i, j, l;
+	size_t i, j, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
 	{

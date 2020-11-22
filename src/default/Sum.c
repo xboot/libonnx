@@ -34,9 +34,9 @@ static void Sum_bfloat16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px;
 	float sum;
-	int i, j, l;
+	int j;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -55,9 +55,9 @@ static void Sum_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px;
 	float sum;
-	int i, j, l;
+	int j;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -76,9 +76,9 @@ static void Sum_float32(struct onnx_node_t * n)
 	float * py = (float *)y->datas;
 	float * px;
 	float sum;
-	int i, j, l;
+	int j;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -97,9 +97,9 @@ static void Sum_float64(struct onnx_node_t * n)
 	double * py = (double *)y->datas;
 	double * px;
 	double sum;
-	int i, j, l;
+	int j;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{

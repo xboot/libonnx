@@ -18,7 +18,7 @@ static int Expand_reshape(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * s = n->inputs[1];
 	int64_t * ps = (int64_t *)s->datas;
-	int ndim = max(x->ndim, s->ndata);
+	int ndim = max(x->ndim, (int)s->ndata);
 	int dims[ndim];
 	int i, j, k;
 
@@ -49,9 +49,8 @@ static void Expand_bool(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint8_t * py = (uint8_t *)y->datas;
 	uint8_t * px = (uint8_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -64,9 +63,8 @@ static void Expand_int8(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	int8_t * py = (int8_t *)y->datas;
 	int8_t * px = (int8_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -79,9 +77,8 @@ static void Expand_int16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	int16_t * py = (int16_t *)y->datas;
 	int16_t * px = (int16_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -94,9 +91,8 @@ static void Expand_int32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	int32_t * py = (int32_t *)y->datas;
 	int32_t * px = (int32_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -109,9 +105,8 @@ static void Expand_int64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	int64_t * py = (int64_t *)y->datas;
 	int64_t * px = (int64_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -124,9 +119,8 @@ static void Expand_uint8(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint8_t * py = (uint8_t *)y->datas;
 	uint8_t * px = (uint8_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -139,9 +133,8 @@ static void Expand_uint16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -154,9 +147,8 @@ static void Expand_uint32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint32_t * py = (uint32_t *)y->datas;
 	uint32_t * px = (uint32_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -169,9 +161,8 @@ static void Expand_uint64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint64_t * py = (uint64_t *)y->datas;
 	uint64_t * px = (uint64_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -184,9 +175,8 @@ static void Expand_bfloat16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -199,9 +189,8 @@ static void Expand_float16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	uint16_t * py = (uint16_t *)y->datas;
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -214,9 +203,8 @@ static void Expand_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	float * py = (float *)y->datas;
 	float * px = (float *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -229,9 +217,8 @@ static void Expand_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	double * py = (double *)y->datas;
 	double * px = (double *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i] = *px;
@@ -244,9 +231,8 @@ static void Expand_complex64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	float * py = (float *)y->datas;
 	float * px = (float *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i * 2] = px[0];
@@ -260,9 +246,8 @@ static void Expand_complex128(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	double * py = (double *)y->datas;
 	double * px = (double *)x->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		py[i * 2] = px[0];
@@ -276,9 +261,8 @@ static void Expand_string(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	char ** px = (char **)x->datas;
 	char ** py = (char **)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		if(py[i])

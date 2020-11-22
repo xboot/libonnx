@@ -45,7 +45,7 @@ static void Cast_bool(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint8_t * px = (uint8_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -164,7 +164,7 @@ static void Cast_int8(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	int8_t * px = (int8_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -283,7 +283,7 @@ static void Cast_int16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	int16_t * px = (int16_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -402,7 +402,7 @@ static void Cast_int32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	int32_t * px = (int32_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -521,7 +521,7 @@ static void Cast_int64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	int64_t * px = (int64_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -640,7 +640,7 @@ static void Cast_uint8(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint8_t * px = (uint8_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -759,7 +759,7 @@ static void Cast_uint16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -878,7 +878,7 @@ static void Cast_uint32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint32_t * px = (uint32_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -997,7 +997,7 @@ static void Cast_uint64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint64_t * px = (uint64_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -1116,7 +1116,7 @@ static void Cast_bfloat16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -1235,7 +1235,7 @@ static void Cast_float16(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -1354,7 +1354,7 @@ static void Cast_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -1473,7 +1473,7 @@ static void Cast_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{
@@ -1592,7 +1592,7 @@ static void Cast_string(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	char ** px = (char **)x->datas;
-	int i, l;
+	size_t i, l;
 
 	switch(pdat->to)
 	{

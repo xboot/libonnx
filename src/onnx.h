@@ -43,7 +43,7 @@ struct onnx_tensor_t {
 	int * dims;
 	int ndim;
 	void * datas;
-	int ndata;
+	size_t ndata;
 };
 
 struct onnx_resolver_t {
@@ -419,7 +419,7 @@ struct onnx_tensor_t * onnx_tensor_alloc(const char * name, enum onnx_tensor_typ
 struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename);
 void onnx_tensor_free(struct onnx_tensor_t * t);
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim);
-void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, int len);
+void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, size_t len);
 
 static inline int onnx_tensor_is_scalar(struct onnx_tensor_t * t)
 {

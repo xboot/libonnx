@@ -47,11 +47,10 @@ static void Dropout_bfloat16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
-	int i, l;
 
 	if(pdat->seed != 0)
 		srand(pdat->seed);
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = px[i];
 }
 
@@ -62,11 +61,10 @@ static void Dropout_float16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
-	int i, l;
 
 	if(pdat->seed != 0)
 		srand(pdat->seed);
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = px[i];
 }
 
@@ -77,11 +75,10 @@ static void Dropout_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
-	int i, l;
 
 	if(pdat->seed != 0)
 		srand(pdat->seed);
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = px[i];
 }
 
@@ -92,11 +89,10 @@ static void Dropout_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
-	int i, l;
 
 	if(pdat->seed != 0)
 		srand(pdat->seed);
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = px[i];
 }
 

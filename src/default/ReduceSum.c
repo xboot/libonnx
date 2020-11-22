@@ -49,7 +49,7 @@ static int ReduceSum_reshape(struct onnx_node_t * n)
 	{
 		struct onnx_tensor_t * a = n->inputs[1];
 		int64_t * pa = (int64_t *)a->datas;
-		pdat->naxes = min(min(x->ndim, 32), a->ndata);
+		pdat->naxes = min(min(x->ndim, 32), (int)a->ndata);
 		for(i = 0; i < pdat->naxes; i++)
 		{
 			axis = pa[i];

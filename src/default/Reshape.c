@@ -40,9 +40,8 @@ static void Reshape_operator(struct onnx_node_t * n)
 	int total_shape = 1;
 	int ndim = s->ndata;
 	int dims[ndim];
-	int i, j, l;
 
-	for(i = 0; i < ndim; i++)
+	for(int i = 0; i < ndim; i++)
 	{
 		if(ps[i] == 0)
 			dims[i] = x->dims[i];
@@ -50,9 +49,9 @@ static void Reshape_operator(struct onnx_node_t * n)
 			dims[i] = ps[i];
 		else
 		{
-			for(j = 0; j < x->ndim; j++)
+			for(int j = 0; j < x->ndim; j++)
 				total_dim *= x->dims[j];
-			for(j = 0; j < ndim; j++)
+			for(int j = 0; j < ndim; j++)
 			{
 				if(ps[j] > 0)
 					total_shape *= ps[j];
@@ -66,7 +65,7 @@ static void Reshape_operator(struct onnx_node_t * n)
 		onnx_tensor_reinit(y, x->type, dims, ndim);
 	if(x->type == ONNX_TENSOR_TYPE_STRING)
 	{
-		for(i = 0, l = y->ndata; i < l; i++)
+		for(size_t i = 0, l = y->ndata; i < l; i++)
 		{
 			if(py[i])
 				free(py[i]);

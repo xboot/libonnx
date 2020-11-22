@@ -25,9 +25,9 @@ static void Shape_operator(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * y = n->outputs[0];
 	int64_t * py = (int64_t *)y->datas;
-	int i, l;
+	size_t i, l;
 
-	for(i = 0, l = min(y->ndata, x->ndim); i < l; i++)
+	for(i = 0, l = min(y->ndata, (size_t)x->ndim); i < l; i++)
 		py[i] = x->dims[i];
 }
 

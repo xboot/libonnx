@@ -71,9 +71,9 @@ static void Concat_operator(struct onnx_node_t * n)
 	int ybase;
 	int ypitch;
 	int xpitch;
-	int sz = onnx_tensor_type_sizeof(n->inputs[0]->type);
-	int i, j, k, l;
+	int i, j, k;
 	int idx;
+	size_t o, l;
 
 	if(n->inputs[0]->type == ONNX_TENSOR_TYPE_STRING)
 	{
@@ -87,11 +87,11 @@ static void Concat_operator(struct onnx_node_t * n)
 			px = (char **)x->datas;
 			for(i = x->ndim - 1, xpitch = 1; i >= pdat->caxis; i--)
 				xpitch *= x->dims[i];
-			for(i = 0, j = 0, k = ybase, l = x->ndata; i < l; i++)
+			for(o = 0, j = 0, k = ybase, l = x->ndata; o < l; o++)
 			{
-				if(py[k + i])
-					free(py[k + i]);
-				py[k + i] = strdup(px[i]);
+				if(py[k + o])
+					free(py[k + o]);
+				py[k + o] = strdup(px[o]);
 				if(++j == xpitch)
 				{
 					k += (ypitch - xpitch);
@@ -105,6 +105,7 @@ static void Concat_operator(struct onnx_node_t * n)
 	{
 		char * py = (char *)y->datas;
 		char * px;
+		int sz = onnx_tensor_type_sizeof(n->inputs[0]->type);
 		for(i = y->ndim - 1, ypitch = 1; i >= pdat->caxis; i--)
 			ypitch *= y->dims[i];
 		for(idx = 0, ybase = 0; idx < n->ninput; idx++)
@@ -113,9 +114,9 @@ static void Concat_operator(struct onnx_node_t * n)
 			px = (char *)x->datas;
 			for(i = x->ndim - 1, xpitch = 1; i >= pdat->caxis; i--)
 				xpitch *= x->dims[i];
-			for(i = 0, j = 0, k = ybase, l = x->ndata; i < l; i++)
+			for(o = 0, j = 0, k = ybase, l = x->ndata; o < l; o++)
 			{
-				memcpy(py + (k + i) * sz, px + i * sz, sz);
+				memcpy(py + (k + o) * sz, px + o * sz, sz);
 				if(++j == xpitch)
 				{
 					k += (ypitch - xpitch);

@@ -59,7 +59,7 @@ static int Constant_init(struct onnx_node_t * n)
 					if(y->datas && attr->strings)
 					{
 						char ** str = (char **)y->datas;
-						for(int i = 0; i < y->ndata; i++)
+						for(size_t i = 0; i < y->ndata; i++)
 						{
 							if(str[i])
 							{
@@ -67,7 +67,7 @@ static int Constant_init(struct onnx_node_t * n)
 								str[i] = NULL;
 							}
 						}
-						for(int i = 0; i < y->ndata; i++)
+						for(size_t i = 0; i < y->ndata; i++)
 						{
 							str[i] = malloc(attr->strings[i].len + 1);
 							if(str[i])

@@ -14,7 +14,7 @@
 static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 {
 	int result = 0;
-	int i;
+	size_t i;
 
 	if(!a || !b)
 		return 0;

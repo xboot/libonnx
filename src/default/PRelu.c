@@ -28,9 +28,8 @@ static void PRelu_int32(struct onnx_node_t * n)
 	int32_t * py = (int32_t *)y->datas;
 	int32_t * pa = (int32_t *)a->datas;;
 	int32_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -50,9 +49,8 @@ static void PRelu_int64(struct onnx_node_t * n)
 	int64_t * py = (int64_t *)y->datas;
 	int64_t * pa = (int64_t *)a->datas;;
 	int64_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -72,9 +70,8 @@ static void PRelu_uint32(struct onnx_node_t * n)
 	uint32_t * py = (uint32_t *)y->datas;
 	uint32_t * pa = (uint32_t *)a->datas;;
 	uint32_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -94,9 +91,8 @@ static void PRelu_uint64(struct onnx_node_t * n)
 	uint64_t * py = (uint64_t *)y->datas;
 	uint64_t * pa = (uint64_t *)a->datas;;
 	uint64_t * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -117,9 +113,8 @@ static void PRelu_float16(struct onnx_node_t * n)
 	uint16_t * pa = (uint16_t *)a->datas;;
 	uint16_t * pb;
 	float v;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(pa[i]);
 		if(v < 0)
@@ -140,9 +135,8 @@ static void PRelu_float32(struct onnx_node_t * n)
 	float * py = (float *)y->datas;
 	float * pa = (float *)a->datas;;
 	float * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -162,9 +156,8 @@ static void PRelu_float64(struct onnx_node_t * n)
 	double * py = (double *)y->datas;
 	double * pa = (double *)a->datas;;
 	double * pb;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{

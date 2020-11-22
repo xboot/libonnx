@@ -81,7 +81,7 @@ static void Transpose_bool(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -103,7 +103,7 @@ static void Transpose_int8(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -125,7 +125,7 @@ static void Transpose_int16(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -147,7 +147,7 @@ static void Transpose_int32(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -169,7 +169,7 @@ static void Transpose_int64(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -191,7 +191,7 @@ static void Transpose_uint8(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -213,7 +213,7 @@ static void Transpose_uint16(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -235,7 +235,7 @@ static void Transpose_uint32(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -257,7 +257,7 @@ static void Transpose_uint64(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -279,7 +279,7 @@ static void Transpose_bfloat16(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -301,7 +301,7 @@ static void Transpose_float16(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -323,7 +323,7 @@ static void Transpose_float32(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -345,7 +345,7 @@ static void Transpose_float64(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -367,7 +367,7 @@ static void Transpose_complex64(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -390,7 +390,7 @@ static void Transpose_complex128(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{
@@ -413,7 +413,7 @@ static void Transpose_string(struct onnx_node_t * n)
 	int nperm = pdat->nperm;
 	int ix[nperm], iy[nperm];
 	int ox, oy;
-	int i, l;
+	size_t i, l;
 
 	for(oy = 0, l = y->ndata; oy < l; oy++)
 	{

@@ -123,9 +123,8 @@ static void Erf_bfloat16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = bfloat16_to_float32(px[i]);
 		py[i] = float32_to_bfloat16(erff(v));
@@ -139,9 +138,8 @@ static void Erf_float16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		py[i] = float32_to_float16(erff(v));
@@ -154,9 +152,8 @@ static void Erf_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = erff(px[i]);
 }
 
@@ -166,9 +163,8 @@ static void Erf_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = erf(px[i]);
 }
 

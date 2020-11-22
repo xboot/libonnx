@@ -26,9 +26,8 @@ static void Not_bool(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint8_t * px = (uint8_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i++)
+	for(size_t i = 0, l = y->ndata; i < l; i++)
 		py[i] = !px[i];
 }
 

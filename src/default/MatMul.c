@@ -97,9 +97,8 @@ static void MatMul_int32(struct onnx_node_t * n)
 	int32_t * pa;
 	int32_t * pb;
 	int32_t sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -126,9 +125,8 @@ static void MatMul_int64(struct onnx_node_t * n)
 	int64_t * pa;
 	int64_t * pb;
 	int64_t sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -155,9 +153,8 @@ static void MatMul_uint32(struct onnx_node_t * n)
 	uint32_t * pa;
 	uint32_t * pb;
 	uint32_t sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -184,9 +181,8 @@ static void MatMul_uint64(struct onnx_node_t * n)
 	uint64_t * pa;
 	uint64_t * pb;
 	uint64_t sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -213,9 +209,8 @@ static void MatMul_bfloat16(struct onnx_node_t * n)
 	uint16_t * pa;
 	uint16_t * pb;
 	float sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -242,9 +237,8 @@ static void MatMul_float16(struct onnx_node_t * n)
 	uint16_t * pa;
 	uint16_t * pb;
 	float sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -271,9 +265,8 @@ static void MatMul_float32(struct onnx_node_t * n)
 	float * pa;
 	float * pb;
 	float sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -300,9 +293,8 @@ static void MatMul_float64(struct onnx_node_t * n)
 	double * pa;
 	double * pb;
 	double sum;
-	int i, l;
 
-	for(i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);

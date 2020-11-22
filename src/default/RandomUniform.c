@@ -67,7 +67,6 @@ static void RandomUniform_operator(struct onnx_node_t * n)
 {
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 	struct onnx_tensor_t * y = n->outputs[0];
-	int i, l;
 
 	if(pdat->seed != 0.0)
 		srand(pdat->seed);
@@ -76,21 +75,21 @@ static void RandomUniform_operator(struct onnx_node_t * n)
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		{
 			uint16_t * py = (uint16_t *)y->datas;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 				py[i] = float16_to_float32(((float)rand() / (float)RAND_MAX) * (pdat->high - pdat->low) + pdat->low);
 		}
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
 		{
 			float * py = (float *)y->datas;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 				py[i] = ((float)rand() / (float)RAND_MAX) * (pdat->high - pdat->low) + pdat->low;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
 		{
 			double * py = (double *)y->datas;
-			for(i = 0, l = y->ndata; i < l; i++)
+			for(size_t i = 0, l = y->ndata; i < l; i++)
 				py[i] = ((double)rand() / (double)RAND_MAX) * (pdat->high - pdat->low) + pdat->low;
 		}
 		break;
