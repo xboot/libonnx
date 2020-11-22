@@ -25,17 +25,10 @@ static int Reshape_exit(struct onnx_node_t * n)
 
 static int Reshape_reshape(struct onnx_node_t * n)
 {
-	return 1;
-}
-
-static void Reshape_operator(struct onnx_node_t * n)
-{
+	struct onnx_tensor_t * y = n->outputs[0];
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * s = n->inputs[1];
-	struct onnx_tensor_t * y = n->outputs[0];
 	int64_t * ps = s->datas;
-	char ** px = (char **)x->datas;
-	char ** py = (char **)y->datas;
 	int total_dim = 1;
 	int total_shape = 1;
 	int ndim = s->ndata;
@@ -61,8 +54,16 @@ static void Reshape_operator(struct onnx_node_t * n)
 			dims[i] = total_dim / total_shape;
 		}
 	}
-	if((y->ndim != ndim) || (memcmp(y->dims, dims, sizeof(int) * ndim) != 0))
-		onnx_tensor_reinit(y, x->type, dims, ndim);
+	return onnx_tensor_reshape(y, dims, ndim, x->type);
+}
+
+static void Reshape_operator(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * x = n->inputs[0];
+	char ** py = (char **)y->datas;
+	char ** px = (char **)x->datas;
+
 	if(x->type == ONNX_TENSOR_TYPE_STRING)
 	{
 		for(size_t i = 0, l = y->ndata; i < l; i++)
