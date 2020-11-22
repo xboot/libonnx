@@ -743,9 +743,13 @@ static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoP
 						dims[i] = v->type->tensor_type->shape->dim[i]->dim_value;
 						break;
 					case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE_DIM_PARAM:
+						if(strcmp(v->type->tensor_type->shape->dim[i]->dim_param, "batch_size") == 0)
+							dims[i] = 1;
+						else
+							dims[i] = 1;
 						break;
 					default:
-						dims[i] = 0;
+						dims[i] = 1;
 						break;
 					}
 				}
@@ -1171,7 +1175,10 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				for(j = 0; j < ctx->model->graph->n_initializer; j++)
 				{
 					if(strcmp(ctx->model->graph->initializer[j]->name, t->name) == 0)
+					{
 						onnx_tensor_copy_from_tensor_proto(t, ctx->model->graph->initializer[j]);
+						break;
+					}
 				}
 				hmap_add(ctx->map, t->name, t);
 			}
