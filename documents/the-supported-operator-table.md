@@ -375,8 +375,8 @@
 |NegativeLogLikelihoodLoss-12||
 |Range-11|√|
 |Softmax-13|√|
-|Softmax-11||
-|Softmax-1||
+|Softmax-11|√|
+|Softmax-1|√|
 |SoftmaxCrossEntropyLoss-13||
 |SoftmaxCrossEntropyLoss-12||
 
