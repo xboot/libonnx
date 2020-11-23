@@ -11,10 +11,10 @@ struct profiler_t
 
 static inline uint64_t time_get(void)
 {
-	struct timeval time;
+	struct timeval tv;
 
-	gettimeofday(&time, 0);
-	return (uint64_t)(time.tv_sec * 1000000000ULL + time.tv_usec * 1000);
+	gettimeofday(&tv, 0);
+	return (uint64_t)(tv.tv_sec * 1000000000ULL + tv.tv_usec * 1000);
 }
 
 static struct hmap_t * profiler_alloc(int size)
@@ -84,7 +84,7 @@ static void profiler_dump(struct hmap_t * m)
 		hmap_for_each_entry(e, m)
 		{
 			p = (struct profiler_t *)e->value;
-		    printf("%-32s %ld %12.3f(us)\r\n", e->key, p->count, (p->count > 0) ? ((double)p->elapsed / 1000.0f) / (double)p->count : 0);
+			printf("%-32s %ld %12.3f(us)\r\n", e->key, p->count, (p->count > 0) ? ((double)p->elapsed / 1000.0f) / (double)p->count : 0);
 		}
 	}
 }
@@ -118,6 +118,7 @@ static void onnx_run_benchmark(struct onnx_context_t * ctx, int count)
 		profiler_free(m);
 	}
 }
+
 int main(int argc, char * argv[])
 {
 	struct onnx_context_t * ctx;

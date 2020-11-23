@@ -2276,7 +2276,9 @@ int main(int argc, char * argv[])
 		 */
 		onnx_tensor_dump(input, 1);
 
-		/* Run inference */
+		/*
+		 * Run inference
+		 */
 		onnx_run(ctx);
 
 		/*
