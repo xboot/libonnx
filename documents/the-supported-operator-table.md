@@ -367,8 +367,8 @@
 |GreaterOrEqual-12|√|
 |LessOrEqual-12|√|
 |LogSoftmax-13|√|
-|LogSoftmax-11||
-|LogSoftmax-1||
+|LogSoftmax-11|√|
+|LogSoftmax-1|√|
 |MeanVarianceNormalization-13||
 |MeanVarianceNormalization-9||
 |NegativeLogLikelihoodLoss-13||
