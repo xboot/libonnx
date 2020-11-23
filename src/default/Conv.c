@@ -220,6 +220,7 @@ static void Conv_float16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * pw = (uint16_t *)w->datas;
 	uint16_t * pb = NULL;
+	float * pxcache = NULL;
 	float sum, v, weight;
 	int ndim = x->ndim;
 	int M = w->dims[0];
@@ -247,18 +248,50 @@ static void Conv_float16(struct onnx_node_t * n)
 		typedef float (*pxtype)[iC][iH][iW];
 		typedef float (*pwtype)[C][H][W];
 		typedef float (*pytype)[M][oH][oW];
+		typedef float (*pxcachetype)[(oC * pdat->group / M) * C][H][W];
 
-		for(int n = 0; n < oN; ++n)
+		pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
+
+		for(int h = 0; h < oH; ++h)
 		{
-			for(int c = 0; c < oC; ++c)
+			for(int w = 0; w < oW; ++w)
 			{
-				for(int h = 0; h < oH; ++h)
+				int base_h = h * pdat->strides[0] - pdat->cpads[0];
+				int base_w = w * pdat->strides[1] - pdat->cpads[1];
+
+				if (pxcache)
 				{
-					for(int w = 0; w < oW; ++w)
+					for(int n = 0; n < oN; ++n)
+					{
+						for(int group_c = 0; group_c < oC * pdat->group / M; ++group_c)
+						{
+							int base_c = group_c * C;
+							for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+							{
+								int input_h = base_h + i * pdat->dilations[0];
+								if(input_h >= iH)
+									break;
+								for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+								{
+									int input_w = base_w + j * pdat->dilations[1];
+									if(input_w >= iW)
+										break;
+									for(int w_channel = 0; w_channel < C; ++w_channel)
+									{
+										ch = base_c + w_channel;
+										((pxcachetype)pxcache)[n][ch][i][j] = float16_to_float32(((pxtype)px)[n][ch][input_h][input_w]);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				for(int n = 0; n < oN; ++n)
+				{
+					for(int c = 0; c < oC; ++c)
 					{
 						int base_c = (c * pdat->group / M) * C;
-						int base_h = h * pdat->strides[0] - pdat->cpads[0];
-						int base_w = w * pdat->strides[1] - pdat->cpads[1];
 						sum = 0;
 						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
 						{
@@ -273,8 +306,15 @@ static void Conv_float16(struct onnx_node_t * n)
 								for(int w_channel = 0; w_channel < C; ++w_channel)
 								{
 									ch = base_c + w_channel;
-									v = float16_to_float32(((pxtype)px)[n][ch][input_h][input_w]);
-									weight = float16_to_float32(((pwtype)pw)[c][w_channel][i][j]);
+									if (pxcache)
+									{										
+										v = ((pxcachetype)pxcache)[n][ch][i][j];
+									}
+									else
+									{
+										v = float16_to_float32(((pxtype)px)[n][ch][input_h][input_w]);
+									}									
+									weight = ((pwtype)pw)[c][w_channel][i][j];
 									sum += v * weight;
 								}
 							}
@@ -285,6 +325,10 @@ static void Conv_float16(struct onnx_node_t * n)
 					}
 				}
 			}
+		}
+		if (pxcache)
+		{
+			free(pxcache);
 		}
 	}
 	else
@@ -354,6 +398,7 @@ static void Conv_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * pw = (float *)w->datas;
 	float * pb = NULL;
+	float * pxcache = NULL;
 	float sum, v, weight;
 	int ndim = x->ndim;
 	int M = w->dims[0];
@@ -381,18 +426,50 @@ static void Conv_float32(struct onnx_node_t * n)
 		typedef float (*pxtype)[iC][iH][iW];
 		typedef float (*pwtype)[C][H][W];
 		typedef float (*pytype)[M][oH][oW];
+		typedef float (*pxcachetype)[(oC * pdat->group / M) * C][H][W];
 
-		for(int n = 0; n < oN; ++n)
+		pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
+
+		for(int h = 0; h < oH; ++h)
 		{
-			for(int c = 0; c < oC; ++c)
+			for(int w = 0; w < oW; ++w)
 			{
-				for(int h = 0; h < oH; ++h)
+				int base_h = h * pdat->strides[0] - pdat->cpads[0];
+				int base_w = w * pdat->strides[1] - pdat->cpads[1];
+
+				if (pxcache)
 				{
-					for(int w = 0; w < oW; ++w)
+					for(int n = 0; n < oN; ++n)
+					{
+						for(int group_c = 0; group_c < oC * pdat->group / M; ++group_c)
+						{
+							int base_c = group_c * C;
+							for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+							{
+								int input_h = base_h + i * pdat->dilations[0];
+								if(input_h >= iH)
+									break;
+								for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+								{
+									int input_w = base_w + j * pdat->dilations[1];
+									if(input_w >= iW)
+										break;
+									for(int w_channel = 0; w_channel < C; ++w_channel)
+									{
+										ch = base_c + w_channel;
+										((pxcachetype)pxcache)[n][ch][i][j] = ((pxtype)px)[n][ch][input_h][input_w];
+									}
+								}
+							}
+						}
+					}
+				}
+
+				for(int n = 0; n < oN; ++n)
+				{
+					for(int c = 0; c < oC; ++c)
 					{
 						int base_c = (c * pdat->group / M) * C;
-						int base_h = h * pdat->strides[0] - pdat->cpads[0];
-						int base_w = w * pdat->strides[1] - pdat->cpads[1];
 						sum = 0;
 						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
 						{
@@ -407,7 +484,14 @@ static void Conv_float32(struct onnx_node_t * n)
 								for(int w_channel = 0; w_channel < C; ++w_channel)
 								{
 									ch = base_c + w_channel;
-									v = ((pxtype)px)[n][ch][input_h][input_w];
+									if (pxcache)
+									{										
+										v = ((pxcachetype)pxcache)[n][ch][i][j];
+									}
+									else
+									{
+										v = ((pxtype)px)[n][ch][input_h][input_w];
+									}									
 									weight = ((pwtype)pw)[c][w_channel][i][j];
 									sum += v * weight;
 								}
@@ -419,6 +503,10 @@ static void Conv_float32(struct onnx_node_t * n)
 					}
 				}
 			}
+		}
+		if (pxcache)
+		{
+			free(pxcache);
 		}
 	}
 	else
@@ -488,6 +576,7 @@ static void Conv_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * pw = (double *)w->datas;
 	double * pb = NULL;
+	double * pxcache = NULL;
 	double sum, v, weight;
 	int ndim = x->ndim;
 	int M = w->dims[0];
@@ -515,18 +604,50 @@ static void Conv_float64(struct onnx_node_t * n)
 		typedef double (*pxtype)[iC][iH][iW];
 		typedef double (*pwtype)[C][H][W];
 		typedef double (*pytype)[M][oH][oW];
+		typedef double (*pxcachetype)[(oC * pdat->group / M) * C][H][W];
 
-		for(int n = 0; n < oN; ++n)
+		pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(double));
+
+		for(int h = 0; h < oH; ++h)
 		{
-			for(int c = 0; c < oC; ++c)
+			for(int w = 0; w < oW; ++w)
 			{
-				for(int h = 0; h < oH; ++h)
+				int base_h = h * pdat->strides[0] - pdat->cpads[0];
+				int base_w = w * pdat->strides[1] - pdat->cpads[1];
+
+				if (pxcache)
 				{
-					for(int w = 0; w < oW; ++w)
+					for(int n = 0; n < oN; ++n)
+					{
+						for(int group_c = 0; group_c < oC * pdat->group / M; ++group_c)
+						{
+							int base_c = group_c * C;
+							for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
+							{
+								int input_h = base_h + i * pdat->dilations[0];
+								if(input_h >= iH)
+									break;
+								for(int j = (base_w < 0 ? (-base_w) / pdat->dilations[1] : 0); j < W; ++j)
+								{
+									int input_w = base_w + j * pdat->dilations[1];
+									if(input_w >= iW)
+										break;
+									for(int w_channel = 0; w_channel < C; ++w_channel)
+									{
+										ch = base_c + w_channel;
+										((pxcachetype)pxcache)[n][ch][i][j] = ((pxtype)px)[n][ch][input_h][input_w];
+									}
+								}
+							}
+						}
+					}
+				}
+
+				for(int n = 0; n < oN; ++n)
+				{
+					for(int c = 0; c < oC; ++c)
 					{
 						int base_c = (c * pdat->group / M) * C;
-						int base_h = h * pdat->strides[0] - pdat->cpads[0];
-						int base_w = w * pdat->strides[1] - pdat->cpads[1];
 						sum = 0;
 						for(int i = (base_h < 0 ? (-base_h) / pdat->dilations[0] : 0); i < H; ++i)
 						{
@@ -541,7 +662,14 @@ static void Conv_float64(struct onnx_node_t * n)
 								for(int w_channel = 0; w_channel < C; ++w_channel)
 								{
 									ch = base_c + w_channel;
-									v = ((pxtype)px)[n][ch][input_h][input_w];
+									if (pxcache)
+									{										
+										v = ((pxcachetype)pxcache)[n][ch][i][j];
+									}
+									else
+									{
+										v = ((pxtype)px)[n][ch][input_h][input_w];
+									}									
 									weight = ((pwtype)pw)[c][w_channel][i][j];
 									sum += v * weight;
 								}
@@ -553,6 +681,10 @@ static void Conv_float64(struct onnx_node_t * n)
 					}
 				}
 			}
+		}
+		if (pxcache)
+		{
+			free(pxcache);
 		}
 	}
 	else
