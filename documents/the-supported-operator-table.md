@@ -80,10 +80,10 @@
 |Div-1||
 |Dropout-13|√|
 |Dropout-12|√|
-|Dropout-10||
-|Dropout-7||
-|Dropout-6||
-|Dropout-1||
+|Dropout-10|√|
+|Dropout-7|√|
+|Dropout-6|√|
+|Dropout-1|√|
 |Einsum-12||
 |Elu-6|√|
 |Elu-1|√|
