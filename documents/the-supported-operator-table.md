@@ -31,7 +31,7 @@
 |AveragePool-7|√|
 |AveragePool-1|√|
 |BatchNormalization-9|√|
-|BatchNormalization-7||
+|BatchNormalization-7|√|
 |BatchNormalization-6||
 |BatchNormalization-1||
 |BitShift-11|√|
