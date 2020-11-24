@@ -13,7 +13,6 @@
 
 static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 {
-	int result = 0;
 	size_t i;
 
 	if(!a || !b)
@@ -40,8 +39,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 	case ONNX_TENSOR_TYPE_UINT16:
 	case ONNX_TENSOR_TYPE_UINT32:
 	case ONNX_TENSOR_TYPE_UINT64:
-		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) == 0)
-			result = 1;
+		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
+			return 0;
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
 		{
@@ -50,10 +49,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata; i++)
 			{
 				if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT16:
@@ -63,10 +60,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata; i++)
 			{
 				if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT32:
@@ -76,10 +71,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata; i++)
 			{
 				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT64:
@@ -89,10 +82,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata; i++)
 			{
 				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_COMPLEX64:
@@ -102,10 +93,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata * 2; i++)
 			{
 				if(fabsf(p[i] - q[i]) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata * 2)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_COMPLEX128:
@@ -115,10 +104,8 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata * 2; i++)
 			{
 				if(fabs(p[i] - q[i]) > FLOAT_EPSILON)
-					break;
+					return 0;
 			}
-			if(i == a->ndata * 2)
-				result = 1;
 		}
 		break;
 	case ONNX_TENSOR_TYPE_STRING:
@@ -128,16 +115,14 @@ static int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 			for(i = 0; i < a->ndata; i++)
 			{
 				if(p[i] && q[i] && (strcmp(p[i], q[i]) != 0))
-					break;
+					return 0;
 			}
-			if(i == a->ndata)
-				result = 1;
 		}
 		break;
 	default:
 		break;
 	}
-	return result;
+	return 1;
 }
 
 static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
