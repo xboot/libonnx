@@ -168,9 +168,9 @@ def save_tensor_to_pbfile(array, pbfile):
     tensor = onnx.numpy_helper.from_array(array)
     if not os.path.exists('.outputs'):
         os.makedirs('.outputs')
-    with open(os.path.join('.outputs', pbfile), 'wb') as f:
+    with open(os.path.join('.outputs', pbfile.replace('/', '_')), 'wb') as f:
         f.write(tensor.SerializeToString())
-        print('save output tensor to .outputs/' + pbfile)
+        print('save output tensor to .outputs/' + pbfile.replace('/', '_'))
 
 def main():
     parser = argparse.ArgumentParser()
