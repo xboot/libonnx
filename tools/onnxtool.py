@@ -11,7 +11,9 @@ import onnx.numpy_helper
 import onnxruntime as rt
 
 import numpy as np
+import argparse
 import sys
+import os
 
 TensorShape = List[int]
 TensorShapes = Dict[Optional[str], TensorShape]
@@ -156,15 +158,52 @@ def check(model_opt: onnx.ModelProto, model_ori: onnx.ModelProto, n_times: int =
                 return False
     return True
 
-model = onnx.load(sys.argv[1])
-add_all_features_to_output(model)
+def load_tensor_from_pbfile(pbfile):
+    tensor = onnx.TensorProto()
+    with open(pbfile, 'rb') as f:
+        tensor.ParseFromString(f.read())
+    return onnx.numpy_helper.to_array(tensor)
 
-input = {'data': np.ones((1, 3, 224, 224), dtype = np.float32) * 100}
-results = forward(model, inputs = input)
+def save_tensor_to_pbfile(array, pbfile):
+    tensor = onnx.numpy_helper.from_array(array)
+    if not os.path.exists('.outputs'):
+        os.makedirs('.outputs')
+    with open(os.path.join('.outputs', pbfile), 'wb') as f:
+        f.write(tensor.SerializeToString())
+        print('save output tensor to .outputs/' + pbfile)
 
-print(results['squeezenet0_conv0_fwd'])
-#print(results['squeezenet0_pool0_fwd'])
-#print(results['squeezenet0_flatten0_reshape0'])
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('model', help='The onnx model')
+    parser.add_argument('--input', help='The input tensors should be "name:file" for example "x:input.pb"', type=str, nargs='+')
+    parser.add_argument('--output', help='The output tensors will be print by name', type=str, nargs='+')
+    parser.add_argument('--save', help='Enable save all output tensor to protobuf', action='store_true')
+    args = parser.parse_args()
+    input_tensors = {}
+    if args.input is not None:
+        for x in args.input:
+            pieces = x.split(':')
+            name, pbfile = ':'.join(pieces[:-1]), load_tensor_from_pbfile(pieces[-1])
+            input_tensors[name] = pbfile
+    model = onnx.load(args.model)
+    add_all_features_to_output(model)
+    results = forward(model, inputs = input_tensors)
+    if args.output is not None:
+        for y in args.output:
+            t = results[y]
+            print("================================================================")
+            print("Name:", y)
+            print("Type:", t.dtype)
+            print("Size:", t.size)
+            print("Shape:", t.shape)
+            print("Dims:", t.ndim)
+            print(t)
+    else:
+        for k, v in results.items():
+            print(k)
+    if args.save:
+        for k, v in results.items():
+            save_tensor_to_pbfile(v, k + ".pb")
 
-# save as .pb:
-# https://github.com/onnx/onnx/blob/master/docs/PythonAPIOverview.md#manipulating-tensorproto-and-numpy-array
+if __name__ == '__main__':
+    main()
