@@ -42,8 +42,8 @@ make
 ```
 
 ## Screenshots
-
-TBD.
+### Mnist handwritten digit prediction
+![](documents/images/mnist.gif)
 
 ## Notes
 
