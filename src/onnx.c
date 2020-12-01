@@ -26,188 +26,520 @@
  */
 
 #include <onnx.h>
+#include <default/default.h>
 
 #define ONNX_LOG(...)	printf(__VA_ARGS__)
 
-static void * resolver_default_create(void)
+static void hmap_entry_callback(struct hmap_entry_t * e)
 {
-	return NULL;
+	if(e && e->value)
+		onnx_tensor_free((struct onnx_tensor_t *)e->value);
 }
 
-static void resolver_default_destroy(void * rctx)
+struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen)
 {
+	struct onnx_context_t * ctx;
+	int i;
+
+	if(!buf || len <= 0)
+		return NULL;
+
+	ctx = malloc(sizeof(struct onnx_context_t));
+	if(!ctx)
+		return NULL;
+
+	ctx->model = onnx__model_proto__unpack(NULL, len, buf);
+	if(!ctx->model)
+	{
+		if(ctx)
+			free(ctx);
+		return NULL;
+	}
+
+	ctx->map = hmap_alloc(0);
+	if(!ctx->map)
+	{
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		if(ctx)
+			free(ctx);
+		return NULL;
+	}
+
+	ctx->rlen = rlen;
+	if(r && (ctx->rlen > 0))
+	{
+		ctx->r = malloc(sizeof(struct onnx_resolver_t *) * ctx->rlen);
+		ctx->rctx = malloc(sizeof(void *) * ctx->rlen);
+		if(!ctx->r || !ctx->rctx)
+		{
+			if(ctx->rctx)
+				free(ctx->rctx);
+			if(ctx->r)
+				free(ctx->r);
+			if(ctx->map)
+				hmap_free(ctx->map, hmap_entry_callback);
+			if(ctx->model)
+				onnx__model_proto__free_unpacked(ctx->model, NULL);
+			if(ctx)
+				free(ctx);
+			return NULL;
+		}
+	}
+	else
+	{
+		ctx->r = NULL;
+		ctx->rctx = NULL;
+	}
+
+	for(i = 0; i < ctx->rlen; i++)
+	{
+		ctx->r[i] = r[i];
+		if(r[i] && r[i]->create)
+			ctx->rctx[i] = r[i]->create();
+	}
+
+	ctx->g = onnx_graph_alloc(ctx, ctx->model->graph);
+	if(!ctx->g)
+	{
+		for(i = 0; i < ctx->rlen; i++)
+		{
+			if(ctx->r[i] && ctx->r[i]->destroy)
+				ctx->r[i]->destroy(ctx->rctx[i]);
+		}
+		if(ctx->rctx)
+			free(ctx->rctx);
+		if(ctx->r)
+			free(ctx->r);
+		if(ctx->map)
+			hmap_free(ctx->map, hmap_entry_callback);
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		if(ctx)
+			free(ctx);
+		return NULL;
+	}
+
+	return ctx;
 }
 
-static struct onnx_resolver_t resolver_default = {
-	.name 							= "default",
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen)
+{
+	struct onnx_context_t * ctx = NULL;
+	FILE * fp;
+	void * buf;
+	size_t l, len;
 
-	.create							= resolver_default_create,
-	.destroy						= resolver_default_destroy,
+	fp = fopen(filename, "rb");
+	if(fp)
+	{
+		fseek(fp, 0L, SEEK_END);
+		l = ftell(fp);
+		fseek(fp, 0L, SEEK_SET);
+		if(l > 0)
+		{
+			buf = malloc(l);
+			if(buf)
+			{
+				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
+				ctx = onnx_context_alloc(buf, len, r, rlen);
+				free(buf);
+			}
+		}
+		fclose(fp);
+	}
+	return ctx;
+}
 
-	.op_Abs							= resolver_default_op_Abs,
-	.op_Acos						= resolver_default_op_Acos,
-	.op_Acosh						= resolver_default_op_Acosh,
-	.op_Add							= resolver_default_op_Add,
-	.op_And							= resolver_default_op_And,
-	.op_ArgMax						= resolver_default_op_ArgMax,
-	.op_ArgMin						= resolver_default_op_ArgMin,
-	.op_Asin						= resolver_default_op_Asin,
-	.op_Asinh						= resolver_default_op_Asinh,
-	.op_Atan						= resolver_default_op_Atan,
-	.op_Atanh						= resolver_default_op_Atanh,
-	.op_AveragePool					= resolver_default_op_AveragePool,
-	.op_BatchNormalization			= resolver_default_op_BatchNormalization,
-	.op_BitShift					= resolver_default_op_BitShift,
-	.op_Cast						= resolver_default_op_Cast,
-	.op_Ceil						= resolver_default_op_Ceil,
-	.op_Clip						= resolver_default_op_Clip,
-	.op_Compress					= resolver_default_op_Compress,
-	.op_Concat						= resolver_default_op_Concat,
-	.op_ConcatFromSequence			= resolver_default_op_ConcatFromSequence,
-	.op_Constant					= resolver_default_op_Constant,
-	.op_ConstantOfShape				= resolver_default_op_ConstantOfShape,
-	.op_Conv						= resolver_default_op_Conv,
-	.op_ConvInteger					= resolver_default_op_ConvInteger,
-	.op_ConvTranspose				= resolver_default_op_ConvTranspose,
-	.op_Cos							= resolver_default_op_Cos,
-	.op_Cosh						= resolver_default_op_Cosh,
-	.op_CumSum						= resolver_default_op_CumSum,
-	.op_DepthToSpace				= resolver_default_op_DepthToSpace,
-	.op_DequantizeLinear			= resolver_default_op_DequantizeLinear,
-	.op_Det							= resolver_default_op_Det,
-	.op_Div							= resolver_default_op_Div,
-	.op_Dropout						= resolver_default_op_Dropout,
-	.op_Einsum						= resolver_default_op_Einsum,
-	.op_Elu							= resolver_default_op_Elu,
-	.op_Equal						= resolver_default_op_Equal,
-	.op_Erf							= resolver_default_op_Erf,
-	.op_Exp							= resolver_default_op_Exp,
-	.op_Expand						= resolver_default_op_Expand,
-	.op_EyeLike						= resolver_default_op_EyeLike,
-	.op_Flatten						= resolver_default_op_Flatten,
-	.op_Floor						= resolver_default_op_Floor,
-	.op_GRU							= resolver_default_op_GRU,
-	.op_Gather						= resolver_default_op_Gather,
-	.op_GatherElements				= resolver_default_op_GatherElements,
-	.op_GatherND					= resolver_default_op_GatherND,
-	.op_Gemm						= resolver_default_op_Gemm,
-	.op_GlobalAveragePool			= resolver_default_op_GlobalAveragePool,
-	.op_GlobalLpPool				= resolver_default_op_GlobalLpPool,
-	.op_GlobalMaxPool				= resolver_default_op_GlobalMaxPool,
-	.op_Greater						= resolver_default_op_Greater,
-	.op_HardSigmoid					= resolver_default_op_HardSigmoid,
-	.op_Hardmax						= resolver_default_op_Hardmax,
-	.op_Identity					= resolver_default_op_Identity,
-	.op_If							= resolver_default_op_If,
-	.op_InstanceNormalization		= resolver_default_op_InstanceNormalization,
-	.op_IsInf						= resolver_default_op_IsInf,
-	.op_IsNaN						= resolver_default_op_IsNaN,
-	.op_LRN							= resolver_default_op_LRN,
-	.op_LSTM						= resolver_default_op_LSTM,
-	.op_LeakyRelu					= resolver_default_op_LeakyRelu,
-	.op_Less						= resolver_default_op_Less,
-	.op_Log							= resolver_default_op_Log,
-	.op_Loop						= resolver_default_op_Loop,
-	.op_LpNormalization				= resolver_default_op_LpNormalization,
-	.op_LpPool						= resolver_default_op_LpPool,
-	.op_MatMul						= resolver_default_op_MatMul,
-	.op_MatMulInteger				= resolver_default_op_MatMulInteger,
-	.op_Max							= resolver_default_op_Max,
-	.op_MaxPool						= resolver_default_op_MaxPool,
-	.op_MaxRoiPool					= resolver_default_op_MaxRoiPool,
-	.op_MaxUnpool					= resolver_default_op_MaxUnpool,
-	.op_Mean						= resolver_default_op_Mean,
-	.op_Min							= resolver_default_op_Min,
-	.op_Mod							= resolver_default_op_Mod,
-	.op_Mul							= resolver_default_op_Mul,
-	.op_Multinomial					= resolver_default_op_Multinomial,
-	.op_Neg							= resolver_default_op_Neg,
-	.op_NonMaxSuppression			= resolver_default_op_NonMaxSuppression,
-	.op_NonZero						= resolver_default_op_NonZero,
-	.op_Not							= resolver_default_op_Not,
-	.op_OneHot						= resolver_default_op_OneHot,
-	.op_Or							= resolver_default_op_Or,
-	.op_PRelu						= resolver_default_op_PRelu,
-	.op_Pad							= resolver_default_op_Pad,
-	.op_Pow							= resolver_default_op_Pow,
-	.op_QLinearConv					= resolver_default_op_QLinearConv,
-	.op_QLinearMatMul				= resolver_default_op_QLinearMatMul,
-	.op_QuantizeLinear				= resolver_default_op_QuantizeLinear,
-	.op_RNN							= resolver_default_op_RNN,
-	.op_RandomNormal				= resolver_default_op_RandomNormal,
-	.op_RandomNormalLike			= resolver_default_op_RandomNormalLike,
-	.op_RandomUniform				= resolver_default_op_RandomUniform,
-	.op_RandomUniformLike			= resolver_default_op_RandomUniformLike,
-	.op_Reciprocal					= resolver_default_op_Reciprocal,
-	.op_ReduceL1					= resolver_default_op_ReduceL1,
-	.op_ReduceL2					= resolver_default_op_ReduceL2,
-	.op_ReduceLogSum				= resolver_default_op_ReduceLogSum,
-	.op_ReduceLogSumExp				= resolver_default_op_ReduceLogSumExp,
-	.op_ReduceMax					= resolver_default_op_ReduceMax,
-	.op_ReduceMean					= resolver_default_op_ReduceMean,
-	.op_ReduceMin					= resolver_default_op_ReduceMin,
-	.op_ReduceProd					= resolver_default_op_ReduceProd,
-	.op_ReduceSum					= resolver_default_op_ReduceSum,
-	.op_ReduceSumSquare				= resolver_default_op_ReduceSumSquare,
-	.op_Relu						= resolver_default_op_Relu,
-	.op_Reshape						= resolver_default_op_Reshape,
-	.op_Resize						= resolver_default_op_Resize,
-	.op_ReverseSequence				= resolver_default_op_ReverseSequence,
-	.op_RoiAlign					= resolver_default_op_RoiAlign,
-	.op_Round						= resolver_default_op_Round,
-	.op_Scan						= resolver_default_op_Scan,
-	.op_Scatter						= resolver_default_op_Scatter,
-	.op_ScatterElements				= resolver_default_op_ScatterElements,
-	.op_ScatterND					= resolver_default_op_ScatterND,
-	.op_Selu						= resolver_default_op_Selu,
-	.op_SequenceAt					= resolver_default_op_SequenceAt,
-	.op_SequenceConstruct			= resolver_default_op_SequenceConstruct,
-	.op_SequenceEmpty				= resolver_default_op_SequenceEmpty,
-	.op_SequenceErase				= resolver_default_op_SequenceErase,
-	.op_SequenceInsert				= resolver_default_op_SequenceInsert,
-	.op_SequenceLength				= resolver_default_op_SequenceLength,
-	.op_Shape						= resolver_default_op_Shape,
-	.op_Shrink						= resolver_default_op_Shrink,
-	.op_Sigmoid						= resolver_default_op_Sigmoid,
-	.op_Sign						= resolver_default_op_Sign,
-	.op_Sin							= resolver_default_op_Sin,
-	.op_Sinh						= resolver_default_op_Sinh,
-	.op_Size						= resolver_default_op_Size,
-	.op_Slice						= resolver_default_op_Slice,
-	.op_Softplus					= resolver_default_op_Softplus,
-	.op_Softsign					= resolver_default_op_Softsign,
-	.op_SpaceToDepth				= resolver_default_op_SpaceToDepth,
-	.op_Split						= resolver_default_op_Split,
-	.op_SplitToSequence				= resolver_default_op_SplitToSequence,
-	.op_Sqrt						= resolver_default_op_Sqrt,
-	.op_Squeeze						= resolver_default_op_Squeeze,
-	.op_StringNormalizer			= resolver_default_op_StringNormalizer,
-	.op_Sub							= resolver_default_op_Sub,
-	.op_Sum							= resolver_default_op_Sum,
-	.op_Tan							= resolver_default_op_Tan,
-	.op_Tanh						= resolver_default_op_Tanh,
-	.op_TfIdfVectorizer				= resolver_default_op_TfIdfVectorizer,
-	.op_ThresholdedRelu				= resolver_default_op_ThresholdedRelu,
-	.op_Tile						= resolver_default_op_Tile,
-	.op_TopK						= resolver_default_op_TopK,
-	.op_Transpose					= resolver_default_op_Transpose,
-	.op_Unique						= resolver_default_op_Unique,
-	.op_Unsqueeze					= resolver_default_op_Unsqueeze,
-	.op_Upsample					= resolver_default_op_Upsample,
-	.op_Where						= resolver_default_op_Where,
-	.op_Xor							= resolver_default_op_Xor,
+void onnx_context_free(struct onnx_context_t * ctx)
+{
+	int i;
 
-	.op_Celu						= resolver_default_op_Celu,
-	.op_DynamicQuantizeLinear		= resolver_default_op_DynamicQuantizeLinear,
-	.op_GreaterOrEqual				= resolver_default_op_GreaterOrEqual,
-	.op_LessOrEqual					= resolver_default_op_LessOrEqual,
-	.op_LogSoftmax					= resolver_default_op_LogSoftmax,
-	.op_MeanVarianceNormalization	= resolver_default_op_MeanVarianceNormalization,
-	.op_NegativeLogLikelihoodLoss	= resolver_default_op_NegativeLogLikelihoodLoss,
-	.op_Range						= resolver_default_op_Range,
-	.op_Softmax						= resolver_default_op_Softmax,
-	.op_SoftmaxCrossEntropyLoss		= resolver_default_op_SoftmaxCrossEntropyLoss,
-};
+	if(ctx)
+	{
+		if(ctx->g)
+			onnx_graph_free(ctx->g);
+		for(i = 0; i < ctx->rlen; i++)
+		{
+			if(ctx->r[i] && ctx->r[i]->destroy)
+				ctx->r[i]->destroy(ctx->rctx[i]);
+		}
+		if(ctx->rctx)
+			free(ctx->rctx);
+		if(ctx->r)
+			free(ctx->r);
+		if(ctx->map)
+			hmap_free(ctx->map, hmap_entry_callback);
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		free(ctx);
+	}
+}
+
+static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoProto * v)
+{
+	struct onnx_tensor_t * t;
+	enum onnx_tensor_type_t type;
+	int * dims = NULL;
+	int ndim;
+	int i;
+
+	if(!v || !v->name)
+		return NULL;
+
+	switch(v->type->value_case)
+	{
+	case ONNX__TYPE_PROTO__VALUE_TENSOR_TYPE:
+		type = (enum onnx_tensor_type_t)v->type->tensor_type->elem_type;
+		ndim = v->type->tensor_type->shape->n_dim;
+		if(ndim > 0)
+		{
+			dims = malloc(sizeof(int) * ndim);
+			if(dims)
+			{
+				for(i = 0; i < ndim; i++)
+				{
+					switch(v->type->tensor_type->shape->dim[i]->value_case)
+					{
+					case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE_DIM_VALUE:
+						dims[i] = v->type->tensor_type->shape->dim[i]->dim_value;
+						break;
+					case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE_DIM_PARAM:
+						if(strcmp(v->type->tensor_type->shape->dim[i]->dim_param, "batch_size") == 0)
+							dims[i] = 1;
+						else
+							dims[i] = 1;
+						break;
+					default:
+						dims[i] = 1;
+						break;
+					}
+				}
+			}
+		}
+		t = onnx_tensor_alloc(v->name, type, dims, ndim);
+		if(dims)
+			free(dims);
+		break;
+	case ONNX__TYPE_PROTO__VALUE_SEQUENCE_TYPE:
+		t = NULL;
+		break;
+	case ONNX__TYPE_PROTO__VALUE_MAP_TYPE:
+		t = NULL;
+		break;
+	default:
+		t = NULL;
+		break;
+	}
+	return t;
+}
+
+static void onnx_tensor_copy_from_tensor_proto(struct onnx_tensor_t * t, Onnx__TensorProto * o)
+{
+	size_t n, i;
+	int sz;
+
+	if(t && o)
+	{
+		if(t->type == o->data_type)
+		{
+			sz = onnx_tensor_type_sizeof(t->type);
+			if(sz > 0)
+			{
+				if((o->raw_data.len > 0) && o->raw_data.data)
+				{
+					switch(o->data_type)
+					{
+					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
+						{
+							float * p = (float *)t->datas;
+							uint32_t * q = (uint32_t *)o->raw_data.data;
+							union { uint32_t u; float f; } v;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+								{
+									v.u = le32_to_cpu(q[i]);
+									p[i] = v.f;
+								}
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
+						{
+							uint8_t * p = (uint8_t *)t->datas;
+							uint8_t * q = (uint8_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len);
+								memcpy(p, q, n);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
+						{
+							int8_t * p = (int8_t *)t->datas;
+							int8_t * q = (int8_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len);
+								memcpy(p, q, n);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
+						{
+							uint16_t * p = (uint16_t *)t->datas;
+							uint16_t * q = (uint16_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le16_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
+						{
+							int16_t * p = (int16_t *)t->datas;
+							int16_t * q = (int16_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le16_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
+						{
+							int32_t * p = (int32_t *)t->datas;
+							int32_t * q = (int32_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le32_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
+						{
+							int64_t * p = (int64_t *)t->datas;
+							int64_t * q = (int64_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le64_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
+						{
+							uint8_t * p = (uint8_t *)t->datas;
+							uint8_t * q = (uint8_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len);
+								memcpy(p, q, n);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+						{
+							uint16_t * p = (uint16_t *)t->datas;
+							uint16_t * q = (uint16_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le16_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+						{
+							double * p = (double *)t->datas;
+							uint64_t * q = (uint64_t *)o->raw_data.data;
+							union { uint64_t u; double f; } v;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+								{
+									v.u = le64_to_cpu(q[i]);
+									p[i] = v.f;
+								}
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
+						{
+							uint32_t * p = (uint32_t *)t->datas;
+							uint32_t * q = (uint32_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le32_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
+						{
+							uint64_t * p = (uint64_t *)t->datas;
+							uint64_t * q = (uint64_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le64_to_cpu(q[i]);
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
+						{
+							float * p = (float *)t->datas;
+							uint32_t * q = (uint32_t *)o->raw_data.data;
+							union { uint32_t u; float f; } v;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz) * 2;
+								for(i = 0; i < n; i++)
+								{
+									v.u = le32_to_cpu(q[i]);
+									p[i] = v.f;
+								}
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
+						{
+							double * p = (double *)t->datas;
+							uint64_t * q = (uint64_t *)o->raw_data.data;
+							union { uint64_t u; double f; } v;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz) * 2;
+								for(i = 0; i < n; i++)
+								{
+									v.u = le64_to_cpu(q[i]);
+									p[i] = v.f;
+								}
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
+						{
+							uint16_t * p = (uint16_t *)t->datas;
+							uint16_t * q = (uint16_t *)o->raw_data.data;
+							if(t->ndata > 0)
+							{
+								n = min(t->ndata, (size_t)o->raw_data.len / sz);
+								for(i = 0; i < n; i++)
+									p[i] = le16_to_cpu(q[i]);
+							}
+						}
+						break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					switch(o->data_type)
+					{
+					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
+						n = min(t->ndata, (size_t)o->n_float_data);
+						if((n > 0) && t->datas && o->float_data)
+							memcpy(t->datas, o->float_data, sizeof(float) * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
+						//TODO
+						n = min(t->ndata, (size_t)o->n_int32_data);
+						if((n > 0) && t->datas && o->int32_data)
+							memcpy(t->datas, o->int32_data, sz * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
+						n = min(t->ndata, (size_t)o->n_string_data);
+						if((n > 0) && t->datas && o->string_data)
+						{
+							char ** str = (char **)t->datas;
+							for(i = 0; i < t->ndata; i++)
+							{
+								if(str[i])
+								{
+									free(str[i]);
+									str[i] = NULL;
+								}
+							}
+							for(i = 0; i < n; i++)
+							{
+								str[i] = malloc(o->string_data[i].len + 1);
+								if(str[i])
+								{
+									str[i][o->string_data[i].len] = 0;
+									memcpy(str[i], o->string_data[i].data, o->string_data[i].len);
+								}
+							}
+						}
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
+						n = min(t->ndata, (size_t)o->n_int64_data);
+						if((n > 0) && t->datas && o->int64_data)
+							memcpy(t->datas, o->int64_data, sizeof(int64_t) * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
+						n = min(t->ndata, (size_t)o->n_double_data);
+						if((n > 0) && t->datas && o->double_data)
+							memcpy(t->datas, o->double_data, sizeof(double) * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
+					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
+						//TODO
+						n = min(t->ndata, (size_t)o->n_uint64_data);
+						if((n > 0) && t->datas && o->uint64_data)
+							memcpy(t->datas, o->uint64_data, sz * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
+						n = min(t->ndata, (size_t)(o->n_float_data / 2));
+						if((n > 0) && t->datas && o->float_data)
+							memcpy(t->datas, o->float_data, sizeof(float) * 2 * n);
+						break;
+					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
+						n = min(t->ndata, (size_t)(o->n_double_data / 2));
+						if((n > 0) && t->datas && o->double_data)
+							memcpy(t->datas, o->double_data, sizeof(double) * 2 * n);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+static int reshape_dummy(struct onnx_node_t * n)
+{
+	return 1;
+}
+
+static void operator_dummy(struct onnx_node_t * n)
+{
+	ONNX_LOG("\033[45;37mUnsupported opset\033[0m => %s-%d (%s)\r\n", n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
+}
 
 static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node_t * n)
 {
@@ -712,517 +1044,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		if(rop)
 			rop(n);
 	}
-}
-
-static struct onnx_tensor_t * onnx_tensor_alloc_from_value_info(Onnx__ValueInfoProto * v)
-{
-	struct onnx_tensor_t * t;
-	enum onnx_tensor_type_t type;
-	int * dims = NULL;
-	int ndim;
-	int i;
-
-	if(!v || !v->name)
-		return NULL;
-
-	switch(v->type->value_case)
-	{
-	case ONNX__TYPE_PROTO__VALUE_TENSOR_TYPE:
-		type = (enum onnx_tensor_type_t)v->type->tensor_type->elem_type;
-		ndim = v->type->tensor_type->shape->n_dim;
-		if(ndim > 0)
-		{
-			dims = malloc(sizeof(int) * ndim);
-			if(dims)
-			{
-				for(i = 0; i < ndim; i++)
-				{
-					switch(v->type->tensor_type->shape->dim[i]->value_case)
-					{
-					case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE_DIM_VALUE:
-						dims[i] = v->type->tensor_type->shape->dim[i]->dim_value;
-						break;
-					case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE_DIM_PARAM:
-						if(strcmp(v->type->tensor_type->shape->dim[i]->dim_param, "batch_size") == 0)
-							dims[i] = 1;
-						else
-							dims[i] = 1;
-						break;
-					default:
-						dims[i] = 1;
-						break;
-					}
-				}
-			}
-		}
-		t = onnx_tensor_alloc(v->name, type, dims, ndim);
-		if(dims)
-			free(dims);
-		break;
-	case ONNX__TYPE_PROTO__VALUE_SEQUENCE_TYPE:
-		t = NULL;
-		break;
-	case ONNX__TYPE_PROTO__VALUE_MAP_TYPE:
-		t = NULL;
-		break;
-	default:
-		t = NULL;
-		break;
-	}
-	return t;
-}
-
-static void onnx_tensor_copy_from_tensor_proto(struct onnx_tensor_t * t, Onnx__TensorProto * o)
-{
-	size_t n, i;
-	int sz;
-
-	if(t && o)
-	{
-		if(t->type == o->data_type)
-		{
-			sz = onnx_tensor_type_sizeof(t->type);
-			if(sz > 0)
-			{
-				if((o->raw_data.len > 0) && o->raw_data.data)
-				{
-					switch(o->data_type)
-					{
-					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-						{
-							float * p = (float *)t->datas;
-							uint32_t * q = (uint32_t *)o->raw_data.data;
-							union { uint32_t u; float f; } v;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-								{
-									v.u = le32_to_cpu(q[i]);
-									p[i] = v.f;
-								}
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
-						{
-							uint8_t * p = (uint8_t *)t->datas;
-							uint8_t * q = (uint8_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len);
-								memcpy(p, q, n);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
-						{
-							int8_t * p = (int8_t *)t->datas;
-							int8_t * q = (int8_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len);
-								memcpy(p, q, n);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
-						{
-							uint16_t * p = (uint16_t *)t->datas;
-							uint16_t * q = (uint16_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le16_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
-						{
-							int16_t * p = (int16_t *)t->datas;
-							int16_t * q = (int16_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le16_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
-						{
-							int32_t * p = (int32_t *)t->datas;
-							int32_t * q = (int32_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le32_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
-						{
-							int64_t * p = (int64_t *)t->datas;
-							int64_t * q = (int64_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le64_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
-						{
-							uint8_t * p = (uint8_t *)t->datas;
-							uint8_t * q = (uint8_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len);
-								memcpy(p, q, n);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
-						{
-							uint16_t * p = (uint16_t *)t->datas;
-							uint16_t * q = (uint16_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le16_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
-						{
-							double * p = (double *)t->datas;
-							uint64_t * q = (uint64_t *)o->raw_data.data;
-							union { uint64_t u; double f; } v;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-								{
-									v.u = le64_to_cpu(q[i]);
-									p[i] = v.f;
-								}
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
-						{
-							uint32_t * p = (uint32_t *)t->datas;
-							uint32_t * q = (uint32_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le32_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
-						{
-							uint64_t * p = (uint64_t *)t->datas;
-							uint64_t * q = (uint64_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le64_to_cpu(q[i]);
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
-						{
-							float * p = (float *)t->datas;
-							uint32_t * q = (uint32_t *)o->raw_data.data;
-							union { uint32_t u; float f; } v;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz) * 2;
-								for(i = 0; i < n; i++)
-								{
-									v.u = le32_to_cpu(q[i]);
-									p[i] = v.f;
-								}
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
-						{
-							double * p = (double *)t->datas;
-							uint64_t * q = (uint64_t *)o->raw_data.data;
-							union { uint64_t u; double f; } v;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz) * 2;
-								for(i = 0; i < n; i++)
-								{
-									v.u = le64_to_cpu(q[i]);
-									p[i] = v.f;
-								}
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
-						{
-							uint16_t * p = (uint16_t *)t->datas;
-							uint16_t * q = (uint16_t *)o->raw_data.data;
-							if(t->ndata > 0)
-							{
-								n = min(t->ndata, (size_t)o->raw_data.len / sz);
-								for(i = 0; i < n; i++)
-									p[i] = le16_to_cpu(q[i]);
-							}
-						}
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					switch(o->data_type)
-					{
-					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT:
-						n = min(t->ndata, (size_t)o->n_float_data);
-						if((n > 0) && t->datas && o->float_data)
-							memcpy(t->datas, o->float_data, sizeof(float) * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT8:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT8:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT16:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT16:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT32:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__BOOL:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT16:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__BFLOAT16:
-						//TODO
-						n = min(t->ndata, (size_t)o->n_int32_data);
-						if((n > 0) && t->datas && o->int32_data)
-							memcpy(t->datas, o->int32_data, sz * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__STRING:
-						n = min(t->ndata, (size_t)o->n_string_data);
-						if((n > 0) && t->datas && o->string_data)
-						{
-							char ** str = (char **)t->datas;
-							for(i = 0; i < t->ndata; i++)
-							{
-								if(str[i])
-								{
-									free(str[i]);
-									str[i] = NULL;
-								}
-							}
-							for(i = 0; i < n; i++)
-							{
-								str[i] = malloc(o->string_data[i].len + 1);
-								if(str[i])
-								{
-									str[i][o->string_data[i].len] = 0;
-									memcpy(str[i], o->string_data[i].data, o->string_data[i].len);
-								}
-							}
-						}
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__INT64:
-						n = min(t->ndata, (size_t)o->n_int64_data);
-						if((n > 0) && t->datas && o->int64_data)
-							memcpy(t->datas, o->int64_data, sizeof(int64_t) * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__DOUBLE:
-						n = min(t->ndata, (size_t)o->n_double_data);
-						if((n > 0) && t->datas && o->double_data)
-							memcpy(t->datas, o->double_data, sizeof(double) * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT32:
-					case ONNX__TENSOR_PROTO__DATA_TYPE__UINT64:
-						//TODO
-						n = min(t->ndata, (size_t)o->n_uint64_data);
-						if((n > 0) && t->datas && o->uint64_data)
-							memcpy(t->datas, o->uint64_data, sz * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX64:
-						n = min(t->ndata, (size_t)(o->n_float_data / 2));
-						if((n > 0) && t->datas && o->float_data)
-							memcpy(t->datas, o->float_data, sizeof(float) * 2 * n);
-						break;
-					case ONNX__TENSOR_PROTO__DATA_TYPE__COMPLEX128:
-						n = min(t->ndata, (size_t)(o->n_double_data / 2));
-						if((n > 0) && t->datas && o->double_data)
-							memcpy(t->datas, o->double_data, sizeof(double) * 2 * n);
-						break;
-					default:
-						break;
-					}
-				}
-			}
-		}
-	}
-}
-
-static void hmap_entry_callback(struct hmap_entry_t * e)
-{
-	if(e && e->value)
-		onnx_tensor_free((struct onnx_tensor_t *)e->value);
-}
-
-struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen)
-{
-	struct onnx_context_t * ctx;
-	int i;
-
-	if(!buf || len <= 0)
-		return NULL;
-
-	ctx = malloc(sizeof(struct onnx_context_t));
-	if(!ctx)
-		return NULL;
-
-	ctx->model = onnx__model_proto__unpack(NULL, len, buf);
-	if(!ctx->model)
-	{
-		if(ctx)
-			free(ctx);
-		return NULL;
-	}
-
-	ctx->map = hmap_alloc(0);
-	if(!ctx->map)
-	{
-		if(ctx->model)
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
-		if(ctx)
-			free(ctx);
-		return NULL;
-	}
-
-	ctx->rlen = rlen;
-	if(r && (ctx->rlen > 0))
-	{
-		ctx->r = malloc(sizeof(struct onnx_resolver_t *) * ctx->rlen);
-		ctx->rctx = malloc(sizeof(void *) * ctx->rlen);
-		if(!ctx->r || !ctx->rctx)
-		{
-			if(ctx->rctx)
-				free(ctx->rctx);
-			if(ctx->r)
-				free(ctx->r);
-			if(ctx->map)
-				hmap_free(ctx->map, hmap_entry_callback);
-			if(ctx->model)
-				onnx__model_proto__free_unpacked(ctx->model, NULL);
-			if(ctx)
-				free(ctx);
-			return NULL;
-		}
-	}
-	else
-	{
-		ctx->r = NULL;
-		ctx->rctx = NULL;
-	}
-
-	for(i = 0; i < ctx->rlen; i++)
-	{
-		ctx->r[i] = r[i];
-		if(r[i] && r[i]->create)
-			ctx->rctx[i] = r[i]->create();
-	}
-
-	ctx->g = onnx_graph_alloc(ctx, ctx->model->graph);
-	if(!ctx->g)
-	{
-		for(i = 0; i < ctx->rlen; i++)
-		{
-			if(ctx->r[i] && ctx->r[i]->destroy)
-				ctx->r[i]->destroy(ctx->rctx[i]);
-		}
-		if(ctx->rctx)
-			free(ctx->rctx);
-		if(ctx->r)
-			free(ctx->r);
-		if(ctx->map)
-			hmap_free(ctx->map, hmap_entry_callback);
-		if(ctx->model)
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
-		if(ctx)
-			free(ctx);
-		return NULL;
-	}
-
-	return ctx;
-}
-
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen)
-{
-	struct onnx_context_t * ctx = NULL;
-	FILE * fp;
-	void * buf;
-	size_t l, len;
-
-	fp = fopen(filename, "rb");
-	if(fp)
-	{
-		fseek(fp, 0L, SEEK_END);
-		l = ftell(fp);
-		fseek(fp, 0L, SEEK_SET);
-		if(l > 0)
-		{
-			buf = malloc(l);
-			if(buf)
-			{
-				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
-				ctx = onnx_context_alloc(buf, len, r, rlen);
-				free(buf);
-			}
-		}
-		fclose(fp);
-	}
-	return ctx;
-}
-
-void onnx_context_free(struct onnx_context_t * ctx)
-{
-	int i;
-
-	if(ctx)
-	{
-		if(ctx->g)
-			onnx_graph_free(ctx->g);
-		for(i = 0; i < ctx->rlen; i++)
-		{
-			if(ctx->r[i] && ctx->r[i]->destroy)
-				ctx->r[i]->destroy(ctx->rctx[i]);
-		}
-		if(ctx->rctx)
-			free(ctx->rctx);
-		if(ctx->r)
-			free(ctx->r);
-		if(ctx->map)
-			hmap_free(ctx->map, hmap_entry_callback);
-		if(ctx->model)
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx);
-	}
-}
-
-static int reshape_dummy(struct onnx_node_t * n)
-{
-	return 1;
-}
-
-static void operator_dummy(struct onnx_node_t * n)
-{
-	ONNX_LOG("\033[45;37mUnsupported opset\033[0m => %s-%d (%s)\r\n", n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
 }
 
 struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphProto * graph)
