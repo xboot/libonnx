@@ -5,7 +5,16 @@
 extern "C" {
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#include <malloc.h>
+#include <float.h>
+#include <math.h>
+#include <list.h>
+#include <hmap.h>
 
 static inline uint16_t __swab16(uint16_t x)
 {
