@@ -138,9 +138,9 @@
 |Hardmax-1||
 |Identity-13|√|
 |Identity-1|√|
-|If-13||
-|If-11||
-|If-1||
+|If-13|√|
+|If-11|√|
+|If-1|√|
 |InstanceNormalization-6|√|
 |InstanceNormalization-1|√|
 |IsInf-10|√|
