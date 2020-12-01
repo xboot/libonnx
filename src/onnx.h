@@ -270,7 +270,7 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, size_t len);
 
 static inline int onnx_tensor_is_scalar(struct onnx_tensor_t * t)
 {
-	return (t->ndim > 0) ? 0 : 1;
+	return ((t->ndim == 0) && (t->ndata == 1)) ? 1 : 0;
 }
 
 static inline int onnx_tensor_broadcast_is_valid(struct onnx_tensor_t * x, int * dims, int ndim)
