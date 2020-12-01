@@ -1444,6 +1444,120 @@ void onnx_tensor_free(struct onnx_tensor_t * t)
 	}
 }
 
+int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
+{
+	size_t i;
+
+	if(!a || !b)
+		return 0;
+	if(a->type != b->type)
+		return 0;
+	if(a->ndim != b->ndim)
+		return 0;
+	if(a->ndata != b->ndata)
+		return 0;
+	if(a->ndim > 0)
+	{
+		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) != 0)
+			return 0;
+	}
+	switch(a->type)
+	{
+	case ONNX_TENSOR_TYPE_BOOL:
+	case ONNX_TENSOR_TYPE_INT8:
+	case ONNX_TENSOR_TYPE_INT16:
+	case ONNX_TENSOR_TYPE_INT32:
+	case ONNX_TENSOR_TYPE_INT64:
+	case ONNX_TENSOR_TYPE_UINT8:
+	case ONNX_TENSOR_TYPE_UINT16:
+	case ONNX_TENSOR_TYPE_UINT32:
+	case ONNX_TENSOR_TYPE_UINT64:
+		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
+			return 0;
+		break;
+	case ONNX_TENSOR_TYPE_BFLOAT16:
+		{
+			uint16_t * p = (uint16_t *)a->datas;
+			uint16_t * q = (uint16_t *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(bfloat16_to_float32(p[i]) - bfloat16_to_float32(q[i])) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT16:
+		{
+			uint16_t * p = (uint16_t *)a->datas;
+			uint16_t * q = (uint16_t *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(float16_to_float32(p[i]) - float16_to_float32(q[i])) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT32:
+		{
+			float * p = (float *)a->datas;
+			float * q = (float *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabsf(p[i] - q[i]) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT64:
+		{
+			double * p = (double *)a->datas;
+			double * q = (double *)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(fabs(p[i] - q[i]) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_COMPLEX64:
+		{
+			float * p = (float *)a->datas;
+			float * q = (float *)b->datas;
+			for(i = 0; i < a->ndata * 2; i++)
+			{
+				if(fabsf(p[i] - q[i]) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_COMPLEX128:
+		{
+			double * p = (double *)a->datas;
+			double * q = (double *)b->datas;
+			for(i = 0; i < a->ndata * 2; i++)
+			{
+				if(fabs(p[i] - q[i]) > 1e-3)
+					return 0;
+			}
+		}
+		break;
+	case ONNX_TENSOR_TYPE_STRING:
+		{
+			char ** p = (char **)a->datas;
+			char ** q = (char **)b->datas;
+			for(i = 0; i < a->ndata; i++)
+			{
+				if(p[i] && q[i] && (strcmp(p[i], q[i]) != 0))
+					return 0;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+	return 1;
+}
+
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim)
 {
 	char ** str;
