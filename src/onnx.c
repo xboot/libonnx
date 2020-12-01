@@ -1174,6 +1174,7 @@ struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphP
 		n = &g->nodes[i];
 		memset(n, 0, sizeof(struct onnx_node_t));
 
+		n->ctx = ctx;
 		n->proto = graph->node[i];
 		domain = n->proto->domain;
 		if(!domain || (strlen(domain) == 0))

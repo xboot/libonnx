@@ -50,6 +50,7 @@ struct onnx_tensor_t {
 };
 
 struct onnx_node_t {
+	struct onnx_context_t * ctx;
 	struct onnx_resolver_t * r;
 	void * rctx;
 	int opset;
