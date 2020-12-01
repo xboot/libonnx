@@ -13,8 +13,11 @@ extern "C" {
 #define LIBONNX_PATCH			(0)
 #define LIBONNX_VERSION			((LIBONNX_MAJOY * 10000) + (LIBONNX_MINIOR * 100) + LIBONNX_PATCH)
 
+struct onnx_tensor_t;
 struct onnx_node_t;
+struct onnx_graph_t;
 struct onnx_context_t;
+struct onnx_resolver_t;
 
 enum onnx_tensor_type_t {
 	ONNX_TENSOR_TYPE_UNDEFINED	= 0,
@@ -44,6 +47,37 @@ struct onnx_tensor_t {
 	int ndim;
 	void * datas;
 	size_t ndata;
+};
+
+struct onnx_node_t {
+	struct onnx_resolver_t * r;
+	void * rctx;
+	int opset;
+	struct onnx_tensor_t ** inputs;
+	int ninput;
+	struct onnx_tensor_t ** outputs;
+	int noutput;
+	Onnx__NodeProto * proto;
+
+	int (*init)(struct onnx_node_t * n);
+	int (*exit)(struct onnx_node_t * n);
+	int (*reshape)(struct onnx_node_t * n);
+	void (*operator)(struct onnx_node_t * n);
+	void * priv;
+};
+
+struct onnx_graph_t {
+	struct onnx_node_t * nodes;
+	int nlen;
+};
+
+struct onnx_context_t {
+	Onnx__ModelProto * model;
+	struct hmap_t * map;
+	struct onnx_resolver_t ** r;
+	void ** rctx;
+	int rlen;
+	struct onnx_graph_t * g;
 };
 
 struct onnx_resolver_t {
@@ -217,33 +251,6 @@ struct onnx_resolver_t {
 	void (*op_SoftmaxCrossEntropyLoss)(struct onnx_node_t * n);
 };
 
-struct onnx_node_t {
-	struct onnx_resolver_t * r;
-	void * rctx;
-	int opset;
-	struct onnx_tensor_t ** inputs;
-	int ninput;
-	struct onnx_tensor_t ** outputs;
-	int noutput;
-	Onnx__NodeProto * proto;
-
-	int (*init)(struct onnx_node_t * n);
-	int (*exit)(struct onnx_node_t * n);
-	int (*reshape)(struct onnx_node_t * n);
-	void (*operator)(struct onnx_node_t * n);
-	void * priv;
-};
-
-struct onnx_context_t {
-	Onnx__ModelProto * model;
-	struct onnx_node_t * nodes;
-	int nlen;
-	struct onnx_resolver_t ** r;
-	void ** rctx;
-	int rlen;
-	struct hmap_t * map;
-};
-
 void resolver_default_op_Abs(struct onnx_node_t * n);
 void resolver_default_op_Acos(struct onnx_node_t * n);
 void resolver_default_op_Acosh(struct onnx_node_t * n);
@@ -412,6 +419,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen);
 void onnx_context_free(struct onnx_context_t * ctx);
 
+struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphProto * graph);
+void onnx_graph_free(struct onnx_graph_t * g);
+
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type);
 int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type);
 struct onnx_tensor_t * onnx_tensor_search(struct onnx_context_t * ctx, const char * name);
@@ -537,6 +547,7 @@ Onnx__SparseTensorProto * onnx_attribute_read_sparse_tensor(struct onnx_node_t *
 
 void onnx_tensor_dump(struct onnx_tensor_t * t, int detail);
 void onnx_node_dump(struct onnx_node_t * n, int detail);
+void onnx_graph_dump(struct onnx_graph_t * g, int detail);
 void onnx_context_dump(struct onnx_context_t * ctx, int detail);
 
 void onnx_run(struct onnx_context_t * ctx);

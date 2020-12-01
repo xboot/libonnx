@@ -1075,26 +1075,10 @@ static void hmap_entry_callback(struct hmap_entry_t * e)
 		onnx_tensor_free((struct onnx_tensor_t *)e->value);
 }
 
-static int reshape_dummy(struct onnx_node_t * n)
-{
-	return 1;
-}
-
-static void operator_dummy(struct onnx_node_t * n)
-{
-	ONNX_LOG("\033[45;37mUnsupported opset\033[0m => %s-%d (%s)\r\n", n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
-}
-
 struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen)
 {
 	struct onnx_context_t * ctx;
-	struct onnx_node_t * n;
-	struct onnx_tensor_t * t;
-	Onnx__TensorProto * o;
-	Onnx__ValueInfoProto * v;
-	char * p, * domain;
-	char * name;
-	int i, j, k, l;
+	int i;
 
 	if(!buf || len <= 0)
 		return NULL;
@@ -1111,9 +1095,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		return NULL;
 	}
 
-	ctx->nlen = ctx->model->graph->n_node;
-	ctx->nodes = malloc(sizeof(struct onnx_node_t) * ctx->nlen);
-	if(!ctx->nodes)
+	ctx->map = hmap_alloc(0);
+	if(!ctx->map)
 	{
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
@@ -1133,8 +1116,8 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				free(ctx->rctx);
 			if(ctx->r)
 				free(ctx->r);
-			if(ctx->nodes)
-				free(ctx->nodes);
+			if(ctx->map)
+				hmap_free(ctx->map, hmap_entry_callback);
 			if(ctx->model)
 				onnx__model_proto__free_unpacked(ctx->model, NULL);
 			if(ctx)
@@ -1148,15 +1131,27 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		ctx->rctx = NULL;
 	}
 
-	ctx->map = hmap_alloc(0);
-	if(!ctx->map)
+	for(i = 0; i < ctx->rlen; i++)
 	{
+		ctx->r[i] = r[i];
+		if(r[i] && r[i]->create)
+			ctx->rctx[i] = r[i]->create();
+	}
+
+	ctx->g = onnx_graph_alloc(ctx, ctx->model->graph);
+	if(!ctx->g)
+	{
+		for(i = 0; i < ctx->rlen; i++)
+		{
+			if(ctx->r[i] && ctx->r[i]->destroy)
+				ctx->r[i]->destroy(ctx->rctx[i]);
+		}
 		if(ctx->rctx)
 			free(ctx->rctx);
 		if(ctx->r)
 			free(ctx->r);
-		if(ctx->nodes)
-			free(ctx->nodes);
+		if(ctx->map)
+			hmap_free(ctx->map, hmap_entry_callback);
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		if(ctx)
@@ -1164,19 +1159,112 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		return NULL;
 	}
 
-	for(i = 0; i < ctx->model->graph->n_input; i++)
+	return ctx;
+}
+
+struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen)
+{
+	struct onnx_context_t * ctx = NULL;
+	FILE * fp;
+	void * buf;
+	size_t l, len;
+
+	fp = fopen(filename, "rb");
+	if(fp)
 	{
-		v = ctx->model->graph->input[i];
+		fseek(fp, 0L, SEEK_END);
+		l = ftell(fp);
+		fseek(fp, 0L, SEEK_SET);
+		if(l > 0)
+		{
+			buf = malloc(l);
+			if(buf)
+			{
+				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
+				ctx = onnx_context_alloc(buf, len, r, rlen);
+				free(buf);
+			}
+		}
+		fclose(fp);
+	}
+	return ctx;
+}
+
+void onnx_context_free(struct onnx_context_t * ctx)
+{
+	int i;
+
+	if(ctx)
+	{
+		if(ctx->g)
+			onnx_graph_free(ctx->g);
+		for(i = 0; i < ctx->rlen; i++)
+		{
+			if(ctx->r[i] && ctx->r[i]->destroy)
+				ctx->r[i]->destroy(ctx->rctx[i]);
+		}
+		if(ctx->rctx)
+			free(ctx->rctx);
+		if(ctx->r)
+			free(ctx->r);
+		if(ctx->map)
+			hmap_free(ctx->map, hmap_entry_callback);
+		if(ctx->model)
+			onnx__model_proto__free_unpacked(ctx->model, NULL);
+		free(ctx);
+	}
+}
+
+static int reshape_dummy(struct onnx_node_t * n)
+{
+	return 1;
+}
+
+static void operator_dummy(struct onnx_node_t * n)
+{
+	ONNX_LOG("\033[45;37mUnsupported opset\033[0m => %s-%d (%s)\r\n", n->proto->op_type, n->opset, (strlen(n->proto->domain) > 0) ? n->proto->domain : "ai.onnx");
+}
+
+struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphProto * graph)
+{
+	struct onnx_graph_t * g;
+	struct onnx_node_t * n;
+	struct onnx_tensor_t * t;
+	Onnx__TensorProto * o;
+	Onnx__ValueInfoProto * v;
+	char * p, * domain;
+	char * name;
+	int i, j, k, l;
+
+	if(!graph)
+		return NULL;
+
+	g = malloc(sizeof(struct onnx_graph_t));
+	if(!g)
+		return NULL;
+	memset(g, 0, sizeof(struct onnx_graph_t));
+
+	g->nlen = graph->n_node;
+	g->nodes = malloc(sizeof(struct onnx_node_t) * g->nlen);
+	if(!g->nodes)
+	{
+		free(g);
+		return NULL;
+	}
+
+	for(i = 0; i < graph->n_input; i++)
+	{
+		v = graph->input[i];
 		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
 			if(t)
 			{
-				for(j = 0; j < ctx->model->graph->n_initializer; j++)
+				for(j = 0; j < graph->n_initializer; j++)
 				{
-					if(strcmp(ctx->model->graph->initializer[j]->name, t->name) == 0)
+					if(strcmp(graph->initializer[j]->name, t->name) == 0)
 					{
-						onnx_tensor_copy_from_tensor_proto(t, ctx->model->graph->initializer[j]);
+						onnx_tensor_copy_from_tensor_proto(t, graph->initializer[j]);
 						break;
 					}
 				}
@@ -1185,9 +1273,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		}
 	}
 
-	for(i = 0; i < ctx->model->graph->n_output; i++)
+	for(i = 0; i < graph->n_output; i++)
 	{
-		v = ctx->model->graph->output[i];
+		v = graph->output[i];
 		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
@@ -1196,9 +1284,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		}
 	}
 
-	for(i = 0; i < ctx->model->graph->n_value_info; i++)
+	for(i = 0; i < graph->n_value_info; i++)
 	{
-		v = ctx->model->graph->value_info[i];
+		v = graph->value_info[i];
 		if(!onnx_tensor_search(ctx, v->name))
 		{
 			t = onnx_tensor_alloc_from_value_info(v);
@@ -1207,11 +1295,11 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		}
 	}
 
-	for(i = 0; i < ctx->model->graph->n_node; i++)
+	for(i = 0; i < graph->n_node; i++)
 	{
-		for(j = 0; j < ctx->model->graph->node[i]->n_output; j++)
+		for(j = 0; j < graph->node[i]->n_output; j++)
 		{
-			name = ctx->model->graph->node[i]->output[j];
+			name = graph->node[i]->output[j];
 			if(!onnx_tensor_search(ctx, name))
 			{
 				t = onnx_tensor_alloc(name, ONNX_TENSOR_TYPE_UNDEFINED, NULL, 0);
@@ -1221,18 +1309,18 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		}
 	}
 
-	for(i = 0; i < ctx->model->graph->n_node; i++)
+	for(i = 0; i < graph->n_node; i++)
 	{
-		for(j = 0; j < ctx->model->graph->node[i]->n_input; j++)
+		for(j = 0; j < graph->node[i]->n_input; j++)
 		{
-			name = ctx->model->graph->node[i]->input[j];
+			name = graph->node[i]->input[j];
 			if(!onnx_tensor_search(ctx, name))
 			{
-				for(k = 0; k < ctx->model->graph->n_initializer; k++)
+				for(k = 0; k < graph->n_initializer; k++)
 				{
-					if(strcmp(ctx->model->graph->initializer[k]->name, name) == 0)
+					if(strcmp(graph->initializer[k]->name, name) == 0)
 					{
-						o = ctx->model->graph->initializer[k];
+						o = graph->initializer[k];
 						if(o)
 						{
 							int ndim = o->n_dims;
@@ -1251,37 +1339,21 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 				}
 				if(!onnx_tensor_search(ctx, name))
 				{
-					if(ctx->map)
-						hmap_free(ctx->map, hmap_entry_callback);
-					if(ctx->rctx)
-						free(ctx->rctx);
-					if(ctx->r)
-						free(ctx->r);
-					if(ctx->nodes)
-						free(ctx->nodes);
-					if(ctx->model)
-						onnx__model_proto__free_unpacked(ctx->model, NULL);
-					if(ctx)
-						free(ctx);
+					if(g->nodes)
+						free(g->nodes);
+					free(g);
 					return NULL;
 				}
 			}
 		}
 	}
 
-	for(i = 0; i < ctx->rlen; i++)
+	for(i = 0; i < g->nlen; i++)
 	{
-		ctx->r[i] = r[i];
-		if(r[i] && r[i]->create)
-			ctx->rctx[i] = r[i]->create();
-	}
-
-	for(i = 0; i < ctx->nlen; i++)
-	{
-		n = &ctx->nodes[i];
+		n = &g->nodes[i];
 		memset(n, 0, sizeof(struct onnx_node_t));
 
-		n->proto = ctx->model->graph->node[i];
+		n->proto = graph->node[i];
 		domain = n->proto->domain;
 		if(!domain || (strlen(domain) == 0))
 			domain = "ai.onnx";
@@ -1343,13 +1415,11 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		{
 			if(n->init(n) <= 0)
 			{
-				if(ctx->map)
-					hmap_free(ctx->map, hmap_entry_callback);
-				if(ctx->nodes)
+				if(g->nodes)
 				{
-					for(j = 0; j < ctx->nlen; j++)
+					for(j = 0; j < g->nlen; j++)
 					{
-						n = &ctx->nodes[j];
+						n = &g->nodes[j];
 						if(n->exit)
 							n->exit(n);
 						if(n->inputs)
@@ -1357,21 +1427,9 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 						if(n->outputs)
 							free(n->outputs);
 					}
-					free(ctx->nodes);
+					free(g->nodes);
 				}
-				for(j = 0; j < ctx->rlen; j++)
-				{
-					if(ctx->r[j] && ctx->r[j]->destroy)
-						ctx->r[j]->destroy(ctx->rctx[j]);
-				}
-				if(ctx->rctx)
-					free(ctx->rctx);
-				if(ctx->r)
-					free(ctx->r);
-				if(ctx->model)
-					onnx__model_proto__free_unpacked(ctx->model, NULL);
-				if(ctx)
-					free(ctx);
+				free(g);
 				return NULL;
 			}
 		}
@@ -1379,51 +1437,21 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			n->reshape(n);
 	}
 
-	return ctx;
+	return g;
 }
 
-struct onnx_context_t * onnx_context_alloc_from_file(const char * filename, struct onnx_resolver_t ** r, int rlen)
-{
-	struct onnx_context_t * ctx = NULL;
-	FILE * fp;
-	void * buf;
-	size_t l, len;
-
-	fp = fopen(filename, "rb");
-	if(fp)
-	{
-		fseek(fp, 0L, SEEK_END);
-		l = ftell(fp);
-		fseek(fp, 0L, SEEK_SET);
-		if(l > 0)
-		{
-			buf = malloc(l);
-			if(buf)
-			{
-				for(len = 0; len < l; len += fread(buf + len, 1, l - len, fp));
-				ctx = onnx_context_alloc(buf, len, r, rlen);
-				free(buf);
-			}
-		}
-		fclose(fp);
-	}
-	return ctx;
-}
-
-void onnx_context_free(struct onnx_context_t * ctx)
+void onnx_graph_free(struct onnx_graph_t * g)
 {
 	struct onnx_node_t * n;
 	int i;
 
-	if(ctx)
+	if(g)
 	{
-		if(ctx->map)
-			hmap_free(ctx->map, hmap_entry_callback);
-		if(ctx->nodes)
+		if(g->nodes)
 		{
-			for(i = 0; i < ctx->nlen; i++)
+			for(i = 0; i < g->nlen; i++)
 			{
-				n = &ctx->nodes[i];
+				n = &g->nodes[i];
 				if(n->exit)
 					n->exit(n);
 				if(n->inputs)
@@ -1431,20 +1459,9 @@ void onnx_context_free(struct onnx_context_t * ctx)
 				if(n->outputs)
 					free(n->outputs);
 			}
-			free(ctx->nodes);
+			free(g->nodes);
 		}
-		for(i = 0; i < ctx->rlen; i++)
-		{
-			if(ctx->r[i] && ctx->r[i]->destroy)
-				ctx->r[i]->destroy(ctx->rctx[i]);
-		}
-		if(ctx->rctx)
-			free(ctx->rctx);
-		if(ctx->r)
-			free(ctx->r);
-		if(ctx->model)
-			onnx__model_proto__free_unpacked(ctx->model, NULL);
-		free(ctx);
+		free(g);
 	}
 }
 
@@ -2126,6 +2143,17 @@ void onnx_node_dump(struct onnx_node_t * n, int detail)
 	}
 }
 
+void onnx_graph_dump(struct onnx_graph_t * g, int detail)
+{
+	int i;
+
+	if(g)
+	{
+		for(i = 0; i < g->nlen; i++)
+			onnx_node_dump(&g->nodes[i], detail);
+	}
+}
+
 void onnx_context_dump(struct onnx_context_t * ctx, int detail)
 {
 	int i;
@@ -2141,12 +2169,8 @@ void onnx_context_dump(struct onnx_context_t * ctx, int detail)
 			for(i = 0; i < ctx->model->n_opset_import; i++)
 				ONNX_LOG("\t%s v%ld\r\n", (strlen(ctx->model->opset_import[i]->domain) > 0) ? ctx->model->opset_import[i]->domain : "ai.onnx", ctx->model->opset_import[i]->version);
 		}
-		if(ctx->nlen > 0)
-		{
-			ONNX_LOG("Nodes:\r\n");
-			for(i = 0; i < ctx->nlen; i++)
-				onnx_node_dump(&ctx->nodes[i], detail);
-		}
+		if(ctx->g)
+			onnx_graph_dump(ctx->g, detail);
 	}
 }
 
@@ -2157,9 +2181,9 @@ void onnx_run(struct onnx_context_t * ctx)
 
 	if(ctx)
 	{
-		for(i = 0; i < ctx->nlen; i++)
+		for(i = 0; i < ctx->g->nlen; i++)
 		{
-			n = &ctx->nodes[i];
+			n = &ctx->g->nodes[i];
 			if(n->reshape(n))
 				n->operator(n);
 		}
