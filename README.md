@@ -42,8 +42,8 @@ make
 ```
 
 ## Screenshots
-### Mnist handwritten digit prediction
-![](documents/images/mnist.gif)
+* [Mnist handwritten digit prediction](examples/mnist)
+![Mnist handwritten digit prediction](documents/images/mnist.gif)
 
 ## Notes
 
