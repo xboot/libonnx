@@ -177,7 +177,7 @@ def main():
     parser.add_argument('model', help='The onnx model')
     parser.add_argument('--input', help='The input tensors should be "name:file" for example "x:input.pb"', type=str, nargs='+')
     parser.add_argument('--output', help='The output tensors will be print by name', type=str, nargs='+')
-    parser.add_argument('--save', help='Enable save all output tensor to protobuf', action='store_true')
+    parser.add_argument('--save', help='Save all output tensor to protobuf', action='store_true')
     args = parser.parse_args()
     input_tensors = {}
     if args.input is not None:
