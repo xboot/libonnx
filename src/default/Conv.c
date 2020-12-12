@@ -320,9 +320,9 @@ static void Conv_float16(struct onnx_node_t * n)
 		typedef float (*mytype)/*[oH * oW]*/[MM];
 
 		/* try im2col first */
-		matw = valloc(MM * H * W * C * sizeof(float));
-		matx = valloc(oH * oW * H * W * C * sizeof(float));
-		maty = valloc(oH * oW * MM * sizeof(float));
+		matw = malloc(MM * H * W * C * sizeof(float));
+		matx = malloc(oH * oW * H * W * C * sizeof(float));
+		maty = malloc(oH * oW * MM * sizeof(float));
 		if (matw && matx && maty)
 		{
 			conv_mode = CONV_IM2COL;
@@ -334,7 +334,7 @@ static void Conv_float16(struct onnx_node_t * n)
 			if (maty) free(maty);
 			
 			/* then try cached conv */
-			pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
+			pxcache = malloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
 			if (pxcache)
 			{
 				conv_mode = CONV_CACHED;
@@ -606,9 +606,9 @@ static void Conv_float32(struct onnx_node_t * n)
 		typedef float (*mytype)/*[oH * oW]*/[MM];
 
 		/* try im2col first */
-		matw = valloc(MM * H * W * C * sizeof(float));
-		matx = valloc(oH * oW * H * W * C * sizeof(float));
-		maty = valloc(oH * oW * MM * sizeof(float));
+		matw = malloc(MM * H * W * C * sizeof(float));
+		matx = malloc(oH * oW * H * W * C * sizeof(float));
+		maty = malloc(oH * oW * MM * sizeof(float));
 		if (matw && matx && maty)
 		{
 			conv_mode = CONV_IM2COL;
@@ -620,7 +620,7 @@ static void Conv_float32(struct onnx_node_t * n)
 			if (maty) free(maty);
 			
 			/* then try cached conv */
-			pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
+			pxcache = malloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(float));
 			if (pxcache)
 			{
 				conv_mode = CONV_CACHED;
@@ -892,9 +892,9 @@ static void Conv_float64(struct onnx_node_t * n)
 		typedef double (*mytype)/*[oH * oW]*/[MM];
 
 		/* try im2col first */
-		matw = valloc(MM * H * W * C * sizeof(double));
-		matx = valloc(oH * oW * H * W * C * sizeof(double));
-		maty = valloc(oH * oW * MM * sizeof(double));
+		matw = malloc(MM * H * W * C * sizeof(double));
+		matx = malloc(oH * oW * H * W * C * sizeof(double));
+		maty = malloc(oH * oW * MM * sizeof(double));
 		if (matw && matx && maty)
 		{
 			conv_mode = CONV_IM2COL;
@@ -906,7 +906,7 @@ static void Conv_float64(struct onnx_node_t * n)
 			if (maty) free(maty);
 			
 			/* then try cached conv */
-			pxcache = valloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(double));
+			pxcache = malloc(oN * (oC * pdat->group / M) * C * H * W * sizeof(double));
 			if (pxcache)
 			{
 				conv_mode = CONV_CACHED;
