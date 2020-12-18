@@ -1,8 +1,7 @@
 #include <sys/time.h>
 #include <onnx.h>
 
-struct profiler_t
-{
+struct profiler_t {
 	uint64_t begin;
 	uint64_t end;
 	uint64_t elapsed;
@@ -72,10 +71,13 @@ static inline void profiler_end(struct profiler_t * p)
 	}
 }
 
-static void profiler_dump(struct hmap_t * m)
+static void profiler_dump(struct hmap_t * m, int count)
 {
 	struct hmap_entry_t * e;
 	struct profiler_t * p;
+	double total = 0;
+	double mean = 0;
+	double fps = 0;
 
 	if(m)
 	{
@@ -84,8 +86,16 @@ static void profiler_dump(struct hmap_t * m)
 		hmap_for_each_entry(e, m)
 		{
 			p = (struct profiler_t *)e->value;
+			total += p->elapsed;
 			printf("%-32s %ld %12.3f(us)\r\n", e->key, p->count, (p->count > 0) ? ((double)p->elapsed / 1000.0f) / (double)p->count : 0);
 		}
+		if(count > 0)
+		{
+			mean = total / (double)count;
+			fps = (double)1000000000.0 / mean;
+		}
+		printf("----------------------------------------------------------------\r\n");
+		printf("Running counts: %d, Average time: %.3f(us), Frame rates: %.3f(fps)\r\n", count, mean / 1000.0f, fps);
 	}
 }
 
@@ -95,11 +105,18 @@ static void onnx_run_benchmark(struct onnx_context_t * ctx, int count)
 	struct hmap_t * m;
 	struct profiler_t * p;
 	char name[256];
+	int cnt = count;
 	int len, i;
 
 	if(ctx)
 	{
 		m = profiler_alloc(0);
+		for(i = 0; i < ctx->g->nlen; i++)
+		{
+			n = &ctx->g->nodes[i];
+			if(n->reshape(n))
+				n->operator(n);
+		}
 		while(count-- > 0)
 		{
 			for(i = 0; i < ctx->g->nlen; i++)
@@ -114,7 +131,7 @@ static void onnx_run_benchmark(struct onnx_context_t * ctx, int count)
 				profiler_end(p);
 			}
 		}
-		profiler_dump(m);
+		profiler_dump(m, cnt);
 		profiler_free(m);
 	}
 }
@@ -135,8 +152,7 @@ int main(int argc, char * argv[])
 	if(argc >= 3)
 		count = strtol(argv[2], NULL, 0);
 	if(count <= 0)
-		count = 10;
-
+		count = 1;
 	ctx = onnx_context_alloc_from_file(filename, NULL, 0);
 	if(ctx)
 	{
