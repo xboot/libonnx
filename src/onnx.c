@@ -1623,7 +1623,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 					sz = onnx_tensor_type_sizeof(t->type);
 					if(sz > 0)
 					{
-						t->datas = memalign(512, (n * sz + 0x1ff) & ~0x1ff);
+						t->datas = malloc(n * sz);
 						if(t->datas)
 						{
 							memset(t->datas, 0, n * sz);
@@ -1650,7 +1650,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 				sz = onnx_tensor_type_sizeof(t->type);
 				if(sz > 0)
 				{
-					t->datas = memalign(512, (sz + 0x1ff) & ~0x1ff);
+					t->datas = malloc(sz);
 					if(t->datas)
 					{
 						memset(t->datas, 0, sz);
