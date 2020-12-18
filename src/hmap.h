@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <helper.h>
+#include <onnxconf.h>
 
 struct hmap_t {
 	struct hlist_head * hash;

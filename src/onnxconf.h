@@ -1,5 +1,5 @@
-#ifndef __HELPER_H__
-#define __HELPER_H__
+#ifndef __ONNXCONF_H__
+#define __ONNXCONF_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,6 +15,18 @@ extern "C" {
 #include <math.h>
 #include <list.h>
 #include <hmap.h>
+
+/*
+ * Macro
+ */
+#define min(a, b)			({typeof(a) _amin = (a); typeof(b) _bmin = (b); (void)(&_amin == &_bmin); _amin < _bmin ? _amin : _bmin;})
+#define max(a, b)			({typeof(a) _amax = (a); typeof(b) _bmax = (b); (void)(&_amax == &_bmax); _amax > _bmax ? _amax : _bmax;})
+#define clamp(v, a, b)		min(max(a, v), b)
+
+/*
+ * little or big endian
+ */
+#define ONNX_LITTLE_ENDIAN	(1)
 
 static inline uint16_t __swab16(uint16_t x)
 {
@@ -49,38 +61,37 @@ static inline uint32_t __swahb32(uint32_t x)
 	return (((x & (uint32_t)0x00ff00ffUL) << 8) | ((x & (uint32_t)0xff00ff00UL) >> 8));
 }
 
-#ifdef ONNX_CPU_BIG_ENDIAN
-#define cpu_to_le64(x)	(__swab64((uint64_t)(x)))
-#define le64_to_cpu(x)	(__swab64((uint64_t)(x)))
-#define cpu_to_le32(x)	(__swab32((uint32_t)(x)))
-#define le32_to_cpu(x)	(__swab32((uint32_t)(x)))
-#define cpu_to_le16(x)	(__swab16((uint16_t)(x)))
-#define le16_to_cpu(x)	(__swab16((uint16_t)(x)))
-#define cpu_to_be64(x)	((uint64_t)(x))
-#define be64_to_cpu(x)	((uint64_t)(x))
-#define cpu_to_be32(x)	((uint32_t)(x))
-#define be32_to_cpu(x)	((uint32_t)(x))
-#define cpu_to_be16(x)	((uint16_t)(x))
-#define be16_to_cpu(x)	((uint16_t)(x))
+#ifdef ONNX_LITTLE_ENDIAN
+#define cpu_to_le64(x)		((uint64_t)(x))
+#define le64_to_cpu(x)		((uint64_t)(x))
+#define cpu_to_le32(x)		((uint32_t)(x))
+#define le32_to_cpu(x)		((uint32_t)(x))
+#define cpu_to_le16(x)		((uint16_t)(x))
+#define le16_to_cpu(x)		((uint16_t)(x))
+#define cpu_to_be64(x)		(__swab64((uint64_t)(x)))
+#define be64_to_cpu(x)		(__swab64((uint64_t)(x)))
+#define cpu_to_be32(x)		(__swab32((uint32_t)(x)))
+#define be32_to_cpu(x)		(__swab32((uint32_t)(x)))
+#define cpu_to_be16(x)		(__swab16((uint16_t)(x)))
+#define be16_to_cpu(x)		(__swab16((uint16_t)(x)))
 #else
-#define cpu_to_le64(x)	((uint64_t)(x))
-#define le64_to_cpu(x)	((uint64_t)(x))
-#define cpu_to_le32(x)	((uint32_t)(x))
-#define le32_to_cpu(x)	((uint32_t)(x))
-#define cpu_to_le16(x)	((uint16_t)(x))
-#define le16_to_cpu(x)	((uint16_t)(x))
-#define cpu_to_be64(x)	(__swab64((uint64_t)(x)))
-#define be64_to_cpu(x)	(__swab64((uint64_t)(x)))
-#define cpu_to_be32(x)	(__swab32((uint32_t)(x)))
-#define be32_to_cpu(x)	(__swab32((uint32_t)(x)))
-#define cpu_to_be16(x)	(__swab16((uint16_t)(x)))
-#define be16_to_cpu(x)	(__swab16((uint16_t)(x)))
+#define cpu_to_le64(x)		(__swab64((uint64_t)(x)))
+#define le64_to_cpu(x)		(__swab64((uint64_t)(x)))
+#define cpu_to_le32(x)		(__swab32((uint32_t)(x)))
+#define le32_to_cpu(x)		(__swab32((uint32_t)(x)))
+#define cpu_to_le16(x)		(__swab16((uint16_t)(x)))
+#define le16_to_cpu(x)		(__swab16((uint16_t)(x)))
+#define cpu_to_be64(x)		((uint64_t)(x))
+#define be64_to_cpu(x)		((uint64_t)(x))
+#define cpu_to_be32(x)		((uint32_t)(x))
+#define be32_to_cpu(x)		((uint32_t)(x))
+#define cpu_to_be16(x)		((uint16_t)(x))
+#define be16_to_cpu(x)		((uint16_t)(x))
 #endif
 
-#define min(a, b)		({typeof(a) _amin = (a); typeof(b) _bmin = (b); (void)(&_amin == &_bmin); _amin < _bmin ? _amin : _bmin;})
-#define max(a, b)		({typeof(a) _amax = (a); typeof(b) _bmax = (b); (void)(&_amax == &_bmax); _amax > _bmax ? _amax : _bmax;})
-#define clamp(v, a, b)	min(max(a, v), b)
-
+/*
+ * float16, bfloat16 and float32 conversion
+ */
 static inline uint16_t float32_to_float16(float v)
 {
 	union { uint32_t u; float f; } t;
@@ -118,6 +129,9 @@ static inline float bfloat16_to_float32(uint16_t v)
 	return t.f;
 }
 
+/*
+ * String hash
+ */
 static inline uint32_t shash(const char * s)
 {
 	uint32_t v = 5381;
@@ -133,4 +147,4 @@ static inline uint32_t shash(const char * s)
 }
 #endif
 
-#endif /* __HELPER_H__ */
+#endif /* __ONNXCONF_H__ */

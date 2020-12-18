@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <helper.h>
+#include <onnxconf.h>
 #include <onnx.proto3.pb-c.h>
 
 #define LIBONNX_MAJOY			(1)
