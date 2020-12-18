@@ -77,22 +77,40 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 	}
 }
 
+static void usage(void)
+{
+	printf("usage:\r\n");
+	printf("    tests <DIRECTORY>\r\n");
+	printf("examples:\r\n");
+	printf("    tests ./tests/model\r\n");
+	printf("    tests ./tests/node\r\n");
+	printf("    tests ./tests/pytorch-converted\r\n");
+	printf("    tests ./tests/pytorch-operator\r\n");
+	printf("    tests ./tests/simple\r\n");
+}
+
 int main(int argc, char * argv[])
 {
 	struct hmap_t * m;
 	struct hmap_entry_t * e;
 	struct dirent * d;
 	struct stat st;
-	char path[PATH_MAX];
 	DIR * dir;
 
-	if((readlink("/proc/self/exe", path, sizeof(path)) <= 0) || (chdir(dirname(path)) != 0))
-		printf("ERROR: Can't change working directory.(%s)\r\n", getcwd(path, sizeof(path)));
-
-	if((lstat(path, &st) == 0) && S_ISDIR(st.st_mode))
+	if(argc != 2)
 	{
-		m = hmap_alloc(0);
-		if((dir = opendir(path)) != NULL)
+		usage();
+		return -1;
+	}
+	if((lstat(argv[1], &st) != 0) || !S_ISDIR(st.st_mode))
+	{
+		usage();
+		return -1;
+	}
+	m = hmap_alloc(0);
+	if((dir = opendir(argv[1])) != NULL)
+	{
+		if(chdir(argv[1]) == 0)
 		{
 			while((d = readdir(dir)) != NULL)
 			{
@@ -105,14 +123,14 @@ int main(int argc, char * argv[])
 					hmap_add(m, d->d_name, NULL);
 				}
 			}
-			closedir(dir);
 		}
-		hmap_sort(m);
-		hmap_for_each_entry(e, m)
-		{
-			testcase(e->key, NULL, 0);
-		}
-		hmap_free(m, NULL);
+		closedir(dir);
 	}
+	hmap_sort(m);
+	hmap_for_each_entry(e, m)
+	{
+		testcase(e->key, NULL, 0);
+	}
+	hmap_free(m, NULL);
 	return 0;
 }
