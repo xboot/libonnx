@@ -95,7 +95,7 @@ static void profiler_dump(struct hmap_t * m, int count)
 			fps = (double)1000000000.0 / mean;
 		}
 		printf("----------------------------------------------------------------\r\n");
-		printf("Running counts: %d, Average time: %.3f(us), Frame rates: %.3f(fps)\r\n", count, mean / 1000.0f, fps);
+		printf("Repeat times: %d, Average time: %.3f(us), Frame rates: %.3f(fps)\r\n", count, mean / 1000.0f, fps);
 	}
 }
 
