@@ -46,6 +46,32 @@ void resolver_default_op_Identity(struct onnx_node_t * n)
 {
 	if(n->opset >= 14)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BOOL:
+		case ONNX_TENSOR_TYPE_INT8:
+		case ONNX_TENSOR_TYPE_INT16:
+		case ONNX_TENSOR_TYPE_INT32:
+		case ONNX_TENSOR_TYPE_INT64:
+		case ONNX_TENSOR_TYPE_UINT8:
+		case ONNX_TENSOR_TYPE_UINT16:
+		case ONNX_TENSOR_TYPE_UINT32:
+		case ONNX_TENSOR_TYPE_UINT64:
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT16:
+		case ONNX_TENSOR_TYPE_FLOAT32:
+		case ONNX_TENSOR_TYPE_FLOAT64:
+		case ONNX_TENSOR_TYPE_COMPLEX64:
+		case ONNX_TENSOR_TYPE_COMPLEX128:
+		case ONNX_TENSOR_TYPE_STRING:
+			n->init = Identity_init;
+			n->exit = Identity_exit;
+			n->reshape = Identity_reshape;
+			n->operator = Identity_operator;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 13)
 	{
