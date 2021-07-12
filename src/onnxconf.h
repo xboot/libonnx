@@ -62,6 +62,12 @@ static inline uint32_t __swahb32(uint32_t x)
 }
 
 #ifdef ONNX_LITTLE_ENDIAN
+#undef WORDS_BIGENDIAN
+#else
+#define WORDS_BIGENDIAN
+#endif
+
+#ifdef ONNX_LITTLE_ENDIAN
 #define cpu_to_le64(x)		((uint64_t)(x))
 #define le64_to_cpu(x)		((uint64_t)(x))
 #define cpu_to_le32(x)		((uint32_t)(x))
