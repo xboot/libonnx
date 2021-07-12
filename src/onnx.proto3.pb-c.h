@@ -147,7 +147,7 @@ typedef enum _Onnx__Version {
   /*
    * The version field is always serialized and we will use it to store the
    * version that the  graph is generated from. This helps us set up version
-   * control. 
+   * control.
    * For the IR, we are using simple numbers starting with 0x00000001,
    * which was the version we published on Oct 10, 2017.
    */
@@ -337,7 +337,7 @@ struct  _Onnx__ValueInfoProto
  * Nodes
  * Computation graphs are made up of a DAG of nodes, which represent what is
  * commonly called a "layer" or "pipeline stage" in machine learning frameworks.
- * For example, it can be a node of type "Conv" that takes in an image, a filter 
+ * For example, it can be a node of type "Conv" that takes in an image, a filter
  * tensor and a bias tensor, and produces the convolved output.
  */
 struct  _Onnx__NodeProto
@@ -449,7 +449,7 @@ struct  _Onnx__TrainingInfoProto
    *    tensor_a, tensor_b -> MatMul -> tensor_c -> Sigmoid -> tensor_d -> Add -> tensor_e
    * Notice that an input of a node in the "algorithm" graph may reference the
    * output of a node in the inference graph (but not the other way round). Also, inference
-   * node cannot reference inputs of "algorithm". With these restrictions, inference graph 
+   * node cannot reference inputs of "algorithm". With these restrictions, inference graph
    * can always be run independently without training information.
    * By default, this field is an empty graph and its evaluation does not
    * produce any output. Evaluating the default training step never
@@ -458,7 +458,7 @@ struct  _Onnx__TrainingInfoProto
   Onnx__GraphProto *algorithm;
   /*
    * This field specifies the bindings from the outputs of "initialization" to
-   * some initializers in "ModelProto.graph.initializer" and 
+   * some initializers in "ModelProto.graph.initializer" and
    * the "algorithm.initializer" in the same TrainingInfoProto.
    * See "update_binding" below for details.
    * By default, this field is empty and no initializer would be changed
@@ -623,7 +623,7 @@ struct  _Onnx__TensorAnnotation
 
 /*
  * Graphs
- * A graph defines the computational logic of a model and is comprised of a parameterized 
+ * A graph defines the computational logic of a model and is comprised of a parameterized
  * list of nodes that form a directed acyclic graph based on their inputs and outputs.
  * This is the equivalent of the "network" or "graph" in many deep learning
  * frameworks.
@@ -980,8 +980,8 @@ struct  _Onnx__TypeProto
 {
   ProtobufCMessage base;
   /*
-   * An optional denotation can be used to denote the whole 
-   * type with a standard semantic description as to what is 
+   * An optional denotation can be used to denote the whole
+   * type with a standard semantic description as to what is
    * stored inside. Refer to https://github.com/onnx/onnx/blob/master/docs/TypeDenotation.md#type-denotation-definition
    * for pre-defined type denotations.
    */
