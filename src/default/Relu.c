@@ -20,6 +20,50 @@ static int Relu_reshape(struct onnx_node_t * n)
 	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
+static void Relu_int8(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	int8_t * px = (int8_t *)x->datas;
+	int8_t * py = (int8_t *)y->datas;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? 0 : px[i];
+}
+
+static void Relu_int16(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	int16_t * px = (int16_t *)x->datas;
+	int16_t * py = (int16_t *)y->datas;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? 0 : px[i];
+}
+
+static void Relu_int32(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	int32_t * px = (int32_t *)x->datas;
+	int32_t * py = (int32_t *)y->datas;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? 0 : px[i];
+}
+
+static void Relu_int64(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	int64_t * px = (int64_t *)x->datas;
+	int64_t * py = (int64_t *)y->datas;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? 0 : px[i];
+}
+
 static void Relu_bfloat16(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * x = n->inputs[0];
@@ -80,6 +124,59 @@ void resolver_default_op_Relu(struct onnx_node_t * n)
 {
 	if(n->opset >= 14)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_int64;
+			break;
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Relu_init;
+			n->exit = Relu_exit;
+			n->reshape = Relu_reshape;
+			n->operator = Relu_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 13)
 	{
