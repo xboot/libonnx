@@ -234,6 +234,7 @@ struct onnx_resolver_t {
 	void (*op_Tile)(struct onnx_node_t * n);
 	void (*op_TopK)(struct onnx_node_t * n);
 	void (*op_Transpose)(struct onnx_node_t * n);
+	void (*op_Trilu)(struct onnx_node_t * n);
 	void (*op_Unique)(struct onnx_node_t * n);
 	void (*op_Unsqueeze)(struct onnx_node_t * n);
 	void (*op_Upsample)(struct onnx_node_t * n);
@@ -243,6 +244,7 @@ struct onnx_resolver_t {
 	void (*op_Celu)(struct onnx_node_t * n);
 	void (*op_DynamicQuantizeLinear)(struct onnx_node_t * n);
 	void (*op_GreaterOrEqual)(struct onnx_node_t * n);
+	void (*op_HardSwish)(struct onnx_node_t * n);
 	void (*op_LessOrEqual)(struct onnx_node_t * n);
 	void (*op_LogSoftmax)(struct onnx_node_t * n);
 	void (*op_MeanVarianceNormalization)(struct onnx_node_t * n);

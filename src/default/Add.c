@@ -159,7 +159,10 @@ static void Add_13_bfloat16(struct onnx_node_t * n)
 
 void resolver_default_op_Add(struct onnx_node_t * n)
 {
-	if(n->opset >= 13)
+	if(n->opset >= 14)
+	{
+	}
+	else if(n->opset >= 13)
 	{
 		switch(n->inputs[0]->type)
 		{

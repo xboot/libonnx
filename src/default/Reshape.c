@@ -81,7 +81,10 @@ static void Reshape_operator(struct onnx_node_t * n)
 
 void resolver_default_op_Reshape(struct onnx_node_t * n)
 {
-	if(n->opset >= 13)
+	if(n->opset >= 14)
+	{
+	}
+	else if(n->opset >= 13)
 	{
 		switch(n->inputs[0]->type)
 		{

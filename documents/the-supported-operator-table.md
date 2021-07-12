@@ -8,6 +8,7 @@
 |Abs-1 | √ |
 | Acos-7 | √ |
 |Acosh-9                                       | √ |
+|Add-14||
 |Add-13|√|
 |Add-7|√|
 |Add-6||
@@ -30,6 +31,7 @@
 |AveragePool-10|√|
 |AveragePool-7|√|
 |AveragePool-1|√|
+|BatchNormalization-14||
 |BatchNormalization-9|√|
 |BatchNormalization-7|√|
 |BatchNormalization-6||
@@ -67,6 +69,7 @@
 |ConvTranspose-1||
 |Cos-7|√|
 |Cosh-9|√|
+|CumSum-14||
 |CumSum-11||
 |DepthToSpace-13||
 |DepthToSpace-11||
@@ -74,6 +77,7 @@
 |DequantizeLinear-13||
 |DequantizeLinear-10||
 |Det-11||
+|Div-14||
 |Div-13|√|
 |Div-7|√|
 |Div-6||
@@ -106,6 +110,7 @@
 |Floor-13|√|
 |Floor-6|√|
 |Floor-1|√|
+|GRU-14||
 |GRU-7||
 |GRU-3||
 |GRU-1||
@@ -136,6 +141,7 @@
 |Hardmax-13||
 |Hardmax-11||
 |Hardmax-1||
+|Identity-14||
 |Identity-13|√|
 |Identity-1|√|
 |If-13|√|
@@ -148,6 +154,7 @@
 |IsNaN-9|√|
 |LRN-13|√|
 |LRN-1|√|
+|LSTM-14||
 |LSTM-7||
 |LSTM-1||
 |LeakyRelu-6|√|
@@ -194,6 +201,7 @@
 |Min-1|√|
 |Mod-13|√|
 |Mod-10|√|
+|Mul-14||
 |Mul-13|√|
 |Mul-7|√|
 |Mul-6||
@@ -227,6 +235,7 @@
 |QLinearMatMul-10||
 |QuantizeLinear-13||
 |QuantizeLinear-10||
+|RNN-14||
 |RNN-7||
 |RNN-1||
 |RandomNormal-1|√|
@@ -268,9 +277,11 @@
 |ReduceSumSquare-13|√|
 |ReduceSumSquare-11|√|
 |ReduceSumSquare-1|√|
+|Relu-14||
 |Relu-13|√|
 |Relu-6|√|
 |Relu-1|√|
+|Reshape-14||
 |Reshape-13|√|
 |Reshape-5|√|
 |Reshape-1||
@@ -329,6 +340,7 @@
 |Squeeze-11||
 |Squeeze-1||
 |StringNormalizer-10||
+|Sub-14||
 |Sub-13|√|
 |Sub-7|√|
 |Sub-6||
@@ -351,6 +363,7 @@
 |TopK-1||
 |Transpose-13|√|
 |Transpose-1|√|
+|Trilu-14||
 |Unique-11||
 |Unsqueeze-13|√|
 |Unsqueeze-11||
@@ -365,6 +378,7 @@
 |Celu-12|√|
 |DynamicQuantizeLinear-11||
 |GreaterOrEqual-12|√|
+|HardSwish-14||
 |LessOrEqual-12|√|
 |LogSoftmax-13|√|
 |LogSoftmax-11|√|
