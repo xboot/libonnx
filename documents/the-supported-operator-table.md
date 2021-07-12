@@ -340,7 +340,7 @@
 |Squeeze-11||
 |Squeeze-1||
 |StringNormalizer-10||
-|Sub-14||
+|Sub-14|√|
 |Sub-13|√|
 |Sub-7|√|
 |Sub-6||

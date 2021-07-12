@@ -21,6 +21,40 @@ static int Sub_reshape(struct onnx_node_t * n)
 	return onnx_tensor_reshape_multi_broadcast(y, a, b, a->type);
 }
 
+static void Sub_int8(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * a = n->inputs[0];
+	struct onnx_tensor_t * b = n->inputs[1];
+	int8_t * py = (int8_t *)y->datas;
+	int8_t * pa;
+	int8_t * pb;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+	{
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
+	}
+}
+
+static void Sub_int16(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * a = n->inputs[0];
+	struct onnx_tensor_t * b = n->inputs[1];
+	int16_t * py = (int16_t *)y->datas;
+	int16_t * pa;
+	int16_t * pb;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+	{
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
+	}
+}
+
 static void Sub_int32(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * y = n->outputs[0];
@@ -46,6 +80,40 @@ static void Sub_int64(struct onnx_node_t * n)
 	int64_t * py = (int64_t *)y->datas;
 	int64_t * pa;
 	int64_t * pb;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+	{
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
+	}
+}
+
+static void Sub_uint8(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * a = n->inputs[0];
+	struct onnx_tensor_t * b = n->inputs[1];
+	uint8_t * py = (uint8_t *)y->datas;
+	uint8_t * pa;
+	uint8_t * pb;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+	{
+		pa = onnx_tensor_broadcast_map_address(a, y, i);
+		pb = onnx_tensor_broadcast_map_address(b, y, i);
+		py[i] = *pa - *pb;
+	}
+}
+
+static void Sub_uint16(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * y = n->outputs[0];
+	struct onnx_tensor_t * a = n->inputs[0];
+	struct onnx_tensor_t * b = n->inputs[1];
+	uint16_t * py = (uint16_t *)y->datas;
+	uint16_t * pa;
+	uint16_t * pb;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
@@ -161,6 +229,83 @@ void resolver_default_op_Sub(struct onnx_node_t * n)
 {
 	if(n->opset >= 14)
 	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_INT8:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int8;
+			break;
+		case ONNX_TENSOR_TYPE_INT16:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int16;
+			break;
+		case ONNX_TENSOR_TYPE_INT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int32;
+			break;
+		case ONNX_TENSOR_TYPE_INT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_int64;
+			break;
+		case ONNX_TENSOR_TYPE_UINT8:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint8;
+			break;
+		case ONNX_TENSOR_TYPE_UINT16:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint16;
+			break;
+		case ONNX_TENSOR_TYPE_UINT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint32;
+			break;
+		case ONNX_TENSOR_TYPE_UINT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_uint64;
+			break;
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Sub_init;
+			n->exit = Sub_exit;
+			n->reshape = Sub_reshape;
+			n->operator = Sub_float64;
+			break;
+		default:
+			break;
+		}
 	}
 	else if(n->opset >= 13)
 	{
