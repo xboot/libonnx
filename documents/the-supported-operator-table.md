@@ -77,7 +77,7 @@
 |DequantizeLinear-13||
 |DequantizeLinear-10||
 |Det-11||
-|Div-14||
+|Div-14|√|
 |Div-13|√|
 |Div-7|√|
 |Div-6||
