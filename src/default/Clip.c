@@ -253,8 +253,8 @@ static void Clip_bfloat16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
-	float minv = bfloat16_to_float32(pdat->pmin ? pdat->pmin->v_bfloat16 : float32_to_bfloat16(FLT_MIN));
-	float maxv = bfloat16_to_float32(pdat->pmax ? pdat->pmax->v_bfloat16 : float32_to_bfloat16(FLT_MAX));
+	float minv = bfloat16_to_float32(pdat->pmin ? pdat->pmin->v_bfloat16 : float32_to_bfloat16(-FLT_MAX));
+	float maxv = bfloat16_to_float32(pdat->pmax ? pdat->pmax->v_bfloat16 : float32_to_bfloat16(+FLT_MAX));
 	float v;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
@@ -277,8 +277,8 @@ static void Clip_float16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
-	float minv = float16_to_float32(pdat->pmin ? pdat->pmin->v_float16 : float32_to_float16(FLT_MIN));
-	float maxv = float16_to_float32(pdat->pmax ? pdat->pmax->v_float16 : float32_to_float16(FLT_MAX));
+	float minv = float16_to_float32(pdat->pmin ? pdat->pmin->v_float16 : float32_to_float16(-FLT_MAX));
+	float maxv = float16_to_float32(pdat->pmax ? pdat->pmax->v_float16 : float32_to_float16(+FLT_MAX));
 	float v;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
@@ -301,8 +301,8 @@ static void Clip_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
-	float minv = pdat->pmin ? pdat->pmin->v_float32 : FLT_MIN;
-	float maxv = pdat->pmax ? pdat->pmax->v_float32 : FLT_MAX;
+	float minv = pdat->pmin ? pdat->pmin->v_float32 : -FLT_MAX;
+	float maxv = pdat->pmax ? pdat->pmax->v_float32 : +FLT_MAX;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
@@ -322,8 +322,8 @@ static void Clip_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
-	double minv = pdat->pmin ? pdat->pmin->v_float64 : DBL_MIN;
-	double maxv = pdat->pmax ? pdat->pmax->v_float64 : DBL_MAX;
+	double minv = pdat->pmin ? pdat->pmin->v_float64 : -DBL_MAX;
+	double maxv = pdat->pmax ? pdat->pmax->v_float64 : +DBL_MAX;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
