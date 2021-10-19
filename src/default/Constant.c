@@ -55,7 +55,7 @@ static int Constant_init(struct onnx_node_t * n)
 				if((strcmp(attr->name, "value_strings") == 0) && (attr->n_strings > 0))
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_strings) || (y->type != ONNX_TENSOR_TYPE_STRING))
-						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_STRING, (int[]){ attr->n_ints }, 1);
+						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_STRING, (int[]){ attr->n_strings }, 1);
 					if(y->datas && attr->strings)
 					{
 						char ** str = (char **)y->datas;
