@@ -1,3 +1,4 @@
+#include <fenv.h>
 #include <onnx.h>
 
 static int Round_init(struct onnx_node_t * n)
@@ -26,12 +27,20 @@ static void Round_float16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
+	int r = fegetround();
+	if (r != FE_TONEAREST) {
+		fesetround(FE_TONEAREST);
+	}
 	float v;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
-		py[i] = float32_to_float16(rintf(v));
+		py[i] = float32_to_float16(nearbyintf(v));
+	}
+
+	if (r != FE_TONEAREST) {
+		fesetround(r);
 	}
 }
 
@@ -41,9 +50,17 @@ static void Round_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
+	int r = fegetround();
+	if (r != FE_TONEAREST) {
+		fesetround(FE_TONEAREST);
+	}
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
-		py[i] = rintf(px[i]);
+		py[i] = nearbyintf(px[i]);
+
+	if (r != FE_TONEAREST) {
+		fesetround(r);
+	}
 }
 
 static void Round_float64(struct onnx_node_t * n)
@@ -52,9 +69,17 @@ static void Round_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
+	int r = fegetround();
+	if (r != FE_TONEAREST) {
+		fesetround(FE_TONEAREST);
+	}
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
-		py[i] = rint(px[i]);
+		py[i] = nearbyint(px[i]);
+
+	if (r != FE_TONEAREST) {
+		fesetround(r);
+	}
 }
 
 void resolver_default_op_Round(struct onnx_node_t * n)
