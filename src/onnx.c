@@ -1239,7 +1239,7 @@ struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphP
 			{
 				if(g->nodes)
 				{
-					for(j = 0; j < g->nlen; j++)
+					for(j = 0; j <= i; j++)
 					{
 						n = &g->nodes[j];
 						if(n->exit)
