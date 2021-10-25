@@ -29,7 +29,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 		while(1)
 		{
 			sprintf(data_set_path, "%s/test_data_set_%d", path, data_set_index);
-			if((lstat(data_set_path, &st) != 0) || !S_ISDIR(st.st_mode))
+			if((stat(data_set_path, &st) != 0) || !S_ISDIR(st.st_mode))
 				break;
 			ninput = 0;
 			noutput = 0;
@@ -37,7 +37,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 			while(1)
 			{
 				sprintf(tmp, "%s/input_%d.pb", data_set_path, ninput);
-				if((lstat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
+				if((stat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
 					break;
 				if(ninput > ctx->model->graph->n_input)
 					break;
@@ -52,7 +52,7 @@ static void testcase(const char * path, struct onnx_resolver_t ** r, int rlen)
 			while(1)
 			{
 				sprintf(tmp, "%s/output_%d.pb", data_set_path, noutput);
-				if((lstat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
+				if((stat(tmp, &st) != 0) || !S_ISREG(st.st_mode))
 					break;
 				if(noutput > ctx->model->graph->n_output)
 					break;
@@ -102,7 +102,7 @@ int main(int argc, char * argv[])
 		usage();
 		return -1;
 	}
-	if((lstat(argv[1], &st) != 0) || !S_ISDIR(st.st_mode))
+	if((stat(argv[1], &st) != 0) || !S_ISDIR(st.st_mode))
 	{
 		usage();
 		return -1;
@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
 		{
 			while((d = readdir(dir)) != NULL)
 			{
-				if((lstat(d->d_name, &st) == 0) && S_ISDIR(st.st_mode))
+				if((stat(d->d_name, &st) == 0) && S_ISDIR(st.st_mode))
 				{
 					if(strcmp(".", d->d_name) == 0)
 						continue;
