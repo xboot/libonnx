@@ -48,7 +48,7 @@ static inline unsigned int roundup_pow_of_two(unsigned int x)
 	return 1;
 }
 
-struct hmap_t * hmap_alloc(unsigned int size)
+struct hmap_t * hmap_alloc(int size, void (*cb)(struct hmap_t *, struct hmap_entry_t *))
 {
 	struct hmap_t * m;
 	int i;
@@ -73,21 +73,22 @@ struct hmap_t * hmap_alloc(unsigned int size)
 	init_list_head(&m->list);
 	m->size = size;
 	m->n = 0;
+	m->callback = cb;
 
 	return m;
 }
 
-void hmap_free(struct hmap_t * m, void (*cb)(struct hmap_entry_t *))
+void hmap_free(struct hmap_t * m)
 {
 	if(m)
 	{
-		hmap_clear(m, cb);
+		hmap_clear(m);
 		free(m->hash);
 		free(m);
 	}
 }
 
-void hmap_clear(struct hmap_t * m, void (*cb)(struct hmap_entry_t *))
+void hmap_clear(struct hmap_t * m)
 {
 	struct hmap_entry_t * pos, * n;
 
@@ -98,8 +99,8 @@ void hmap_clear(struct hmap_t * m, void (*cb)(struct hmap_entry_t *))
 			hlist_del(&pos->node);
 			list_del(&pos->head);
 			m->n--;
-			if(cb)
-				cb(pos);
+			if(m->callback)
+				m->callback(m, pos);
 			free(pos->key);
 			free(pos);
 		}

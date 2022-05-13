@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
 		usage();
 		return -1;
 	}
-	m = hmap_alloc(0);
+	m = hmap_alloc(0, NULL);
 	if((dir = opendir(argv[1])) != NULL)
 	{
 		if(chdir(argv[1]) == 0)
@@ -131,6 +131,6 @@ int main(int argc, char * argv[])
 	{
 		testcase(e->key, NULL, 0);
 	}
-	hmap_free(m, NULL);
+	hmap_free(m);
 	return 0;
 }

@@ -30,7 +30,7 @@
 
 #define ONNX_LOG(...)	printf(__VA_ARGS__)
 
-static void hmap_entry_callback(struct hmap_entry_t * e)
+static void hmap_entry_callback(struct hmap_t * m, struct hmap_entry_t * e)
 {
 	if(e && e->value)
 		onnx_tensor_free((struct onnx_tensor_t *)e->value);
@@ -56,7 +56,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		return NULL;
 	}
 
-	ctx->map = hmap_alloc(0);
+	ctx->map = hmap_alloc(0, hmap_entry_callback);
 	if(!ctx->map)
 	{
 		if(ctx->model)
@@ -78,7 +78,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 			if(ctx->r)
 				free(ctx->r);
 			if(ctx->map)
-				hmap_free(ctx->map, hmap_entry_callback);
+				hmap_free(ctx->map);
 			if(ctx->model)
 				onnx__model_proto__free_unpacked(ctx->model, NULL);
 			if(ctx)
@@ -112,7 +112,7 @@ struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct 
 		if(ctx->r)
 			free(ctx->r);
 		if(ctx->map)
-			hmap_free(ctx->map, hmap_entry_callback);
+			hmap_free(ctx->map);
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		if(ctx)
@@ -169,7 +169,7 @@ void onnx_context_free(struct onnx_context_t * ctx)
 		if(ctx->r)
 			free(ctx->r);
 		if(ctx->map)
-			hmap_free(ctx->map, hmap_entry_callback);
+			hmap_free(ctx->map);
 		if(ctx->model)
 			onnx__model_proto__free_unpacked(ctx->model, NULL);
 		free(ctx);

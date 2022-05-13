@@ -16,20 +16,20 @@ static inline uint64_t time_get(void)
 	return (uint64_t)(tv.tv_sec * 1000000000ULL + tv.tv_usec * 1000);
 }
 
-static struct hmap_t * profiler_alloc(int size)
-{
-	return hmap_alloc(size);
-}
-
-static void hmap_entry_callback(struct hmap_entry_t * e)
+static void hmap_entry_callback(struct hmap_t * m, struct hmap_entry_t * e)
 {
 	if(e && e->value)
 		free(e->value);
 }
 
+static struct hmap_t * profiler_alloc(int size)
+{
+	return hmap_alloc(size, hmap_entry_callback);
+}
+
 static void profiler_free(struct hmap_t * m)
 {
-	hmap_free(m, hmap_entry_callback);
+	hmap_free(m);
 }
 
 static struct profiler_t * profiler_search(struct hmap_t * m, const char * name)
