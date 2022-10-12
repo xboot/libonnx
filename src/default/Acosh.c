@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Acosh_init(struct onnx_node_t * n)
 {
@@ -32,7 +32,7 @@ static void Acosh_float16(struct onnx_node_t * n)
 	for(i = 0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
-		py[i] = float32_to_float16(acoshf(v));
+		py[i] = float32_to_float16(acosh(v));
 	}
 }
 
@@ -45,7 +45,7 @@ static void Acosh_float32(struct onnx_node_t * n)
 	size_t i, l;
 
 	for(i = 0, l = y->ndata; i < l; i++)
-		py[i] = acoshf(px[i]);
+		py[i] = acosh(px[i]);
 }
 
 static void Acosh_float64(struct onnx_node_t * n)

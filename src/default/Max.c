@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Max_init(struct onnx_node_t * n)
 {
@@ -35,10 +35,12 @@ static void Max_int8(struct onnx_node_t * n)
 	int8_t * px;
 	int8_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = INT8_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -57,10 +59,12 @@ static void Max_int16(struct onnx_node_t * n)
 	int16_t * px;
 	int16_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = INT16_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -79,10 +83,12 @@ static void Max_int32(struct onnx_node_t * n)
 	int32_t * px;
 	int32_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = INT32_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -101,10 +107,12 @@ static void Max_int64(struct onnx_node_t * n)
 	int64_t * px;
 	int64_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = INT64_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -123,10 +131,12 @@ static void Max_uint8(struct onnx_node_t * n)
 	uint8_t * px;
 	uint8_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = 0;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -145,10 +155,12 @@ static void Max_uint16(struct onnx_node_t * n)
 	uint16_t * px;
 	uint16_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = 0;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -167,10 +179,12 @@ static void Max_uint32(struct onnx_node_t * n)
 	uint32_t * px;
 	uint32_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = 0;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -189,10 +203,12 @@ static void Max_uint64(struct onnx_node_t * n)
 	uint64_t * px;
 	uint64_t maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = 0;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -212,10 +228,12 @@ static void Max_bfloat16(struct onnx_node_t * n)
 	float v;
 	float maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = FLT_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -236,10 +254,12 @@ static void Max_float16(struct onnx_node_t * n)
 	float v;
 	float maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = FLT_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -259,10 +279,12 @@ static void Max_float32(struct onnx_node_t * n)
 	float * px;
 	float maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = FLT_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);
@@ -281,10 +303,12 @@ static void Max_float64(struct onnx_node_t * n)
 	double * px;
 	double maxv;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	int j;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		maxv = DBL_MIN;
-		for(int j = 0; j < n->ninput; j++)
+		for(j = 0; j < n->ninput; j++)
 		{
 			x = n->inputs[j];
 			px = onnx_tensor_broadcast_map_address(x, y, i);

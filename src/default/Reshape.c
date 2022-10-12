@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Reshape_init(struct onnx_node_t * n)
 {
@@ -34,7 +34,9 @@ static int Reshape_reshape(struct onnx_node_t * n)
 	int ndim = s->ndata;
 	int dims[ndim];
 
-	for(int i = 0; i < ndim; i++)
+	int i, j;
+
+	for(i = 0; i < ndim; i++)
 	{
 		if(ps[i] == 0)
 			dims[i] = x->dims[i];
@@ -42,9 +44,9 @@ static int Reshape_reshape(struct onnx_node_t * n)
 			dims[i] = ps[i];
 		else
 		{
-			for(int j = 0; j < x->ndim; j++)
+			for(j = 0; j < x->ndim; j++)
 				total_dim *= x->dims[j];
-			for(int j = 0; j < ndim; j++)
+			for(j = 0; j < ndim; j++)
 			{
 				if(ps[j] > 0)
 					total_shape *= ps[j];
@@ -66,7 +68,8 @@ static void Reshape_operator(struct onnx_node_t * n)
 
 	if(x->type == ONNX_TENSOR_TYPE_STRING)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			if(py[i])
 				free(py[i]);

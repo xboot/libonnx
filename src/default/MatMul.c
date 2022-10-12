@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	int m;
@@ -73,7 +73,9 @@ static int MatMul_reshape(struct onnx_node_t * n)
 		return 0;
 	dims[ndim - 2] = adims[andim - 2];
 	dims[ndim - 1] = bdims[bndim - 1];
-	for(int i = 3; i <= ndim; i++)
+
+	int i;
+	for(i = 3; i <= ndim; i++)
 	{
 		int alen = (andim - i) < 0 ? 1 : adims[andim - i];
 		int blen = (bndim - i) < 0 ? 1 : bdims[bndim - i];
@@ -98,16 +100,18 @@ static void MatMul_int32(struct onnx_node_t * n)
 	int32_t * pb;
 	int32_t sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}
@@ -126,16 +130,18 @@ static void MatMul_int64(struct onnx_node_t * n)
 	int64_t * pb;
 	int64_t sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}
@@ -154,16 +160,18 @@ static void MatMul_uint32(struct onnx_node_t * n)
 	uint32_t * pb;
 	uint32_t sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}
@@ -182,16 +190,18 @@ static void MatMul_uint64(struct onnx_node_t * n)
 	uint64_t * pb;
 	uint64_t sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}
@@ -210,18 +220,20 @@ static void MatMul_bfloat16(struct onnx_node_t * n)
 	uint16_t * pb;
 	float sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
-					sum += bfloat16_to_float32(pa[u * pdat->k + w]) * bfloat16_to_float32(pb[w * pdat->n + v]);
-				py[i + u * pdat->n + v] = float32_to_bfloat16(sum);
+				for(w = 0; w < pdat->k; w++)
+					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
+				py[i + u * pdat->n + v] = sum;
 			}
 		}
 	}
@@ -238,18 +250,20 @@ static void MatMul_float16(struct onnx_node_t * n)
 	uint16_t * pb;
 	float sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
-					sum += float16_to_float32(pa[u * pdat->k + w]) * float16_to_float32(pb[w * pdat->n + v]);
-				py[i + u * pdat->n + v] = float32_to_float16(sum);
+				for(w = 0; w < pdat->k; w++)
+					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
+				py[i + u * pdat->n + v] = sum;
 			}
 		}
 	}
@@ -266,16 +280,18 @@ static void MatMul_float32(struct onnx_node_t * n)
 	float * pb;
 	float sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}
@@ -294,16 +310,18 @@ static void MatMul_float64(struct onnx_node_t * n)
 	double * pb;
 	double sum;
 
-	for(size_t i = 0, l = y->ndata; i < l; i += pdat->m * pdat->n)
+	size_t i, l;
+	int u, v, w;
+	for(i=0, l = y->ndata; i < l; i += pdat->m * pdat->n)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
-		for(int u = 0; u < pdat->m; u++)
+		for(u = 0; u < pdat->m; u++)
 		{
-			for(int v = 0; v < pdat->n; v++)
+			for(v = 0; v < pdat->n; v++)
 			{
 				sum = 0;
-				for(int w = 0; w < pdat->k; w++)
+				for(w = 0; w < pdat->k; w++)
 					sum += pa[u * pdat->k + w] * pb[w * pdat->n + v];
 				py[i + u * pdat->n + v] = sum;
 			}

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <onnxconf.h>
+#include "onnxconf.h"
 
 struct hmap_entry_t {
 	struct hlist_node node;

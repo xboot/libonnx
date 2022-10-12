@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float alpha;
@@ -77,7 +77,7 @@ static void LRN_bfloat16(struct onnx_node_t * n)
 					sum += t * t;
 				}
 				o = (u * C + v) * L + i;
-				py[o] = float32_to_bfloat16(bfloat16_to_float32(px[o]) * powf(pdat->bias + over * sum, -pdat->beta));
+				py[o] = float32_to_bfloat16(bfloat16_to_float32(px[o]) * pow(pdat->bias + over * sum, -pdat->beta));
 			}
 		}
 	}
@@ -116,7 +116,7 @@ static void LRN_float16(struct onnx_node_t * n)
 					sum += t * t;
 				}
 				o = (u * C + v) * L + i;
-				py[o] = float32_to_float16(float16_to_float32(px[o]) * powf(pdat->bias + over * sum, -pdat->beta));
+				py[o] = float32_to_float16(float16_to_float32(px[o]) * pow(pdat->bias + over * sum, -pdat->beta));
 			}
 		}
 	}
@@ -155,7 +155,7 @@ static void LRN_float32(struct onnx_node_t * n)
 					sum += t * t;
 				}
 				o = (u * C + v) * L + i;
-				py[o] = px[o] * powf(pdat->bias + over * sum, -pdat->beta);
+				py[o] = px[o] * pow(pdat->bias + over * sum, -pdat->beta);
 			}
 		}
 	}

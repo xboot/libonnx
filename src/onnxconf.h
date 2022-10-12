@@ -10,11 +10,11 @@ extern "C" {
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-#include <malloc.h>
+ 
 #include <float.h>
 #include <math.h>
-#include <list.h>
-#include <hmap.h>
+#include "list.h"
+#include "hmap.h"
 
 /*
  * Macro
@@ -26,7 +26,9 @@ extern "C" {
 /*
  * little or big endian
  */
-#define ONNX_LITTLE_ENDIAN	(1)
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+	#define ONNX_LITTLE_ENDIAN	(1)
+#endif
 
 static inline uint16_t __swab16(uint16_t x)
 {

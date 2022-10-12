@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include <onnxconf.h>
-#include <onnx.proto3.pb-c.h>
+#include "onnxconf.h"
+#include "onnx.proto3.pb-c.h"
 
 #define LIBONNX_MAJOY			(1)
 #define LIBONNX_MINIOR			(0)

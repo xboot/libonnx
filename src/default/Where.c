@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Where_init(struct onnx_node_t * n)
 {
@@ -37,7 +37,8 @@ static void Where_bool(struct onnx_node_t * n)
 	uint8_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -58,7 +59,8 @@ static void Where_int8(struct onnx_node_t * n)
 	int8_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -79,7 +81,8 @@ static void Where_int16(struct onnx_node_t * n)
 	int16_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -100,7 +103,8 @@ static void Where_int32(struct onnx_node_t * n)
 	int32_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -121,7 +125,8 @@ static void Where_int64(struct onnx_node_t * n)
 	int64_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -142,7 +147,8 @@ static void Where_uint8(struct onnx_node_t * n)
 	uint8_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -163,7 +169,8 @@ static void Where_uint16(struct onnx_node_t * n)
 	uint16_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -184,7 +191,8 @@ static void Where_uint32(struct onnx_node_t * n)
 	uint32_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -205,7 +213,8 @@ static void Where_uint64(struct onnx_node_t * n)
 	uint64_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -226,7 +235,8 @@ static void Where_bfloat16(struct onnx_node_t * n)
 	uint16_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -247,7 +257,8 @@ static void Where_float16(struct onnx_node_t * n)
 	uint16_t * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -268,7 +279,8 @@ static void Where_float32(struct onnx_node_t * n)
 	float * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -289,7 +301,8 @@ static void Where_float64(struct onnx_node_t * n)
 	double * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -310,7 +323,8 @@ static void Where_complex64(struct onnx_node_t * n)
 	float * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -332,7 +346,8 @@ static void Where_complex128(struct onnx_node_t * n)
 	double * px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)
@@ -354,7 +369,8 @@ static void Where_string(struct onnx_node_t * n)
 	char ** px;
 	uint8_t * c;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		c = onnx_tensor_broadcast_map_address(x0, y, i);
 		if(*c)

@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Identity_init(struct onnx_node_t * n)
 {
@@ -29,7 +29,8 @@ static void Identity_operator(struct onnx_node_t * n)
 
 	if(x->type == ONNX_TENSOR_TYPE_STRING)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			if(py[i])
 				free(py[i]);

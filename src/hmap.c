@@ -25,7 +25,7 @@
  *
  */
 
-#include <hmap.h>
+#include "hmap.h"
 
 static inline int fls_generic(unsigned int word)
 {

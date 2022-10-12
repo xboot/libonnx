@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	int * axes;
@@ -187,7 +187,7 @@ static void ReduceLogSumExp_int8(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -235,7 +235,7 @@ static void ReduceLogSumExp_int32(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -283,7 +283,7 @@ static void ReduceLogSumExp_int64(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -331,7 +331,7 @@ static void ReduceLogSumExp_uint8(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -379,7 +379,7 @@ static void ReduceLogSumExp_uint32(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -427,7 +427,7 @@ static void ReduceLogSumExp_uint64(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -475,7 +475,7 @@ static void ReduceLogSumExp_bfloat16(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(bfloat16_to_float32(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]));
+			sum += exp(bfloat16_to_float32(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]));
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = float32_to_bfloat16(logf(sum));
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -523,7 +523,7 @@ static void ReduceLogSumExp_float16(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(float16_to_float32(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]));
+			sum += exp(float16_to_float32(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]));
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = float32_to_float16(logf(sum));
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));
@@ -571,7 +571,7 @@ static void ReduceLogSumExp_float32(struct onnx_node_t * n)
 		sum = 0;
 		do
 		{
-			sum += expf(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
+			sum += exp(px[o + dim_offset(pdat->naxes, iter_in_axes, in_axes_axis_dis)]);
 		} while(dim_next(pdat->naxes, iter_in_axes, iter_in_axes_max));
 		py[i++] = logf(sum);
 	} while(dim_next(not_in_axes_num, iter_not_in_axes, iter_not_in_axes_max));

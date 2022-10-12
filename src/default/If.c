@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	struct onnx_graph_t * else_branch;
@@ -89,6 +89,8 @@ static void If_operator(struct onnx_node_t * n)
 	struct onnx_node_t * t;
 	int i;
 
+	size_t o;
+
 	if(px[0])
 		g = pdat->then_branch;
 	else
@@ -110,7 +112,7 @@ static void If_operator(struct onnx_node_t * n)
 				{
 					char ** pa = (char **)a->datas;
 					char ** pb = (char **)b->datas;
-					for(size_t o = 0; o < b->ndata; o++)
+					for(o = 0; o < b->ndata; o++)
 					{
 						if(pb[o])
 							free(pb[o]);

@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float bias;
@@ -48,7 +48,8 @@ static void Shrink_int8(struct onnx_node_t * n)
 	int8_t * px = (int8_t *)x->datas;
 	int8_t * py = (int8_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -67,7 +68,8 @@ static void Shrink_int16(struct onnx_node_t * n)
 	int16_t * px = (int16_t *)x->datas;
 	int16_t * py = (int16_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -86,7 +88,8 @@ static void Shrink_int32(struct onnx_node_t * n)
 	int32_t * px = (int32_t *)x->datas;
 	int32_t * py = (int32_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -105,7 +108,8 @@ static void Shrink_int64(struct onnx_node_t * n)
 	int64_t * px = (int64_t *)x->datas;
 	int64_t * py = (int64_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -124,7 +128,8 @@ static void Shrink_uint8(struct onnx_node_t * n)
 	uint8_t * px = (uint8_t *)x->datas;
 	uint8_t * py = (uint8_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -143,7 +148,8 @@ static void Shrink_uint16(struct onnx_node_t * n)
 	uint16_t * px = (uint16_t *)x->datas;
 	uint16_t * py = (uint16_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -162,7 +168,8 @@ static void Shrink_uint32(struct onnx_node_t * n)
 	uint32_t * px = (uint32_t *)x->datas;
 	uint32_t * py = (uint32_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -181,7 +188,8 @@ static void Shrink_uint64(struct onnx_node_t * n)
 	uint64_t * px = (uint64_t *)x->datas;
 	uint64_t * py = (uint64_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -201,7 +209,8 @@ static void Shrink_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		if(v < -pdat->lambd)
@@ -221,7 +230,8 @@ static void Shrink_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;
@@ -240,7 +250,8 @@ static void Shrink_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < -pdat->lambd)
 			py[i] = px[i] + pdat->bias;

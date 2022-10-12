@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	double start;
@@ -105,7 +105,8 @@ static void Range_int16(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	int16_t * py = (int16_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = pdat->start + (pdat->delta * i);
 }
 
@@ -115,7 +116,8 @@ static void Range_int32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	int32_t * py = (int32_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = pdat->start + (pdat->delta * i);
 }
 
@@ -125,7 +127,8 @@ static void Range_int64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	int64_t * py = (int64_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = pdat->start + (pdat->delta * i);
 }
 
@@ -135,7 +138,8 @@ static void Range_float32(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	float * py = (float *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = pdat->start + (pdat->delta * i);
 }
 
@@ -145,7 +149,8 @@ static void Range_float64(struct onnx_node_t * n)
 	struct onnx_tensor_t * y = n->outputs[0];
 	double * py = (double *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = pdat->start + (pdat->delta * i);
 }
 

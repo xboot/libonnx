@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float alpha;
@@ -47,10 +47,11 @@ static void Elu_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
-		py[i] = float32_to_float16((px[i] < 0) ? (expf(v) - 1) * pdat->alpha : v);
+		py[i] = float32_to_float16((px[i] < 0) ? (exp(v) - 1) * pdat->alpha : v);
 	}
 }
 
@@ -62,8 +63,9 @@ static void Elu_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
-		py[i] = (px[i] < 0) ? (expf(px[i]) - 1) * pdat->alpha : px[i];
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
+		py[i] = (px[i] < 0) ? (exp(px[i]) - 1) * pdat->alpha : px[i];
 }
 
 static void Elu_float64(struct onnx_node_t * n)
@@ -74,7 +76,8 @@ static void Elu_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? (exp(px[i]) - 1) * pdat->alpha : px[i];
 }
 

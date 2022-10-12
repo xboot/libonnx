@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Relu_init(struct onnx_node_t * n)
 {
@@ -27,7 +27,8 @@ static void Relu_int8(struct onnx_node_t * n)
 	int8_t * px = (int8_t *)x->datas;
 	int8_t * py = (int8_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
@@ -38,7 +39,8 @@ static void Relu_int16(struct onnx_node_t * n)
 	int16_t * px = (int16_t *)x->datas;
 	int16_t * py = (int16_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
@@ -49,7 +51,8 @@ static void Relu_int32(struct onnx_node_t * n)
 	int32_t * px = (int32_t *)x->datas;
 	int32_t * py = (int32_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
@@ -60,7 +63,8 @@ static void Relu_int64(struct onnx_node_t * n)
 	int64_t * px = (int64_t *)x->datas;
 	int64_t * py = (int64_t *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
@@ -72,7 +76,8 @@ static void Relu_bfloat16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = bfloat16_to_float32(px[i]);
 		if(v < 0)
@@ -89,7 +94,8 @@ static void Relu_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		if(v < 0)
@@ -105,7 +111,8 @@ static void Relu_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 
@@ -116,7 +123,8 @@ static void Relu_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] < 0) ? 0 : px[i];
 }
 

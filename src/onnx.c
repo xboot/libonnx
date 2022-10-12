@@ -25,8 +25,8 @@
  *
  */
 
-#include <onnx.h>
-#include <default/default.h>
+#include "onnx.h"
+#include "default/default.h"
 
 #define ONNX_LOG(...)	printf(__VA_ARGS__)
 
@@ -1416,6 +1416,7 @@ struct onnx_tensor_t * onnx_tensor_alloc_from_file(const char * filename)
 void onnx_tensor_free(struct onnx_tensor_t * t)
 {
 	char ** str;
+	size_t idx;
 
 	if(t)
 	{
@@ -1433,7 +1434,7 @@ void onnx_tensor_free(struct onnx_tensor_t * t)
 			if(t->type == ONNX_TENSOR_TYPE_STRING)
 			{
 				str = (char **)t->datas;
-				for(size_t idx = 0; idx < t->ndata; idx++)
+				for(idx = 0; idx < t->ndata; idx++)
 				{
 					if(str[idx])
 						free(str[idx]);
@@ -1562,7 +1563,7 @@ int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, int * dims, int ndim)
 {
 	char ** str;
-	size_t n;
+	size_t n, idx;
 	int sz, i;
 
 	if(t)
@@ -1586,7 +1587,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 			if(t->type == ONNX_TENSOR_TYPE_STRING)
 			{
 				str = (char **)t->datas;
-				for(size_t idx = 0; idx < t->ndata; idx++)
+				for(idx = 0; idx < t->ndata; idx++)
 				{
 					if(str[idx])
 					{
@@ -1664,7 +1665,7 @@ void onnx_tensor_reinit(struct onnx_tensor_t * t, enum onnx_tensor_type_t type, 
 
 void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, size_t len)
 {
-	size_t l;
+	size_t l, idx;
 	int sz;
 
 	if(t)
@@ -1678,7 +1679,7 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, size_t len)
 				{
 					char ** p = (char **)t->datas;
 					char ** q = (char **)buf;
-					for(size_t idx = 0; idx < t->ndata; idx++)
+					for(idx = 0; idx < t->ndata; idx++)
 					{
 						if(p[idx])
 						{
@@ -1687,7 +1688,7 @@ void onnx_tensor_apply(struct onnx_tensor_t * t, void * buf, size_t len)
 						}
 					}
 					l = min(t->ndata, (size_t)len);
-					for(size_t idx = 0; idx < l; idx++)
+					for(idx = 0; idx < l; idx++)
 						p[idx] = strdup(q[idx]);
 				}
 				else
@@ -1744,6 +1745,10 @@ char * onnx_attribute_read_string(struct onnx_node_t * n, const char * name, cha
 	{
 		if(attr->s.len > 0)
 		{
+			attr->s.data=realloc(attr->s.data,attr->s.len+1);
+			if(attr->s.data==NULL)
+				return def;
+				
 			attr->s.data[attr->s.len] = 0;
 			return (char *)attr->s.data;
 		}
@@ -1839,6 +1844,8 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 	void * p;
 	int i, j, k;
 
+	size_t idx;
+
 	if(t)
 	{
 		ONNX_LOG("%s: %s", t->name, onnx_tensor_type_tostring(t->type));
@@ -1873,7 +1880,7 @@ void onnx_tensor_dump(struct onnx_tensor_t * t, int detail)
 					sizes[i] = t->dims[i] * sizes[i + 1];
 					levels[i] = 0;
 				}
-				for(size_t idx = 0; idx < t->ndata; idx++)
+				for(idx = 0; idx < t->ndata; idx++)
 				{
 					for(j = 0; j < t->ndim; j++)
 					{

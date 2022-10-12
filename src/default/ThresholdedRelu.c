@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float alpha;
@@ -47,7 +47,8 @@ static void ThresholdedRelu_float16(struct onnx_node_t * n)
 	uint16_t * py = (uint16_t *)y->datas;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		py[i] = (v > pdat->alpha) ? float32_to_float16(v) : 0;
@@ -62,7 +63,8 @@ static void ThresholdedRelu_float32(struct onnx_node_t * n)
 	float * px = (float *)x->datas;
 	float * py = (float *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] > pdat->alpha) ? px[i] : 0;
 }
 
@@ -74,7 +76,8 @@ static void ThresholdedRelu_float64(struct onnx_node_t * n)
 	double * px = (double *)x->datas;
 	double * py = (double *)y->datas;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = (px[i] > pdat->alpha) ? px[i] : 0;
 }
 

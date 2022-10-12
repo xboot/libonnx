@@ -532,6 +532,18 @@ void   onnx__type_proto__map__init
   static const Onnx__TypeProto__Map init_value = ONNX__TYPE_PROTO__MAP__INIT;
   *message = init_value;
 }
+void   onnx__type_proto__optional__init
+                     (Onnx__TypeProto__Optional         *message)
+{
+  static const Onnx__TypeProto__Optional init_value = ONNX__TYPE_PROTO__OPTIONAL__INIT;
+  *message = init_value;
+}
+void   onnx__type_proto__sparse_tensor__init
+                     (Onnx__TypeProto__SparseTensor         *message)
+{
+  static const Onnx__TypeProto__SparseTensor init_value = ONNX__TYPE_PROTO__SPARSE_TENSOR__INIT;
+  *message = init_value;
+}
 void   onnx__type_proto__init
                      (Onnx__TypeProto         *message)
 {
@@ -622,7 +634,52 @@ void   onnx__operator_set_id_proto__free_unpacked
   assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-static const ProtobufCEnumValue onnx__attribute_proto__attribute_type__enum_values_by_number[13] =
+void   onnx__function_proto__init
+                     (Onnx__FunctionProto         *message)
+{
+  static const Onnx__FunctionProto init_value = ONNX__FUNCTION_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__function_proto__get_packed_size
+                     (const Onnx__FunctionProto *message)
+{
+  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__function_proto__pack
+                     (const Onnx__FunctionProto *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__function_proto__pack_to_buffer
+                     (const Onnx__FunctionProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__FunctionProto *
+       onnx__function_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__FunctionProto *)
+     protobuf_c_message_unpack (&onnx__function_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__function_proto__free_unpacked
+                     (Onnx__FunctionProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+static const ProtobufCEnumValue onnx__attribute_proto__attribute_type__enum_values_by_number[15] =
 {
   { "UNDEFINED", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__UNDEFINED", 0 },
   { "FLOAT", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOAT", 1 },
@@ -637,11 +694,13 @@ static const ProtobufCEnumValue onnx__attribute_proto__attribute_type__enum_valu
   { "GRAPHS", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__GRAPHS", 10 },
   { "SPARSE_TENSOR", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSOR", 11 },
   { "SPARSE_TENSORS", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSORS", 12 },
+  { "TYPE_PROTO", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TYPE_PROTO", 13 },
+  { "TYPE_PROTOS", "ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TYPE_PROTOS", 14 },
 };
 static const ProtobufCIntRange onnx__attribute_proto__attribute_type__value_ranges[] = {
-{0, 0},{0, 13}
+{0, 0},{0, 15}
 };
-static const ProtobufCEnumValueIndex onnx__attribute_proto__attribute_type__enum_values_by_name[13] =
+static const ProtobufCEnumValueIndex onnx__attribute_proto__attribute_type__enum_values_by_name[15] =
 {
   { "FLOAT", 1 },
   { "FLOATS", 6 },
@@ -655,6 +714,8 @@ static const ProtobufCEnumValueIndex onnx__attribute_proto__attribute_type__enum
   { "STRINGS", 8 },
   { "TENSOR", 4 },
   { "TENSORS", 9 },
+  { "TYPE_PROTO", 13 },
+  { "TYPE_PROTOS", 14 },
   { "UNDEFINED", 0 },
 };
 const ProtobufCEnumDescriptor onnx__attribute_proto__attribute_type__descriptor =
@@ -664,15 +725,15 @@ const ProtobufCEnumDescriptor onnx__attribute_proto__attribute_type__descriptor 
   "AttributeType",
   "Onnx__AttributeProto__AttributeType",
   "onnx",
-  13,
+  15,
   onnx__attribute_proto__attribute_type__enum_values_by_number,
-  13,
+  15,
   onnx__attribute_proto__attribute_type__enum_values_by_name,
   1,
   onnx__attribute_proto__attribute_type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor onnx__attribute_proto__field_descriptors[16] =
+static const ProtobufCFieldDescriptor onnx__attribute_proto__field_descriptors[18] =
 {
   {
     "name",
@@ -819,6 +880,30 @@ static const ProtobufCFieldDescriptor onnx__attribute_proto__field_descriptors[1
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
+    "tp",
+    14,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__AttributeProto, tp),
+    &onnx__type_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "type_protos",
+    15,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__AttributeProto, n_type_protos),
+    offsetof(Onnx__AttributeProto, type_protos),
+    &onnx__type_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
     "type",
     20,
     PROTOBUF_C_LABEL_NONE,
@@ -876,21 +961,23 @@ static const unsigned onnx__attribute_proto__field_indices_by_name[] = {
   2,   /* field[2] = i */
   7,   /* field[7] = ints */
   0,   /* field[0] = name */
-  13,   /* field[13] = ref_attr_name */
+  15,   /* field[15] = ref_attr_name */
   3,   /* field[3] = s */
-  14,   /* field[14] = sparse_tensor */
-  15,   /* field[15] = sparse_tensors */
+  16,   /* field[16] = sparse_tensor */
+  17,   /* field[17] = sparse_tensors */
   8,   /* field[8] = strings */
   4,   /* field[4] = t */
   9,   /* field[9] = tensors */
-  12,   /* field[12] = type */
+  12,   /* field[12] = tp */
+  14,   /* field[14] = type */
+  13,   /* field[13] = type_protos */
 };
 static const ProtobufCIntRange onnx__attribute_proto__number_ranges[3 + 1] =
 {
   { 1, 0 },
   { 13, 11 },
-  { 20, 12 },
-  { 0, 16 }
+  { 20, 14 },
+  { 0, 18 }
 };
 const ProtobufCMessageDescriptor onnx__attribute_proto__descriptor =
 {
@@ -900,7 +987,7 @@ const ProtobufCMessageDescriptor onnx__attribute_proto__descriptor =
   "Onnx__AttributeProto",
   "onnx",
   sizeof(Onnx__AttributeProto),
-  16,
+  18,
   onnx__attribute_proto__field_descriptors,
   onnx__attribute_proto__field_indices_by_name,
   3,  onnx__attribute_proto__number_ranges,
@@ -1164,7 +1251,7 @@ const ProtobufCMessageDescriptor onnx__training_info_proto__descriptor =
   (ProtobufCMessageInit) onnx__training_info_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[10] =
+static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[11] =
 {
   {
     "ir_version",
@@ -1286,10 +1373,23 @@ static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[10] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "functions",
+    25,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__ModelProto, n_functions),
+    offsetof(Onnx__ModelProto, functions),
+    &onnx__function_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned onnx__model_proto__field_indices_by_name[] = {
   5,   /* field[5] = doc_string */
   3,   /* field[3] = domain */
+  10,   /* field[10] = functions */
   6,   /* field[6] = graph */
   0,   /* field[0] = ir_version */
   8,   /* field[8] = metadata_props */
@@ -1299,12 +1399,13 @@ static const unsigned onnx__model_proto__field_indices_by_name[] = {
   2,   /* field[2] = producer_version */
   9,   /* field[9] = training_info */
 };
-static const ProtobufCIntRange onnx__model_proto__number_ranges[3 + 1] =
+static const ProtobufCIntRange onnx__model_proto__number_ranges[4 + 1] =
 {
   { 1, 0 },
   { 14, 8 },
   { 20, 9 },
-  { 0, 10 }
+  { 25, 10 },
+  { 0, 11 }
 };
 const ProtobufCMessageDescriptor onnx__model_proto__descriptor =
 {
@@ -1314,10 +1415,10 @@ const ProtobufCMessageDescriptor onnx__model_proto__descriptor =
   "Onnx__ModelProto",
   "onnx",
   sizeof(Onnx__ModelProto),
-  10,
+  11,
   onnx__model_proto__field_descriptors,
   onnx__model_proto__field_indices_by_name,
-  3,  onnx__model_proto__number_ranges,
+  4,  onnx__model_proto__number_ranges,
   (ProtobufCMessageInit) onnx__model_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
@@ -2217,7 +2318,96 @@ const ProtobufCMessageDescriptor onnx__type_proto__map__descriptor =
   (ProtobufCMessageInit) onnx__type_proto__map__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor onnx__type_proto__field_descriptors[4] =
+static const ProtobufCFieldDescriptor onnx__type_proto__optional__field_descriptors[1] =
+{
+  {
+    "elem_type",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__TypeProto__Optional, elem_type),
+    &onnx__type_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__type_proto__optional__field_indices_by_name[] = {
+  0,   /* field[0] = elem_type */
+};
+static const ProtobufCIntRange onnx__type_proto__optional__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor onnx__type_proto__optional__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.TypeProto.Optional",
+  "Optional",
+  "Onnx__TypeProto__Optional",
+  "onnx",
+  sizeof(Onnx__TypeProto__Optional),
+  1,
+  onnx__type_proto__optional__field_descriptors,
+  onnx__type_proto__optional__field_indices_by_name,
+  1,  onnx__type_proto__optional__number_ranges,
+  (ProtobufCMessageInit) onnx__type_proto__optional__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__type_proto__sparse_tensor__field_descriptors[2] =
+{
+  {
+    "elem_type",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT32,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__TypeProto__SparseTensor, elem_type),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "shape",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__TypeProto__SparseTensor, shape),
+    &onnx__tensor_shape_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__type_proto__sparse_tensor__field_indices_by_name[] = {
+  0,   /* field[0] = elem_type */
+  1,   /* field[1] = shape */
+};
+static const ProtobufCIntRange onnx__type_proto__sparse_tensor__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor onnx__type_proto__sparse_tensor__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.TypeProto.SparseTensor",
+  "SparseTensor",
+  "Onnx__TypeProto__SparseTensor",
+  "onnx",
+  sizeof(Onnx__TypeProto__SparseTensor),
+  2,
+  onnx__type_proto__sparse_tensor__field_descriptors,
+  onnx__type_proto__sparse_tensor__field_indices_by_name,
+  1,  onnx__type_proto__sparse_tensor__number_ranges,
+  (ProtobufCMessageInit) onnx__type_proto__sparse_tensor__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__type_proto__field_descriptors[6] =
 {
   {
     "tensor_type",
@@ -2267,18 +2457,45 @@ static const ProtobufCFieldDescriptor onnx__type_proto__field_descriptors[4] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "sparse_tensor_type",
+    8,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__TypeProto, value_case),
+    offsetof(Onnx__TypeProto, sparse_tensor_type),
+    &onnx__type_proto__sparse_tensor__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "optional_type",
+    9,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__TypeProto, value_case),
+    offsetof(Onnx__TypeProto, optional_type),
+    &onnx__type_proto__optional__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned onnx__type_proto__field_indices_by_name[] = {
   3,   /* field[3] = denotation */
   2,   /* field[2] = map_type */
+  5,   /* field[5] = optional_type */
   1,   /* field[1] = sequence_type */
+  4,   /* field[4] = sparse_tensor_type */
   0,   /* field[0] = tensor_type */
 };
-static const ProtobufCIntRange onnx__type_proto__number_ranges[2 + 1] =
+static const ProtobufCIntRange onnx__type_proto__number_ranges[3 + 1] =
 {
   { 1, 0 },
   { 4, 1 },
-  { 0, 4 }
+  { 8, 4 },
+  { 0, 6 }
 };
 const ProtobufCMessageDescriptor onnx__type_proto__descriptor =
 {
@@ -2288,10 +2505,10 @@ const ProtobufCMessageDescriptor onnx__type_proto__descriptor =
   "Onnx__TypeProto",
   "onnx",
   sizeof(Onnx__TypeProto),
-  4,
+  6,
   onnx__type_proto__field_descriptors,
   onnx__type_proto__field_indices_by_name,
-  2,  onnx__type_proto__number_ranges,
+  3,  onnx__type_proto__number_ranges,
   (ProtobufCMessageInit) onnx__type_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
@@ -2346,7 +2563,137 @@ const ProtobufCMessageDescriptor onnx__operator_set_id_proto__descriptor =
   (ProtobufCMessageInit) onnx__operator_set_id_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCEnumValue onnx__version__enum_values_by_number[8] =
+static const ProtobufCFieldDescriptor onnx__function_proto__field_descriptors[8] =
+{
+  {
+    "name",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__FunctionProto, name),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "input",
+    4,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Onnx__FunctionProto, n_input),
+    offsetof(Onnx__FunctionProto, input),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "output",
+    5,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Onnx__FunctionProto, n_output),
+    offsetof(Onnx__FunctionProto, output),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "attribute",
+    6,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Onnx__FunctionProto, n_attribute),
+    offsetof(Onnx__FunctionProto, attribute),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "node",
+    7,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__FunctionProto, n_node),
+    offsetof(Onnx__FunctionProto, node),
+    &onnx__node_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "doc_string",
+    8,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__FunctionProto, doc_string),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "opset_import",
+    9,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__FunctionProto, n_opset_import),
+    offsetof(Onnx__FunctionProto, opset_import),
+    &onnx__operator_set_id_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "domain",
+    10,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__FunctionProto, domain),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__function_proto__field_indices_by_name[] = {
+  3,   /* field[3] = attribute */
+  5,   /* field[5] = doc_string */
+  7,   /* field[7] = domain */
+  1,   /* field[1] = input */
+  0,   /* field[0] = name */
+  4,   /* field[4] = node */
+  6,   /* field[6] = opset_import */
+  2,   /* field[2] = output */
+};
+static const ProtobufCIntRange onnx__function_proto__number_ranges[2 + 1] =
+{
+  { 1, 0 },
+  { 4, 1 },
+  { 0, 8 }
+};
+const ProtobufCMessageDescriptor onnx__function_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.FunctionProto",
+  "FunctionProto",
+  "Onnx__FunctionProto",
+  "onnx",
+  sizeof(Onnx__FunctionProto),
+  8,
+  onnx__function_proto__field_descriptors,
+  onnx__function_proto__field_indices_by_name,
+  2,  onnx__function_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__function_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCEnumValue onnx__version__enum_values_by_number[9] =
 {
   { "_START_VERSION", "ONNX__VERSION___START_VERSION", 0 },
   { "IR_VERSION_2017_10_10", "ONNX__VERSION__IR_VERSION_2017_10_10", 1 },
@@ -2355,20 +2702,22 @@ static const ProtobufCEnumValue onnx__version__enum_values_by_number[8] =
   { "IR_VERSION_2019_1_22", "ONNX__VERSION__IR_VERSION_2019_1_22", 4 },
   { "IR_VERSION_2019_3_18", "ONNX__VERSION__IR_VERSION_2019_3_18", 5 },
   { "IR_VERSION_2019_9_19", "ONNX__VERSION__IR_VERSION_2019_9_19", 6 },
-  { "IR_VERSION", "ONNX__VERSION__IR_VERSION", 7 },
+  { "IR_VERSION_2020_5_8", "ONNX__VERSION__IR_VERSION_2020_5_8", 7 },
+  { "IR_VERSION", "ONNX__VERSION__IR_VERSION", 8 },
 };
 static const ProtobufCIntRange onnx__version__value_ranges[] = {
-{0, 0},{0, 8}
+{0, 0},{0, 9}
 };
-static const ProtobufCEnumValueIndex onnx__version__enum_values_by_name[8] =
+static const ProtobufCEnumValueIndex onnx__version__enum_values_by_name[9] =
 {
-  { "IR_VERSION", 7 },
+  { "IR_VERSION", 8 },
   { "IR_VERSION_2017_10_10", 1 },
   { "IR_VERSION_2017_10_30", 2 },
   { "IR_VERSION_2017_11_3", 3 },
   { "IR_VERSION_2019_1_22", 4 },
   { "IR_VERSION_2019_3_18", 5 },
   { "IR_VERSION_2019_9_19", 6 },
+  { "IR_VERSION_2020_5_8", 7 },
   { "_START_VERSION", 0 },
 };
 const ProtobufCEnumDescriptor onnx__version__descriptor =
@@ -2378,11 +2727,39 @@ const ProtobufCEnumDescriptor onnx__version__descriptor =
   "Version",
   "Onnx__Version",
   "onnx",
-  8,
+  9,
   onnx__version__enum_values_by_number,
-  8,
+  9,
   onnx__version__enum_values_by_name,
   1,
   onnx__version__value_ranges,
+  NULL,NULL,NULL,NULL   /* reserved[1234] */
+};
+static const ProtobufCEnumValue onnx__operator_status__enum_values_by_number[2] =
+{
+  { "EXPERIMENTAL", "ONNX__OPERATOR_STATUS__EXPERIMENTAL", 0 },
+  { "STABLE", "ONNX__OPERATOR_STATUS__STABLE", 1 },
+};
+static const ProtobufCIntRange onnx__operator_status__value_ranges[] = {
+{0, 0},{0, 2}
+};
+static const ProtobufCEnumValueIndex onnx__operator_status__enum_values_by_name[2] =
+{
+  { "EXPERIMENTAL", 0 },
+  { "STABLE", 1 },
+};
+const ProtobufCEnumDescriptor onnx__operator_status__descriptor =
+{
+  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+  "onnx.OperatorStatus",
+  "OperatorStatus",
+  "Onnx__OperatorStatus",
+  "onnx",
+  2,
+  onnx__operator_status__enum_values_by_number,
+  2,
+  onnx__operator_status__enum_values_by_name,
+  1,
+  onnx__operator_status__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
