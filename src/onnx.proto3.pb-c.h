@@ -4,7 +4,7 @@
 #ifndef PROTOBUF_C_onnx_2eproto3__INCLUDED
 #define PROTOBUF_C_onnx_2eproto3__INCLUDED
 
-#include <protobuf-c.h>
+#include "protobuf-c.h"
 
 PROTOBUF_C__BEGIN_DECLS
 
@@ -32,7 +32,10 @@ typedef struct Onnx__TypeProto Onnx__TypeProto;
 typedef struct Onnx__TypeProto__Tensor Onnx__TypeProto__Tensor;
 typedef struct Onnx__TypeProto__Sequence Onnx__TypeProto__Sequence;
 typedef struct Onnx__TypeProto__Map Onnx__TypeProto__Map;
+typedef struct Onnx__TypeProto__Optional Onnx__TypeProto__Optional;
+typedef struct Onnx__TypeProto__SparseTensor Onnx__TypeProto__SparseTensor;
 typedef struct Onnx__OperatorSetIdProto Onnx__OperatorSetIdProto;
+typedef struct Onnx__FunctionProto Onnx__FunctionProto;
 
 
 /* --- enums --- */
@@ -49,12 +52,14 @@ typedef enum _Onnx__AttributeProto__AttributeType {
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSOR = 4,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__GRAPH = 5,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSOR = 11,
+  ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TYPE_PROTO = 13,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOATS = 6,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INTS = 7,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRINGS = 8,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TENSORS = 9,
   ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__GRAPHS = 10,
-  ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSORS = 12
+  ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__SPARSE_TENSORS = 12,
+  ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__TYPE_PROTOS = 14
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE)
 } Onnx__AttributeProto__AttributeType;
 typedef enum _Onnx__TensorProto__DataType {
@@ -185,7 +190,7 @@ typedef enum _Onnx__Version {
    */
   ONNX__VERSION__IR_VERSION_2019_9_19 = 6,
   /*
-   * IR VERSION 7 published on <TBD>
+   * IR VERSION 7 published on May 8, 2020
    * - Add support to allow function body graph to rely on multiple external opreator sets.
    * - Add a list to promote inference graph's initializers to global and
    *   mutable variables. Global variables are visible in all graphs of the
@@ -195,9 +200,25 @@ typedef enum _Onnx__Version {
    *   can modify the values of mutable variables.
    * - Implicitly add inference graph into each TrainingInfoProto's algorithm.
    */
-  ONNX__VERSION__IR_VERSION = 7
+  ONNX__VERSION__IR_VERSION_2020_5_8 = 7,
+  /*
+   * IR VERSION 8 published on <TBD>
+   * Introduce TypeProto.SparseTensor
+   * Introduce TypeProto.Optional
+   * Added a list of FunctionProtos local to the model
+   * Deprecated since_version and operator status from FunctionProto
+   */
+  ONNX__VERSION__IR_VERSION = 8
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__VERSION)
 } Onnx__Version;
+/*
+ * Operator/function status.
+ */
+typedef enum _Onnx__OperatorStatus {
+  ONNX__OPERATOR_STATUS__EXPERIMENTAL = 0,
+  ONNX__OPERATOR_STATUS__STABLE = 1
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__OPERATOR_STATUS)
+} Onnx__OperatorStatus;
 
 /* --- messages --- */
 
@@ -269,6 +290,14 @@ struct  Onnx__AttributeProto
    */
   Onnx__SparseTensorProto *sparse_tensor;
   /*
+   * Do not use field below, it's deprecated.
+   * optional ValueProto v = 12;         // value - subsumes everything but graph
+   */
+  /*
+   * type proto
+   */
+  Onnx__TypeProto *tp;
+  /*
    * list of floats
    */
   size_t n_floats;
@@ -298,10 +327,15 @@ struct  Onnx__AttributeProto
    */
   size_t n_sparse_tensors;
   Onnx__SparseTensorProto **sparse_tensors;
+  /*
+   * list of type protos
+   */
+  size_t n_type_protos;
+  Onnx__TypeProto **type_protos;
 };
 #define ONNX__ATTRIBUTE_PROTO__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&onnx__attribute_proto__descriptor) \
-    , (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__UNDEFINED, 0, 0, {0,NULL}, NULL, NULL, NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL }
+    , (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__UNDEFINED, 0, 0, {0,NULL}, NULL, NULL, NULL, NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL }
 
 
 /*
@@ -582,10 +616,28 @@ struct  Onnx__ModelProto
    */
   size_t n_training_info;
   Onnx__TrainingInfoProto **training_info;
+  /*
+   * A list of function protos local to the model.
+   * Name of the function "FunctionProto.name" should be unique within the domain "FunctionProto.domain".
+   * In case of any conflicts the behavior (whether the model local functions are given higher priority,
+   * or standard opserator sets are given higher priotity or this is treated as error) is defined by 
+   * the runtimes.
+   * 
+   * The operator sets imported by FunctionProto should be compatible with the ones
+   * imported by ModelProto and other model local FunctionProtos. 
+   * Example, if same operator set say 'A' is imported by a FunctionProto and ModelProto 
+   * or by 2 FunctionProtos then versions for the operator set may be different but, 
+   * the operator schema returned for op_type, domain, version combination
+   * for both the versions should be same for every node in the function body.
+   * One FunctionProto can reference other FunctionProto in the model, however, recursive reference
+   * is not allowed.
+   */
+  size_t n_functions;
+  Onnx__FunctionProto **functions;
 };
 #define ONNX__MODEL_PROTO__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&onnx__model_proto__descriptor) \
-    , 0, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0, (char *)protobuf_c_empty_string, NULL, 0,NULL, 0,NULL }
+    , 0, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0, (char *)protobuf_c_empty_string, NULL, 0,NULL, 0,NULL, 0,NULL }
 
 
 /*
@@ -875,7 +927,7 @@ struct  Onnx__TensorShapeProto__Dimension
    * Standard denotation can optionally be used to denote tensor
    * dimensions with standard semantic descriptions to ensure
    * that operations are applied to the correct axis of a tensor.
-   * Refer to https://github.com/onnx/onnx/blob/master/docs/DimensionDenotation.md#denotation-definition
+   * Refer to https://github.com/onnx/onnx/blob/main/docs/DimensionDenotation.md#denotation-definition
    * for pre-defined dimension denotations.
    */
   char *denotation;
@@ -964,11 +1016,47 @@ struct  Onnx__TypeProto__Map
     , 0, NULL }
 
 
+/*
+ * wrapper for Tensor, Sequence, or Map
+ */
+struct  Onnx__TypeProto__Optional
+{
+  ProtobufCMessage base;
+  /*
+   * The type and optional shape of the element wrapped.
+   * This field MUST be present for this version of the IR.
+   * Possible values correspond to OptionalProto.DataType enum
+   */
+  Onnx__TypeProto *elem_type;
+};
+#define ONNX__TYPE_PROTO__OPTIONAL__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__type_proto__optional__descriptor) \
+    , NULL }
+
+
+struct  Onnx__TypeProto__SparseTensor
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST NOT have the value of UNDEFINED
+   * This field MUST have a valid TensorProto.DataType value
+   * This field MUST be present for this version of the IR.
+   */
+  int32_t elem_type;
+  Onnx__TensorShapeProto *shape;
+};
+#define ONNX__TYPE_PROTO__SPARSE_TENSOR__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__type_proto__sparse_tensor__descriptor) \
+    , 0, NULL }
+
+
 typedef enum {
   ONNX__TYPE_PROTO__VALUE__NOT_SET = 0,
   ONNX__TYPE_PROTO__VALUE_TENSOR_TYPE = 1,
   ONNX__TYPE_PROTO__VALUE_SEQUENCE_TYPE = 4,
-  ONNX__TYPE_PROTO__VALUE_MAP_TYPE = 5
+  ONNX__TYPE_PROTO__VALUE_MAP_TYPE = 5,
+  ONNX__TYPE_PROTO__VALUE_OPTIONAL_TYPE = 9,
+  ONNX__TYPE_PROTO__VALUE_SPARSE_TENSOR_TYPE = 8
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__TYPE_PROTO__VALUE__CASE)
 } Onnx__TypeProto__ValueCase;
 
@@ -982,7 +1070,7 @@ struct  Onnx__TypeProto
   /*
    * An optional denotation can be used to denote the whole
    * type with a standard semantic description as to what is
-   * stored inside. Refer to https://github.com/onnx/onnx/blob/master/docs/TypeDenotation.md#type-denotation-definition
+   * stored inside. Refer to https://github.com/onnx/onnx/blob/main/docs/TypeDenotation.md#type-denotation-definition
    * for pre-defined type denotations.
    */
   char *denotation;
@@ -1000,6 +1088,14 @@ struct  Onnx__TypeProto
      * The type of a map.
      */
     Onnx__TypeProto__Map *map_type;
+    /*
+     * The type of an optional.
+     */
+    Onnx__TypeProto__Optional *optional_type;
+    /*
+     * Type of the sparse tensor
+     */
+    Onnx__TypeProto__SparseTensor *sparse_tensor_type;
   };
 };
 #define ONNX__TYPE_PROTO__INIT \
@@ -1030,6 +1126,49 @@ struct  Onnx__OperatorSetIdProto
 #define ONNX__OPERATOR_SET_ID_PROTO__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&onnx__operator_set_id_proto__descriptor) \
     , (char *)protobuf_c_empty_string, 0 }
+
+
+struct  Onnx__FunctionProto
+{
+  ProtobufCMessage base;
+  /*
+   * The name of the function, similar usage of op_type in OperatorProto.
+   * Combined with FunctionProto.domain, this forms the unique identity of
+   * the FunctionProto.
+   */
+  char *name;
+  /*
+   * The inputs and outputs of the function.
+   */
+  size_t n_input;
+  char **input;
+  size_t n_output;
+  char **output;
+  /*
+   * The attributes of the function.
+   */
+  size_t n_attribute;
+  char **attribute;
+  /*
+   * The nodes in the function.
+   */
+  size_t n_node;
+  Onnx__NodeProto **node;
+  /*
+   * A human-readable documentation for this function. Markdown is allowed.
+   */
+  char *doc_string;
+  size_t n_opset_import;
+  Onnx__OperatorSetIdProto **opset_import;
+  /*
+   * The domain which this function belongs to. Combined with FunctionProto.name, this forms the unique identity of
+   * the FunctionProto.
+   */
+  char *domain;
+};
+#define ONNX__FUNCTION_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__function_proto__descriptor) \
+    , (char *)protobuf_c_empty_string, 0,NULL, 0,NULL, 0,NULL, 0,NULL, (char *)protobuf_c_empty_string, 0,NULL, (char *)protobuf_c_empty_string }
 
 
 /* Onnx__AttributeProto methods */
@@ -1256,6 +1395,12 @@ void   onnx__type_proto__sequence__init
 /* Onnx__TypeProto__Map methods */
 void   onnx__type_proto__map__init
                      (Onnx__TypeProto__Map         *message);
+/* Onnx__TypeProto__Optional methods */
+void   onnx__type_proto__optional__init
+                     (Onnx__TypeProto__Optional         *message);
+/* Onnx__TypeProto__SparseTensor methods */
+void   onnx__type_proto__sparse_tensor__init
+                     (Onnx__TypeProto__SparseTensor         *message);
 /* Onnx__TypeProto methods */
 void   onnx__type_proto__init
                      (Onnx__TypeProto         *message);
@@ -1293,6 +1438,25 @@ Onnx__OperatorSetIdProto *
                       const uint8_t       *data);
 void   onnx__operator_set_id_proto__free_unpacked
                      (Onnx__OperatorSetIdProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__FunctionProto methods */
+void   onnx__function_proto__init
+                     (Onnx__FunctionProto         *message);
+size_t onnx__function_proto__get_packed_size
+                     (const Onnx__FunctionProto   *message);
+size_t onnx__function_proto__pack
+                     (const Onnx__FunctionProto   *message,
+                      uint8_t             *out);
+size_t onnx__function_proto__pack_to_buffer
+                     (const Onnx__FunctionProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__FunctionProto *
+       onnx__function_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__function_proto__free_unpacked
+                     (Onnx__FunctionProto *message,
                       ProtobufCAllocator *allocator);
 /* --- per-message closures --- */
 
@@ -1344,11 +1508,20 @@ typedef void (*Onnx__TypeProto__Sequence_Closure)
 typedef void (*Onnx__TypeProto__Map_Closure)
                  (const Onnx__TypeProto__Map *message,
                   void *closure_data);
+typedef void (*Onnx__TypeProto__Optional_Closure)
+                 (const Onnx__TypeProto__Optional *message,
+                  void *closure_data);
+typedef void (*Onnx__TypeProto__SparseTensor_Closure)
+                 (const Onnx__TypeProto__SparseTensor *message,
+                  void *closure_data);
 typedef void (*Onnx__TypeProto_Closure)
                  (const Onnx__TypeProto *message,
                   void *closure_data);
 typedef void (*Onnx__OperatorSetIdProto_Closure)
                  (const Onnx__OperatorSetIdProto *message,
+                  void *closure_data);
+typedef void (*Onnx__FunctionProto_Closure)
+                 (const Onnx__FunctionProto *message,
                   void *closure_data);
 
 /* --- services --- */
@@ -1357,6 +1530,7 @@ typedef void (*Onnx__OperatorSetIdProto_Closure)
 /* --- descriptors --- */
 
 extern const ProtobufCEnumDescriptor    onnx__version__descriptor;
+extern const ProtobufCEnumDescriptor    onnx__operator_status__descriptor;
 extern const ProtobufCMessageDescriptor onnx__attribute_proto__descriptor;
 extern const ProtobufCEnumDescriptor    onnx__attribute_proto__attribute_type__descriptor;
 extern const ProtobufCMessageDescriptor onnx__value_info_proto__descriptor;
@@ -1377,7 +1551,10 @@ extern const ProtobufCMessageDescriptor onnx__type_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__type_proto__tensor__descriptor;
 extern const ProtobufCMessageDescriptor onnx__type_proto__sequence__descriptor;
 extern const ProtobufCMessageDescriptor onnx__type_proto__map__descriptor;
+extern const ProtobufCMessageDescriptor onnx__type_proto__optional__descriptor;
+extern const ProtobufCMessageDescriptor onnx__type_proto__sparse_tensor__descriptor;
 extern const ProtobufCMessageDescriptor onnx__operator_set_id_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__function_proto__descriptor;
 
 PROTOBUF_C__END_DECLS
 

@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int PRelu_init(struct onnx_node_t * n)
 {
@@ -29,7 +29,8 @@ static void PRelu_int32(struct onnx_node_t * n)
 	int32_t * pa = (int32_t *)a->datas;;
 	int32_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -50,7 +51,8 @@ static void PRelu_int64(struct onnx_node_t * n)
 	int64_t * pa = (int64_t *)a->datas;;
 	int64_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -71,7 +73,8 @@ static void PRelu_uint32(struct onnx_node_t * n)
 	uint32_t * pa = (uint32_t *)a->datas;;
 	uint32_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -92,7 +95,8 @@ static void PRelu_uint64(struct onnx_node_t * n)
 	uint64_t * pa = (uint64_t *)a->datas;;
 	uint64_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -114,7 +118,8 @@ static void PRelu_float16(struct onnx_node_t * n)
 	uint16_t * pb;
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(pa[i]);
 		if(v < 0)
@@ -136,7 +141,8 @@ static void PRelu_float32(struct onnx_node_t * n)
 	float * pa = (float *)a->datas;;
 	float * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{
@@ -157,7 +163,8 @@ static void PRelu_float64(struct onnx_node_t * n)
 	double * pa = (double *)a->datas;;
 	double * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(pa[i] < 0)
 		{

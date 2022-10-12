@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Greater_init(struct onnx_node_t * n)
 {
@@ -30,7 +30,8 @@ static void Greater_int8(struct onnx_node_t * n)
 	int8_t * pa;
 	int8_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -47,7 +48,8 @@ static void Greater_int16(struct onnx_node_t * n)
 	int16_t * pa;
 	int16_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -64,7 +66,8 @@ static void Greater_int32(struct onnx_node_t * n)
 	int32_t * pa;
 	int32_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -81,7 +84,8 @@ static void Greater_int64(struct onnx_node_t * n)
 	int64_t * pa;
 	int64_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -98,7 +102,8 @@ static void Greater_uint8(struct onnx_node_t * n)
 	uint8_t * pa;
 	uint8_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -115,7 +120,8 @@ static void Greater_uint16(struct onnx_node_t * n)
 	uint16_t * pa;
 	uint16_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -132,7 +138,8 @@ static void Greater_uint32(struct onnx_node_t * n)
 	uint32_t * pa;
 	uint32_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -149,7 +156,8 @@ static void Greater_uint64(struct onnx_node_t * n)
 	uint64_t * pa;
 	uint64_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -166,7 +174,8 @@ static void Greater_bfloat16(struct onnx_node_t * n)
 	uint16_t * pa;
 	uint16_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -183,7 +192,8 @@ static void Greater_float16(struct onnx_node_t * n)
 	uint16_t * pa;
 	uint16_t * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -200,7 +210,8 @@ static void Greater_float32(struct onnx_node_t * n)
 	float * pa;
 	float * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -217,7 +228,8 @@ static void Greater_float64(struct onnx_node_t * n)
 	double * pa;
 	double * pb;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		pa = onnx_tensor_broadcast_map_address(a, y, i);
 		pb = onnx_tensor_broadcast_map_address(b, y, i);

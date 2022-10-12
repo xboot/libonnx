@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Sum_init(struct onnx_node_t * n)
 {
@@ -36,7 +36,8 @@ static void Sum_bfloat16(struct onnx_node_t * n)
 	float sum;
 	int j;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -57,7 +58,8 @@ static void Sum_float16(struct onnx_node_t * n)
 	float sum;
 	int j;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -78,7 +80,8 @@ static void Sum_float32(struct onnx_node_t * n)
 	float sum;
 	int j;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{
@@ -99,7 +102,8 @@ static void Sum_float64(struct onnx_node_t * n)
 	double sum;
 	int j;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		for(j = 0, sum = 0; j < n->ninput; j++)
 		{

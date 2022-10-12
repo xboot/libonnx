@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 union onnx_scalar_t {
 	uint8_t v_bool;

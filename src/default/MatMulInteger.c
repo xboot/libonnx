@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 void resolver_default_op_MatMulInteger(struct onnx_node_t * n)
 {

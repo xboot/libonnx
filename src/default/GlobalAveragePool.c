@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int GlobalAveragePool_init(struct onnx_node_t * n)
 {

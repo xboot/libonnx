@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Constant_init(struct onnx_node_t * n)
 {
@@ -59,7 +59,8 @@ static int Constant_init(struct onnx_node_t * n)
 					if(y->datas && attr->strings)
 					{
 						char ** str = (char **)y->datas;
-						for(size_t i = 0; i < y->ndata; i++)
+						size_t i;
+						for(i=0; i < y->ndata; i++)
 						{
 							if(str[i])
 							{
@@ -67,7 +68,8 @@ static int Constant_init(struct onnx_node_t * n)
 								str[i] = NULL;
 							}
 						}
-						for(size_t i = 0; i < y->ndata; i++)
+
+						for(i=0; i < y->ndata; i++)
 						{
 							str[i] = malloc(attr->strings[i].len + 1);
 							if(str[i])

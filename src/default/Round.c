@@ -1,5 +1,5 @@
 #include <fenv.h>
-#include <onnx.h>
+#include "../onnx.h"
 
 static int Round_init(struct onnx_node_t * n)
 {
@@ -33,7 +33,8 @@ static void Round_float16(struct onnx_node_t * n)
 	}
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		py[i] = float32_to_float16(nearbyintf(v));
@@ -55,7 +56,8 @@ static void Round_float32(struct onnx_node_t * n)
 		fesetround(FE_TONEAREST);
 	}
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = nearbyintf(px[i]);
 
 	if (r != FE_TONEAREST) {
@@ -74,7 +76,8 @@ static void Round_float64(struct onnx_node_t * n)
 		fesetround(FE_TONEAREST);
 	}
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 		py[i] = nearbyint(px[i]);
 
 	if (r != FE_TONEAREST) {

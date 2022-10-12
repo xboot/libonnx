@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	enum onnx_tensor_type_t dtype;
@@ -66,17 +66,21 @@ static void RandomNormalLike_operator(struct onnx_node_t * n)
 
 	if(pdat->seed != 0.0)
 		srand(pdat->seed);
+
+	size_t i, l;
+
 	switch(pdat->dtype)
 	{
 	case ONNX_TENSOR_TYPE_FLOAT16:
 		{
 			uint16_t * py = (uint16_t *)y->datas;
 			float ty, tx;
-			for(size_t i = 0, l = y->ndata; i < l; i++)
+
+			for(i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (float)rand() / (RAND_MAX + 1.0f);
 				tx = (float)rand() / (RAND_MAX + 1.0f);
-				py[i] = float16_to_float32(pdat->mean + pdat->scale * sqrtf(-2.0f * logf(tx)) * cosf(2.0f * acosf(-1.0f) * ty));
+				py[i] = float16_to_float32(pdat->mean + pdat->scale * sqrtf(-2.0f * logf(tx)) * cos(2.0f * acos(-1.0f) * ty));
 			}
 		}
 		break;
@@ -84,11 +88,12 @@ static void RandomNormalLike_operator(struct onnx_node_t * n)
 		{
 			float * py = (float *)y->datas;
 			float ty, tx;
-			for(size_t i = 0, l = y->ndata; i < l; i++)
+
+			for(i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (float)rand() / (RAND_MAX + 1.0f);
 				tx = (float)rand() / (RAND_MAX + 1.0f);
-				py[i] = pdat->mean + pdat->scale * sqrtf(-2.0f * logf(tx)) * cosf(2.0f * acosf(-1.0f) * ty);
+				py[i] = pdat->mean + pdat->scale * sqrtf(-2.0f * logf(tx)) * cos(2.0f * acos(-1.0f) * ty);
 			}
 		}
 		break;
@@ -96,7 +101,8 @@ static void RandomNormalLike_operator(struct onnx_node_t * n)
 		{
 			double * py = (double *)y->datas;
 			double ty, tx;
-			for(size_t i = 0, l = y->ndata; i < l; i++)
+
+			for(i = 0, l = y->ndata; i < l; i++)
 			{
 				ty = (double)rand() / (RAND_MAX + 1.0f);
 				tx = (double)rand() / (RAND_MAX + 1.0f);

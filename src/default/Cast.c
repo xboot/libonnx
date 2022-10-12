@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	enum onnx_tensor_type_t to;

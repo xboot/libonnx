@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float p;
@@ -70,8 +70,8 @@ static void GlobalLpPool_float16(struct onnx_node_t * n)
 		{
 			o = i * C + j;
 			for(k = 0, v = float16_to_float32(0); k < m; ++k)
-				v += powf(fabsf(float16_to_float32(px[o * m + k])), pdat->p);
-			py[o] = float32_to_float16(powf(v, 1.0 / pdat->p));
+				v += pow(fabsf(float16_to_float32(px[o * m + k])), pdat->p);
+			py[o] = float32_to_float16(pow(v, 1.0 / pdat->p));
 		}
 	}
 }
@@ -94,8 +94,8 @@ static void GlobalLpPool_float32(struct onnx_node_t * n)
 		{
 			o = i * C + j;
 			for(k = 0, py[o] = 0; k < m; ++k)
-				py[o] += powf(fabsf(px[o * m + k]), pdat->p);
-			py[o] = powf(py[o], 1.0 / pdat->p);
+				py[o] += pow(fabsf(px[o * m + k]), pdat->p);
+			py[o] = pow(py[o], 1.0 / pdat->p);
 		}
 	}
 }

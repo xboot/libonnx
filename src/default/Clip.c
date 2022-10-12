@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 union onnx_scalar_t {
 	uint8_t v_bool;
@@ -88,7 +88,8 @@ static void Clip_int8(struct onnx_node_t * n)
 	int8_t minv = pdat->pmin ? pdat->pmin->v_int8 : INT8_MIN;
 	int8_t maxv = pdat->pmax ? pdat->pmax->v_int8 : INT8_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -109,7 +110,8 @@ static void Clip_int16(struct onnx_node_t * n)
 	int16_t minv = pdat->pmin ? pdat->pmin->v_int16 : INT16_MIN;
 	int16_t maxv = pdat->pmax ? pdat->pmax->v_int16 : INT16_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -130,7 +132,8 @@ static void Clip_int32(struct onnx_node_t * n)
 	int32_t minv = pdat->pmin ? pdat->pmin->v_int32 : INT32_MIN;
 	int32_t maxv = pdat->pmax ? pdat->pmax->v_int32 : INT32_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -151,7 +154,8 @@ static void Clip_int64(struct onnx_node_t * n)
 	int64_t minv = pdat->pmin ? pdat->pmin->v_int64 : INT64_MIN;
 	int64_t maxv = pdat->pmax ? pdat->pmax->v_int64 : INT64_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -172,7 +176,8 @@ static void Clip_uint8(struct onnx_node_t * n)
 	uint8_t minv = pdat->pmin ? pdat->pmin->v_uint8 : 0;
 	uint8_t maxv = pdat->pmax ? pdat->pmax->v_uint8 : UINT8_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -193,7 +198,8 @@ static void Clip_uint16(struct onnx_node_t * n)
 	uint16_t minv = pdat->pmin ? pdat->pmin->v_uint16 : 0;
 	uint16_t maxv = pdat->pmax ? pdat->pmax->v_uint16 : UINT16_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -214,7 +220,8 @@ static void Clip_uint32(struct onnx_node_t * n)
 	uint32_t minv = pdat->pmin ? pdat->pmin->v_uint32 : 0;
 	uint32_t maxv = pdat->pmax ? pdat->pmax->v_uint32 : UINT32_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -235,7 +242,8 @@ static void Clip_uint64(struct onnx_node_t * n)
 	uint64_t minv = pdat->pmin ? pdat->pmin->v_uint64 : 0;
 	uint64_t maxv = pdat->pmax ? pdat->pmax->v_uint64 : UINT64_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -257,7 +265,8 @@ static void Clip_bfloat16(struct onnx_node_t * n)
 	float maxv = bfloat16_to_float32(pdat->pmax ? pdat->pmax->v_bfloat16 : float32_to_bfloat16(+FLT_MAX));
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = bfloat16_to_float32(px[i]);
 		if(v < minv)
@@ -281,7 +290,8 @@ static void Clip_float16(struct onnx_node_t * n)
 	float maxv = float16_to_float32(pdat->pmax ? pdat->pmax->v_float16 : float32_to_float16(+FLT_MAX));
 	float v;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		v = float16_to_float32(px[i]);
 		if(v < minv)
@@ -304,7 +314,8 @@ static void Clip_float32(struct onnx_node_t * n)
 	float minv = pdat->pmin ? pdat->pmin->v_float32 : -FLT_MAX;
 	float maxv = pdat->pmax ? pdat->pmax->v_float32 : +FLT_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;
@@ -325,7 +336,8 @@ static void Clip_float64(struct onnx_node_t * n)
 	double minv = pdat->pmin ? pdat->pmin->v_float64 : -DBL_MAX;
 	double maxv = pdat->pmax ? pdat->pmax->v_float64 : +DBL_MAX;
 
-	for(size_t i = 0, l = y->ndata; i < l; i++)
+	size_t i,l;
+	for(i=0, l = y->ndata; i < l; i++)
 	{
 		if(px[i] < minv)
 			py[i] = minv;

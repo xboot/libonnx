@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	float epsilon;
@@ -107,7 +107,7 @@ static void InstanceNormalization_float32(struct onnx_node_t * n)
 		mean = temp / channel;
 		temp = 0;
 		for(i = o; i < l; i++)
-			temp += pow(px[i] - mean, 2);
+			temp += (px[i] - mean)*(px[i] - mean);
 		var = temp / channel;
 		for(i = o; i < l; i++)
 			py[i] = pscale[jc] * ((px[i] - mean) / sqrtf(var + pdat->epsilon)) + pb[jc];
@@ -145,7 +145,7 @@ static void InstanceNormalization_float64(struct onnx_node_t * n)
 		mean = temp / channel;
 		temp = 0;
 		for(i = o; i < l; i++)
-			temp += pow(px[i] - mean, 2);
+			temp += (px[i] - mean)*(px[i] - mean);
 		var = temp / channel;
 		for(i = o; i < l; i++)
 			py[i] = pscale[jc] * ((px[i] - mean) / sqrt(var + pdat->epsilon)) + pb[jc];

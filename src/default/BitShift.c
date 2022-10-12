@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_pdata_t {
 	int isleft;
@@ -51,7 +51,8 @@ static void BitShift_uint8(struct onnx_node_t * n)
 
 	if(pdat->isleft)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -60,7 +61,8 @@ static void BitShift_uint8(struct onnx_node_t * n)
 	}
 	else
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -81,7 +83,8 @@ static void BitShift_uint16(struct onnx_node_t * n)
 
 	if(pdat->isleft)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -90,7 +93,8 @@ static void BitShift_uint16(struct onnx_node_t * n)
 	}
 	else
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -111,7 +115,8 @@ static void BitShift_uint32(struct onnx_node_t * n)
 
 	if(pdat->isleft)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -120,7 +125,8 @@ static void BitShift_uint32(struct onnx_node_t * n)
 	}
 	else
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -141,7 +147,8 @@ static void BitShift_uint64(struct onnx_node_t * n)
 
 	if(pdat->isleft)
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);
@@ -150,7 +157,8 @@ static void BitShift_uint64(struct onnx_node_t * n)
 	}
 	else
 	{
-		for(size_t i = 0, l = y->ndata; i < l; i++)
+		size_t i,l;
+		for(i=0, l = y->ndata; i < l; i++)
 		{
 			pa = onnx_tensor_broadcast_map_address(a, y, i);
 			pb = onnx_tensor_broadcast_map_address(b, y, i);

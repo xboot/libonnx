@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <onnx.h>
+#include "../onnx.h"
 
 void * resolver_default_create(void);
 void resolver_default_destroy(void * rctx);

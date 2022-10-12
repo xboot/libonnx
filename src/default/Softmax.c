@@ -1,4 +1,4 @@
-#include <onnx.h>
+#include "../onnx.h"
 
 struct operator_13_pdata_t
 {
@@ -86,7 +86,7 @@ static void Softmax_13_bfloat16(struct onnx_node_t * n)
 			for(j = 0, sum = 0; j < pdat->current; j++)
 			{
 				o = io + j * pdat->inner;
-				v = expf(bfloat16_to_float32(px[o]) - maxv);
+				v = exp(bfloat16_to_float32(px[o]) - maxv);
 				py[o] = float32_to_bfloat16(v);
 				sum += v;
 			}
@@ -129,7 +129,7 @@ static void Softmax_13_float16(struct onnx_node_t * n)
 			for(j = 0, sum = 0; j < pdat->current; j++)
 			{
 				o = io + j * pdat->inner;
-				v = expf(float16_to_float32(px[o]) - maxv);
+				v = exp(float16_to_float32(px[o]) - maxv);
 				py[o] = float32_to_float16(v);
 				sum += v;
 			}
@@ -171,7 +171,7 @@ static void Softmax_13_float32(struct onnx_node_t * n)
 			for(j = 0, sum = 0; j < pdat->current; j++)
 			{
 				o = io + j * pdat->inner;
-				py[o] = expf(px[o] - maxv);
+				py[o] = exp(px[o] - maxv);
 				sum += py[o];
 			}
 			if(sum != 0)
@@ -301,7 +301,7 @@ static void Softmax_1_11_float16(struct onnx_node_t * n)
 		}
 		for(j = 0, sum = 0; j < pdat->D; j++)
 		{
-			v = expf(float16_to_float32(px[o + j]) - maxv);
+			v = exp(float16_to_float32(px[o + j]) - maxv);
 			py[o + j] = float32_to_float16(v);
 			sum += v;
 		}
@@ -335,7 +335,7 @@ static void Softmax_1_11_float32(struct onnx_node_t * n)
 		}
 		for(j = 0, sum = 0; j < pdat->D; j++)
 		{
-			py[o + j] = expf(px[o + j] - maxv);
+			py[o + j] = exp(px[o + j] - maxv);
 			sum += py[o + j];
 		}
 		if(sum != 0)
