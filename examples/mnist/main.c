@@ -2238,8 +2238,13 @@ static struct window_context_t * window_context_alloc(void)
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	SDL_EnableScreenSaver();
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-	SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0");
+#ifdef SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR
+  SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0");
+#endif
+
+#ifdef SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH
 	SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+#endif
 
 	wctx->window = SDL_CreateWindow("The mnist handwritten digit prediction (https://github.com/xboot/libonnx)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS);
 	wctx->screen = SDL_GetWindowSurface(wctx->window);
