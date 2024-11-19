@@ -82,11 +82,11 @@ static void usage(void)
 	printf("usage:\r\n");
 	printf("    tests <DIRECTORY>\r\n");
 	printf("examples:\r\n");
-	printf("    tests ./tests/model\r\n");
-	printf("    tests ./tests/node\r\n");
-	printf("    tests ./tests/pytorch-converted\r\n");
-	printf("    tests ./tests/pytorch-operator\r\n");
-	printf("    tests ./tests/simple\r\n");
+	printf("    tests ../model\r\n");
+	printf("    tests ../node\r\n");
+	printf("    tests ../pytorch-converted\r\n");
+	printf("    tests ../pytorch-operator\r\n");
+	printf("    tests ../simple\r\n");
 }
 
 int main(int argc, char * argv[])
