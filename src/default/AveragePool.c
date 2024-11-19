@@ -354,7 +354,59 @@ static void AveragePool_float64(struct onnx_node_t * n)
 
 void resolver_default_op_AveragePool(struct onnx_node_t * n)
 {
-	if(n->opset >= 11)
+	if(n->opset >= 22)
+	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 19)
+	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = AveragePool_init;
+			n->exit = AveragePool_exit;
+			n->reshape = AveragePool_reshape;
+			n->operator = AveragePool_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 11)
 	{
 		switch(n->inputs[0]->type)
 		{

@@ -33,6 +33,8 @@
 |Atan-7|√|
 |Atanh-22|√|
 |Atanh-9|√|
+|AveragePool-22|√|
+|AveragePool-19|√|
 |AveragePool-11|√|
 |AveragePool-10|√|
 |AveragePool-7|√|
