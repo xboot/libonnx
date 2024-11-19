@@ -50,13 +50,16 @@ static int Concat_reshape(struct onnx_node_t * n)
 	for(i = 1; i < n->ninput; i++)
 	{
 		pdims = n->inputs[i]->dims;
-		for(j = 0; j < ndim; j++)
+		if(pdims)
 		{
-			if(j == pdat->caxis)
-				s += pdims[j];
-			else if(x->dims[j] != pdims[j])
-				return 0;
-			dims[j] = pdims[j];
+			for(j = 0; j < ndim; j++)
+			{
+				if(j == pdat->caxis)
+					s += pdims[j];
+				else if(x->dims[j] != pdims[j])
+					return 0;
+				dims[j] = pdims[j];
+			}
 		}
 	}
 	dims[pdat->caxis] = s;
