@@ -25,6 +25,7 @@
 |ArgMin-12|√|
 |ArgMin-11|√|
 |ArgMin-1|√|
+|Asin-22|√|
 |Asin-7|√|
 |Asinh-9|√|
 |Atan-7|√|

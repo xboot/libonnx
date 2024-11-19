@@ -20,6 +20,21 @@ static int Asin_reshape(struct onnx_node_t * n)
 	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
+static void Asin_bfloat16(struct onnx_node_t * n)
+{
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+	uint16_t * px = (uint16_t *)x->datas;
+	uint16_t * py = (uint16_t *)y->datas;
+	float v;
+
+	for(size_t i = 0, l = y->ndata; i < l; i++)
+	{
+		v = bfloat16_to_float32(px[i]);
+		py[i] = float32_to_bfloat16(asinf(v));
+	}
+}
+
 static void Asin_float16(struct onnx_node_t * n)
 {
 	struct onnx_tensor_t * x = n->inputs[0];
@@ -59,7 +74,39 @@ static void Asin_float64(struct onnx_node_t * n)
 
 void resolver_default_op_Asin(struct onnx_node_t * n)
 {
-	if(n->opset >= 7)
+	if(n->opset >= 22)
+	{
+		switch(n->inputs[0]->type)
+		{
+		case ONNX_TENSOR_TYPE_BFLOAT16:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_bfloat16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT16:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float16;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT32:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float32;
+			break;
+		case ONNX_TENSOR_TYPE_FLOAT64:
+			n->init = Asin_init;
+			n->exit = Asin_exit;
+			n->reshape = Asin_reshape;
+			n->operator = Asin_float64;
+			break;
+		default:
+			break;
+		}
+	}
+	else if(n->opset >= 7)
 	{
 		switch(n->inputs[0]->type)
 		{
