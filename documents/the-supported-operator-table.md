@@ -29,6 +29,7 @@
 |Asin-7|√|
 |Asinh-22|√|
 |Asinh-9|√|
+|Atan-22|√|
 |Atan-7|√|
 |Atanh-9|√|
 |AveragePool-11|√|
