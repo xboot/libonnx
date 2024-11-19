@@ -46,6 +46,10 @@
 |BatchNormalization-6||
 |BatchNormalization-1||
 |BitShift-11|√|
+|BitwiseAnd-18|√|
+|BitwiseNot-18|√|
+|BitwiseOr-18|√|
+|BitwiseXor-18|√|
 |Cast-13|√|
 |Cast-9|√|
 |Cast-6|√|

@@ -591,6 +591,18 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x0bfe45a2: /* "BitShift" */
 			rop = r->op_BitShift;
 			break;
+		case 0xdadf882f: /* "BitwiseAnd" */
+			rop = r->op_BitwiseAnd;
+			break;
+		case 0xdadfbfad: /* "BitwiseNot" */
+			rop = r->op_BitwiseNot;
+			break;
+		case 0xdfd83c3d: /* "BitwiseOr" */
+			rop = r->op_BitwiseOr;
+			break;
+		case 0xdadfea35: /* "BitwiseXor" */
+			rop = r->op_BitwiseXor;
+			break;
 		case 0x7c8378d0: /* "Cast" */
 			rop = r->op_Cast;
 			break;

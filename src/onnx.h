@@ -107,6 +107,10 @@ struct onnx_resolver_t {
 	void (*op_AveragePool)(struct onnx_node_t * n);
 	void (*op_BatchNormalization)(struct onnx_node_t * n);
 	void (*op_BitShift)(struct onnx_node_t * n);
+	void (*op_BitwiseAnd)(struct onnx_node_t * n);
+	void (*op_BitwiseNot)(struct onnx_node_t * n);
+	void (*op_BitwiseOr)(struct onnx_node_t * n);
+	void (*op_BitwiseXor)(struct onnx_node_t * n);
 	void (*op_Cast)(struct onnx_node_t * n);
 	void (*op_Ceil)(struct onnx_node_t * n);
 	void (*op_Clip)(struct onnx_node_t * n);
