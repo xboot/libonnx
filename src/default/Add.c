@@ -229,7 +229,7 @@ void resolver_default_op_Add(struct onnx_node_t * n)
 {
 	if(n->opset >= 14)
 	{
-	switch(n->inputs[0]->type)
+		switch(n->inputs[0]->type)
 		{
 		case ONNX_TENSOR_TYPE_INT8:
 			n->init = Add_init;
