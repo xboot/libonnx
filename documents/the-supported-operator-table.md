@@ -8,6 +8,7 @@
 |Abs-1 | √ |
 | Acos-22 | √ |
 | Acos-7 | √ |
+|Acosh-22                                       | √ |
 |Acosh-9                                       | √ |
 |Add-14|√|
 |Add-13|√|
