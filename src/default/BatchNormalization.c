@@ -138,7 +138,10 @@ static void BatchNormalization_float64(struct onnx_node_t * n)
 
 void resolver_default_op_BatchNormalization(struct onnx_node_t * n)
 {
-	if(n->opset >= 14)
+	if(n->opset >= 15)
+	{
+	}
+	else if(n->opset >= 14)
 	{
 	}
 	else if(n->opset >= 9)
