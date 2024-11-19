@@ -1170,13 +1170,6 @@ struct onnx_graph_t * onnx_graph_alloc(struct onnx_context_t * ctx, Onnx__GraphP
 						}
 					}
 				}
-				if(!onnx_tensor_search(ctx, name))
-				{
-					if(g->nodes)
-						free(g->nodes);
-					free(g);
-					return NULL;
-				}
 			}
 		}
 	}
