@@ -59,7 +59,7 @@ Change `CROSS_COMPILE` to point the toolchains that you plan to use.
 After compiling all the files, you can run an example by using:
 
 ```shell
-cd libonnx/examples/hello
+cd libonnx/examples/hello/output
 ./hello
 ```
 
@@ -72,8 +72,8 @@ cd libonnx/examples/hello
 To run tests, for example on those in the `tests/model` folder use:
 
 ```shell
-cd libonnx/tests/
-./tests model
+cd libonnx/tests/output
+./tests ../model
 ```
 
 Here is the output:
