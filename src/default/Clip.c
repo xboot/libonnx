@@ -65,7 +65,7 @@ static int Clip_reshape(struct onnx_node_t * n)
 
 	pdat->pmin = NULL;
 	pdat->pmax = NULL;
-	for(i = 1; i < min(3, n->ninput); i++)
+	for(i = 1; i < XMIN(3, n->ninput); i++)
 	{
 		if(n->inputs[i]->ndim == 0)
 		{

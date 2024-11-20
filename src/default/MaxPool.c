@@ -246,7 +246,7 @@ static void MaxPool_int8(struct onnx_node_t * n)
 			if(i >= x->ndim)
 			{
 				v = px[dim_offset(x->ndim, i_dim, x->dims)];
-				maxv = max(v, maxv);
+				maxv = XMAX(v, maxv);
 			}
 		} while(dim_next(x->ndim - 2, k_dim, pdat->kernels));
 		py[dim_offset(x->ndim, o_dim, y->dims)] = maxv;
@@ -286,7 +286,7 @@ static void MaxPool_uint8(struct onnx_node_t * n)
 			if(i >= x->ndim)
 			{
 				v = px[dim_offset(x->ndim, i_dim, x->dims)];
-				maxv = max(v, maxv);
+				maxv = XMAX(v, maxv);
 			}
 		} while(dim_next(x->ndim - 2, k_dim, pdat->kernels));
 		py[dim_offset(x->ndim, o_dim, y->dims)] = maxv;

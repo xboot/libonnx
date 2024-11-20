@@ -65,7 +65,7 @@ static int MatMul_reshape(struct onnx_node_t * n)
 		bdims = b->dims;
 		bndim = b->ndim;
 	}
-	int ndim = max(andim, bndim);
+	int ndim = XMAX(andim, bndim);
 	int dims[ndim];
 	if(andim < 2 || bndim < 2)
 		return 0;
@@ -79,7 +79,7 @@ static int MatMul_reshape(struct onnx_node_t * n)
 		int blen = (bndim - i) < 0 ? 1 : bdims[bndim - i];
 		if(alen != blen && alen > 1 && blen > 1)
 			return 0;
-		dims[ndim - i] = max(alen, blen);
+		dims[ndim - i] = XMAX(alen, blen);
 	}
 	pdat->m = adims[andim - 2];
 	pdat->n = bdims[bndim - 1];

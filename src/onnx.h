@@ -336,7 +336,7 @@ static inline int onnx_tensor_reshape_identity(struct onnx_tensor_t * y, struct 
 
 static inline int onnx_tensor_reshape_multi_broadcast(struct onnx_tensor_t * y, struct onnx_tensor_t * a, struct onnx_tensor_t * b, enum onnx_tensor_type_t type)
 {
-	int ndim = max(a->ndim, b->ndim);
+	int ndim = XMAX(a->ndim, b->ndim);
 	int dims[ndim];
 	int i, j, k;
 

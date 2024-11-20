@@ -18,7 +18,7 @@ static int Expand_reshape(struct onnx_node_t * n)
 	struct onnx_tensor_t * x = n->inputs[0];
 	struct onnx_tensor_t * s = n->inputs[1];
 	int64_t * ps = (int64_t *)s->datas;
-	int ndim = max(x->ndim, (int)s->ndata);
+	int ndim = XMAX(x->ndim, (int)s->ndata);
 	int dims[ndim];
 	int i, j, k;
 

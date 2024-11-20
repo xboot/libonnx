@@ -27,7 +27,7 @@ static void Shape_operator(struct onnx_node_t * n)
 	int64_t * py = (int64_t *)y->datas;
 	size_t i, l;
 
-	for(i = 0, l = min(y->ndata, (size_t)x->ndim); i < l; i++)
+	for(i = 0, l = XMIN(y->ndata, (size_t)x->ndim); i < l; i++)
 		py[i] = x->dims[i];
 }
 

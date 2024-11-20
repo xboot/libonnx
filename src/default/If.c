@@ -69,7 +69,7 @@ static int If_reshape(struct onnx_node_t * n)
 		}
 		if(t)
 		{
-			for(i = 0; i < min(t->noutput, n->noutput); i++)
+			for(i = 0; i < XMIN(t->noutput, n->noutput); i++)
 			{
 				struct onnx_tensor_t * a = t->outputs[i];
 				struct onnx_tensor_t * b = n->outputs[i];
@@ -102,7 +102,7 @@ static void If_operator(struct onnx_node_t * n)
 		}
 		if(t)
 		{
-			for(i = 0; i < min(t->noutput, n->noutput); i++)
+			for(i = 0; i < XMIN(t->noutput, n->noutput); i++)
 			{
 				struct onnx_tensor_t * a = t->outputs[i];
 				struct onnx_tensor_t * b = n->outputs[i];

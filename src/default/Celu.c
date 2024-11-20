@@ -47,7 +47,7 @@ static void Celu_float32(struct onnx_node_t * n)
 	float * py = (float *)y->datas;
 
 	for(size_t i = 0, l = y->ndata; i < l; i++)
-		py[i] = max((float)0.0, (float)px[i]) + min((float)0.0, (float)pdat->alpha * (expf(px[i] / pdat->alpha) - 1));
+		py[i] = XMAX((float)0.0, (float)px[i]) + XMIN((float)0.0, (float)pdat->alpha * (expf(px[i] / pdat->alpha) - 1));
 }
 
 void resolver_default_op_Celu(struct onnx_node_t * n)
