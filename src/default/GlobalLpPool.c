@@ -10,7 +10,7 @@ static int GlobalLpPool_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			if(n->opset >= 2)
@@ -29,7 +29,7 @@ static int GlobalLpPool_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 

@@ -10,7 +10,7 @@ static int Flatten_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->axis = onnx_attribute_read_int(n, "axis", 1);
@@ -26,7 +26,7 @@ static int Flatten_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -70,13 +70,13 @@ static void Flatten_operator(struct onnx_node_t * n)
 		for(size_t i = 0, l = y->ndata; i < l; i++)
 		{
 			if(py[i])
-				free(py[i]);
-			py[i] = strdup(px[i]);
+				onnx_free(py[i]);
+			py[i] = onnx_strdup(px[i]);
 		}
 	}
 	else
 	{
-		memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
+		onnx_memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
 	}
 }
 

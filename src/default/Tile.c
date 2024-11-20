@@ -250,8 +250,8 @@ static void Tile_string(struct onnx_node_t * n)
 	{
 		px = onnx_tensor_broadcast_map_address(x, y, i);
 		if(py[i])
-			free(py[i]);
-		py[i] = strdup(px[i]);
+			onnx_free(py[i]);
+		py[i] = onnx_strdup(px[i]);
 	}
 }
 

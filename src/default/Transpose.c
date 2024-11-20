@@ -13,11 +13,11 @@ static int Transpose_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->nperm = n->inputs[0]->ndim;
-			pdat->perm = malloc(sizeof(int) * pdat->nperm);
+			pdat->perm = onnx_malloc(sizeof(int) * pdat->nperm);
 			if(pdat->perm)
 			{
 				if(pdat->nperm == onnx_attribute_read_ints(n, "perm", &ints))
@@ -35,7 +35,7 @@ static int Transpose_init(struct onnx_node_t * n)
 			}
 			else
 			{
-				free(pdat);
+				onnx_free(pdat);
 			}
 		}
 	}
@@ -49,8 +49,8 @@ static int Transpose_exit(struct onnx_node_t * n)
 	if(pdat)
 	{
 		if(pdat->perm)
-			free(pdat->perm);
-		free(pdat);
+			onnx_free(pdat->perm);
+		onnx_free(pdat);
 	}
 	return 1;
 }
@@ -422,8 +422,8 @@ static void Transpose_string(struct onnx_node_t * n)
 			ix[pdat->perm[i]] = iy[i];
 		ox = onnx_tensor_indices_to_offset(x, ix);
 		if(py[oy])
-			free(py[oy]);
-		py[oy] = strdup(px[ox]);
+			onnx_free(py[oy]);
+		py[oy] = onnx_strdup(px[ox]);
 	}
 }
 

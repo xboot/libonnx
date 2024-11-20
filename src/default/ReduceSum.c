@@ -14,7 +14,7 @@ static int ReduceSum_init(struct onnx_node_t * n)
 
 	if((n->ninput >= 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->keepdims = onnx_attribute_read_int(n, "keepdims", 1);
@@ -31,7 +31,7 @@ static int ReduceSum_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -72,7 +72,7 @@ static int ReduceSum_reshape(struct onnx_node_t * n)
 	}
 	if(pdat->keepdims)
 	{
-		memcpy(dims, x->dims, sizeof(int) * ndim);
+		onnx_memcpy(dims, x->dims, sizeof(int) * ndim);
 		for(i = 0; i < pdat->naxes; i++)
 			dims[pdat->caxes[i]] = 1;
 	}
@@ -159,10 +159,10 @@ static void ReduceSum_int8(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -207,10 +207,10 @@ static void ReduceSum_int32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -255,10 +255,10 @@ static void ReduceSum_int64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -303,10 +303,10 @@ static void ReduceSum_uint8(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -351,10 +351,10 @@ static void ReduceSum_uint32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -399,10 +399,10 @@ static void ReduceSum_uint64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -447,10 +447,10 @@ static void ReduceSum_bfloat16(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -495,10 +495,10 @@ static void ReduceSum_float16(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -543,10 +543,10 @@ static void ReduceSum_float32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -591,10 +591,10 @@ static void ReduceSum_float64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do

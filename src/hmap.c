@@ -58,14 +58,14 @@ struct hmap_t * hmap_alloc(int size, void (*cb)(struct hmap_t *, struct hmap_ent
 	if(size & (size - 1))
 		size = roundup_pow_of_two(size);
 
-	m = malloc(sizeof(struct hmap_t));
+	m = onnx_malloc(sizeof(struct hmap_t));
 	if(!m)
 		return NULL;
 
-	m->hash = malloc(sizeof(struct hlist_head) * size);
+	m->hash = onnx_malloc(sizeof(struct hlist_head) * size);
 	if(!m->hash)
 	{
-		free(m);
+		onnx_free(m);
 		return NULL;
 	}
 	for(i = 0; i < size; i++)
@@ -83,8 +83,8 @@ void hmap_free(struct hmap_t * m)
 	if(m)
 	{
 		hmap_clear(m);
-		free(m->hash);
-		free(m);
+		onnx_free(m->hash);
+		onnx_free(m);
 	}
 }
 
@@ -101,8 +101,8 @@ void hmap_clear(struct hmap_t * m)
 			m->n--;
 			if(m->callback)
 				m->callback(m, pos);
-			free(pos->key);
-			free(pos);
+			onnx_free(pos->key);
+			onnx_free(pos);
 		}
 	}
 }
@@ -121,7 +121,7 @@ static void hmap_resize(struct hmap_t * m, unsigned int size)
 	if(size & (size - 1))
 		size = roundup_pow_of_two(size);
 
-	hash = malloc(sizeof(struct hlist_head) * size);
+	hash = onnx_malloc(sizeof(struct hlist_head) * size);
 	if(!hash)
 		return;
 	for(i = 0; i < size; i++)
@@ -131,7 +131,7 @@ static void hmap_resize(struct hmap_t * m, unsigned int size)
 	{
 		hlist_del(&pos->node);
 	}
-	free(m->hash);
+	onnx_free(m->hash);
 
 	m->hash = hash;
 	m->size = size;
@@ -151,7 +151,7 @@ void hmap_add(struct hmap_t * m, const char * key, void * value)
 
 	hlist_for_each_entry_safe(pos, n, &m->hash[shash(key) & (m->size - 1)], node)
 	{
-		if(strcmp(pos->key, key) == 0)
+		if(onnx_strcmp(pos->key, key) == 0)
 		{
 			if(pos->value != value)
 				pos->value = value;
@@ -162,11 +162,11 @@ void hmap_add(struct hmap_t * m, const char * key, void * value)
 	if(m->n > (m->size >> 1))
 		hmap_resize(m, m->size << 1);
 
-	pos = malloc(sizeof(struct hmap_entry_t));
+	pos = onnx_malloc(sizeof(struct hmap_entry_t));
 	if(!pos)
 		return;
 
-	pos->key = strdup(key);
+	pos->key = onnx_strdup(key);
 	pos->value = value;
 	init_hlist_node(&pos->node);
 	hlist_add_head(&pos->node, &m->hash[shash(pos->key) & (m->size - 1)]);
@@ -188,13 +188,13 @@ void hmap_remove(struct hmap_t * m, const char * key)
 
 	hlist_for_each_entry_safe(pos, n, &m->hash[shash(key) & (m->size - 1)], node)
 	{
-		if(strcmp(pos->key, key) == 0)
+		if(onnx_strcmp(pos->key, key) == 0)
 		{
 			hlist_del(&pos->node);
 			list_del(&pos->head);
 			m->n--;
-			free(pos->key);
-			free(pos);
+			onnx_free(pos->key);
+			onnx_free(pos);
 			return;
 		}
 	}
@@ -266,7 +266,7 @@ static void lsort(void * priv, struct list_head * head, int (*cmp)(void * priv, 
 	if(list_empty(head))
 		return;
 
-	memset(part, 0, sizeof(part));
+	onnx_memset(part, 0, sizeof(part));
 	head->prev->next = NULL;
 	list = head->next;
 
@@ -301,7 +301,7 @@ static int hmap_compare(void * priv, struct list_head * a, struct list_head * b)
 {
 	char * keya = (char *)list_entry(a, struct hmap_entry_t, head)->key;
 	char * keyb = (char *)list_entry(b, struct hmap_entry_t, head)->key;
-	return strcmp(keya, keyb);
+	return onnx_strcmp(keya, keyb);
 }
 
 void hmap_sort(struct hmap_t * m)
@@ -320,7 +320,7 @@ void * hmap_search(struct hmap_t * m, const char * key)
 
 	hlist_for_each_entry_safe(pos, n, &m->hash[shash(key) & (m->size - 1)], node)
 	{
-		if(strcmp(pos->key, key) == 0)
+		if(onnx_strcmp(pos->key, key) == 0)
 			return pos->value;
 	}
 	return NULL;

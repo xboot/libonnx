@@ -31,10 +31,10 @@ static int MaxPool_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput >= 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			memset(pdat, 0, sizeof(struct operator_pdata_t));
+			onnx_memset(pdat, 0, sizeof(struct operator_pdata_t));
 			switch(shash(onnx_attribute_read_string(n, "auto_pad", "NOTSET")))
 			{
 			case 0xc3966fc2: /* "NOTSET" */
@@ -58,12 +58,12 @@ static int MaxPool_init(struct onnx_node_t * n)
 			pdat->nkernel = onnx_attribute_read_ints(n, "kernel_shape", &ints);
 			if(pdat->nkernel > 0)
 			{
-				pdat->kernels = malloc(sizeof(int) * pdat->nkernel);
+				pdat->kernels = onnx_malloc(sizeof(int) * pdat->nkernel);
 				for(i = 0; i < pdat->nkernel; i++)
 					pdat->kernels[i] = ints[i];
 			}
 			pdat->ndilation = pdat->nkernel;
-			pdat->dilations = malloc(sizeof(int) * pdat->ndilation);
+			pdat->dilations = onnx_malloc(sizeof(int) * pdat->ndilation);
 			if(pdat->dilations)
 			{
 				l = onnx_attribute_read_ints(n, "dilations", &ints);
@@ -73,7 +73,7 @@ static int MaxPool_init(struct onnx_node_t * n)
 					pdat->dilations[i] = 1;
 			}
 			pdat->npad = pdat->nkernel * 2;
-			pdat->pads = malloc(sizeof(int) * pdat->npad);
+			pdat->pads = onnx_malloc(sizeof(int) * pdat->npad);
 			if(pdat->pads)
 			{
 				l = onnx_attribute_read_ints(n, "pads", &ints);
@@ -83,7 +83,7 @@ static int MaxPool_init(struct onnx_node_t * n)
 					pdat->pads[i] = 0;
 			}
 			pdat->nstride = pdat->nkernel;
-			pdat->strides = malloc(sizeof(int) * pdat->nstride);
+			pdat->strides = onnx_malloc(sizeof(int) * pdat->nstride);
 			if(pdat->strides)
 			{
 				l = onnx_attribute_read_ints(n, "strides", &ints);
@@ -106,14 +106,14 @@ static int MaxPool_exit(struct onnx_node_t * n)
 	if(pdat)
 	{
 		if(pdat->kernels)
-			free(pdat->kernels);
+			onnx_free(pdat->kernels);
 		if(pdat->dilations)
-			free(pdat->dilations);
+			onnx_free(pdat->dilations);
 		if(pdat->pads)
-			free(pdat->pads);
+			onnx_free(pdat->pads);
 		if(pdat->strides)
-			free(pdat->strides);
-		free(pdat);
+			onnx_free(pdat->strides);
+		onnx_free(pdat);
 	}
 	return 1;
 }
@@ -131,7 +131,7 @@ static int MaxPool_reshape(struct onnx_node_t * n)
 	switch(pdat->auto_pad)
 	{
 	case AUTO_PAD_NOTSET:
-		memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
+		onnx_memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
 		break;
 	case AUTO_PAD_SAME_UPPER:
 		for(i = 0; i < pdat->npad / 2; i++)
@@ -150,7 +150,7 @@ static int MaxPool_reshape(struct onnx_node_t * n)
 		}
 		break;
 	case AUTO_PAD_VALID:
-		memset(pdat->cpads, 0, sizeof(int) * pdat->npad);
+		onnx_memset(pdat->cpads, 0, sizeof(int) * pdat->npad);
 		break;
 	default:
 		break;
@@ -227,12 +227,12 @@ static void MaxPool_int8(struct onnx_node_t * n)
 	int b_dim[x->ndim];
 	int i;
 
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; ++i)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		maxv = INT8_MIN;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -267,12 +267,12 @@ static void MaxPool_uint8(struct onnx_node_t * n)
 	int b_dim[x->ndim];
 	int i;
 
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; ++i)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		maxv = 0;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -307,12 +307,12 @@ static void MaxPool_float16(struct onnx_node_t * n)
 	int b_dim[x->ndim];
 	int i;
 
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; ++i)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		maxv = -FLT_MAX;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -347,12 +347,12 @@ static void MaxPool_float32(struct onnx_node_t * n)
 	int b_dim[x->ndim];
 	int i;
 
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; ++i)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		maxv = -FLT_MAX;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -387,12 +387,12 @@ static void MaxPool_float64(struct onnx_node_t * n)
 	int b_dim[x->ndim];
 	int i;
 
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; ++i)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		maxv = -DBL_MAX;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];

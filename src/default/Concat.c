@@ -11,7 +11,7 @@ static int Concat_init(struct onnx_node_t * n)
 
 	if((n->ninput >= 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->axis = onnx_attribute_read_int(n, "axis", 1);
@@ -27,7 +27,7 @@ static int Concat_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -93,8 +93,8 @@ static void Concat_operator(struct onnx_node_t * n)
 			for(o = 0, j = 0, k = ybase, l = x->ndata; o < l; o++)
 			{
 				if(py[k + o])
-					free(py[k + o]);
-				py[k + o] = strdup(px[o]);
+					onnx_free(py[k + o]);
+				py[k + o] = onnx_strdup(px[o]);
 				if(++j == xpitch)
 				{
 					k += (ypitch - xpitch);
@@ -119,7 +119,7 @@ static void Concat_operator(struct onnx_node_t * n)
 				xpitch *= x->dims[i];
 			for(o = 0, j = 0, k = ybase, l = x->ndata; o < l; o++)
 			{
-				memcpy(py + (k + o) * sz, px + o * sz, sz);
+				onnx_memcpy(py + (k + o) * sz, px + o * sz, sz);
 				if(++j == xpitch)
 				{
 					k += (ypitch - xpitch);

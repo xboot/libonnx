@@ -23,7 +23,7 @@ static int Unsqueeze_reshape(struct onnx_node_t * n)
 	int axis;
 	int i, j;
 
-	memset(dims, 0, sizeof(int) * ndim);
+	onnx_memset(dims, 0, sizeof(int) * ndim);
 	for(i = 0; i < a->ndata; i++)
 	{
 		axis = pa[i];
@@ -52,13 +52,13 @@ static void Unsqueeze_operator(struct onnx_node_t * n)
 		for(size_t i = 0, l = y->ndata; i < l; i++)
 		{
 			if(py[i])
-				free(py[i]);
-			py[i] = strdup(px[i]);
+				onnx_free(py[i]);
+			py[i] = onnx_strdup(px[i]);
 		}
 	}
 	else
 	{
-		memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
+		onnx_memcpy(y->datas, x->datas, x->ndata * onnx_tensor_type_sizeof(x->type));
 	}
 }
 

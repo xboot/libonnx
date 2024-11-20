@@ -29,10 +29,10 @@ static int AveragePool_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
-			memset(pdat, 0, sizeof(struct operator_pdata_t));
+			onnx_memset(pdat, 0, sizeof(struct operator_pdata_t));
 			switch(shash(onnx_attribute_read_string(n, "auto_pad", "NOTSET")))
 			{
 			case 0xc3966fc2: /* "NOTSET" */
@@ -56,12 +56,12 @@ static int AveragePool_init(struct onnx_node_t * n)
 			pdat->nkernel = onnx_attribute_read_ints(n, "kernel_shape", &ints);
 			if(pdat->nkernel > 0)
 			{
-				pdat->kernels = malloc(sizeof(int) * pdat->nkernel);
+				pdat->kernels = onnx_malloc(sizeof(int) * pdat->nkernel);
 				for(i = 0; i < pdat->nkernel; i++)
 					pdat->kernels[i] = ints[i];
 			}
 			pdat->npad = pdat->nkernel * 2;
-			pdat->pads = malloc(sizeof(int) * pdat->npad);
+			pdat->pads = onnx_malloc(sizeof(int) * pdat->npad);
 			if(pdat->pads)
 			{
 				l = onnx_attribute_read_ints(n, "pads", &ints);
@@ -71,7 +71,7 @@ static int AveragePool_init(struct onnx_node_t * n)
 					pdat->pads[i] = 0;
 			}
 			pdat->nstride = pdat->nkernel;
-			pdat->strides = malloc(sizeof(int) * pdat->nstride);
+			pdat->strides = onnx_malloc(sizeof(int) * pdat->nstride);
 			if(pdat->strides)
 			{
 				l = onnx_attribute_read_ints(n, "strides", &ints);
@@ -94,12 +94,12 @@ static int AveragePool_exit(struct onnx_node_t * n)
 	if(pdat)
 	{
 		if(pdat->kernels)
-			free(pdat->kernels);
+			onnx_free(pdat->kernels);
 		if(pdat->pads)
-			free(pdat->pads);
+			onnx_free(pdat->pads);
 		if(pdat->strides)
-			free(pdat->strides);
-		free(pdat);
+			onnx_free(pdat->strides);
+		onnx_free(pdat);
 	}
 	return 1;
 }
@@ -117,7 +117,7 @@ static int AveragePool_reshape(struct onnx_node_t * n)
 	switch(pdat->auto_pad)
 	{
 	case AUTO_PAD_NOTSET:
-		memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
+		onnx_memcpy(pdat->cpads, pdat->pads, sizeof(int) * pdat->npad);
 		break;
 	case AUTO_PAD_SAME_UPPER:
 		for(i = 0; i < pdat->npad / 2; i++)
@@ -136,7 +136,7 @@ static int AveragePool_reshape(struct onnx_node_t * n)
 		}
 		break;
 	case AUTO_PAD_VALID:
-		memset(pdat->cpads, 0, sizeof(int) * pdat->npad);
+		onnx_memset(pdat->cpads, 0, sizeof(int) * pdat->npad);
 		break;
 	default:
 		break;
@@ -216,13 +216,13 @@ static void AveragePool_float16(struct onnx_node_t * n)
 
 	for(i = 0, size = 1; i < x->ndim - 2; ++i)
 		size *= pdat->kernels[i];
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; i++)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		sum = 0;
 		padcnt = 0;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -267,13 +267,13 @@ static void AveragePool_float32(struct onnx_node_t * n)
 
 	for(i = 0, size = 1; i < x->ndim - 2; ++i)
 		size *= pdat->kernels[i];
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; i++)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		sum = 0;
 		padcnt = 0;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];
@@ -318,13 +318,13 @@ static void AveragePool_float64(struct onnx_node_t * n)
 
 	for(i = 0, size = 1; i < x->ndim - 2; ++i)
 		size *= pdat->kernels[i];
-	memset(o_dim, 0, sizeof(o_dim));
+	onnx_memset(o_dim, 0, sizeof(o_dim));
 	do {
 		for(i = 2; i < x->ndim; i++)
 			b_dim[i] = o_dim[i] * pdat->strides[i - 2] - pdat->cpads[i - 2];
 		sum = 0;
 		padcnt = 0;
-		memset(k_dim, 0, sizeof(k_dim));
+		onnx_memset(k_dim, 0, sizeof(k_dim));
 		do {
 			i_dim[0] = o_dim[0];
 			i_dim[1] = o_dim[1];

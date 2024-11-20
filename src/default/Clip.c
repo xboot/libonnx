@@ -35,7 +35,7 @@ static int Clip_init(struct onnx_node_t * n)
 
 	if((n->ninput >= 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->pmin = NULL;
@@ -52,7 +52,7 @@ static int Clip_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -69,9 +69,9 @@ static int Clip_reshape(struct onnx_node_t * n)
 	{
 		if(n->inputs[i]->ndim == 0)
 		{
-			if(strcmp(n->inputs[i]->name, "min") == 0)
+			if(onnx_strcmp(n->inputs[i]->name, "min") == 0)
 				pdat->pmin = (union onnx_scalar_t *)n->inputs[i]->datas;
-			else if(strcmp(n->inputs[i]->name, "max") == 0)
+			else if(onnx_strcmp(n->inputs[i]->name, "max") == 0)
 				pdat->pmax = (union onnx_scalar_t *)n->inputs[i]->datas;
 		}
 	}

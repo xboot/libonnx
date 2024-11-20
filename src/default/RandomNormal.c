@@ -17,11 +17,11 @@ static int RandomNormal_init(struct onnx_node_t * n)
 
 	if(n->noutput == 1)
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->nshape = onnx_attribute_read_ints(n, "shape", &ints);
-			if((pdat->nshape > 0) && (pdat->shape = malloc(sizeof(int) * pdat->nshape)))
+			if((pdat->nshape > 0) && (pdat->shape = onnx_malloc(sizeof(int) * pdat->nshape)))
 			{
 				pdat->dtype = (enum onnx_tensor_type_t)onnx_attribute_read_int(n, "dtype", 1);
 				pdat->mean = onnx_attribute_read_float(n, "mean", 0.0);
@@ -34,7 +34,7 @@ static int RandomNormal_init(struct onnx_node_t * n)
 			}
 			else
 			{
-				free(pdat);
+				onnx_free(pdat);
 				return 0;
 			}
 		}
@@ -49,8 +49,8 @@ static int RandomNormal_exit(struct onnx_node_t * n)
 	if(pdat)
 	{
 		if(pdat->shape)
-			free(pdat->shape);
-		free(pdat);
+			onnx_free(pdat->shape);
+		onnx_free(pdat);
 	}
 	return 1;
 }

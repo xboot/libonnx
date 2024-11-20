@@ -15,7 +15,7 @@ static int ArgMin_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->axis = onnx_attribute_read_int(n, "axis", 0);
@@ -33,7 +33,7 @@ static int ArgMin_exit(struct onnx_node_t * n)
 	struct operator_pdata_t * pdat = (struct operator_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -55,7 +55,7 @@ static int ArgMin_reshape(struct onnx_node_t * n)
 	pdat->stride = x->strides[axis];
 	if(pdat->keepdims)
 	{
-		memcpy(dims, x->dims, sizeof(int) * ndim);
+		onnx_memcpy(dims, x->dims, sizeof(int) * ndim);
 		dims[axis] = 1;
 	}
 	else

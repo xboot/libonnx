@@ -14,7 +14,7 @@ static int Constant_init(struct onnx_node_t * n)
 			switch(attr->type)
 			{
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOAT:
-				if(strcmp(attr->name, "value_float") == 0)
+				if(onnx_strcmp(attr->name, "value_float") == 0)
 				{
 					if((y->ndim != 0) || (y->type != ONNX_TENSOR_TYPE_FLOAT32))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_FLOAT32, NULL, 0);
@@ -23,7 +23,7 @@ static int Constant_init(struct onnx_node_t * n)
 				}
 				break;
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INT:
-				if(strcmp(attr->name, "value_int") == 0)
+				if(onnx_strcmp(attr->name, "value_int") == 0)
 				{
 					if((y->ndim != 0) || (y->type != ONNX_TENSOR_TYPE_INT64))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, NULL, 0);
@@ -34,7 +34,7 @@ static int Constant_init(struct onnx_node_t * n)
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRING:
 				break;
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__FLOATS:
-				if((strcmp(attr->name, "value_floats") == 0) && (attr->n_floats > 0))
+				if((onnx_strcmp(attr->name, "value_floats") == 0) && (attr->n_floats > 0))
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_floats) || (y->type != ONNX_TENSOR_TYPE_FLOAT32))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_FLOAT32, (int[]){ attr->n_floats }, 1);
@@ -43,7 +43,7 @@ static int Constant_init(struct onnx_node_t * n)
 				}
 				break;
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__INTS:
-				if((strcmp(attr->name, "value_ints") == 0) && (attr->n_ints > 0))
+				if((onnx_strcmp(attr->name, "value_ints") == 0) && (attr->n_ints > 0))
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_ints) || (y->type != ONNX_TENSOR_TYPE_INT64))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_INT64, (int[]){ attr->n_ints }, 1);
@@ -52,7 +52,7 @@ static int Constant_init(struct onnx_node_t * n)
 				}
 				break;
 			case ONNX__ATTRIBUTE_PROTO__ATTRIBUTE_TYPE__STRINGS:
-				if((strcmp(attr->name, "value_strings") == 0) && (attr->n_strings > 0))
+				if((onnx_strcmp(attr->name, "value_strings") == 0) && (attr->n_strings > 0))
 				{
 					if((y->ndim != 1) || (y->dims[0] != attr->n_strings) || (y->type != ONNX_TENSOR_TYPE_STRING))
 						onnx_tensor_reinit(y, ONNX_TENSOR_TYPE_STRING, (int[]){ attr->n_strings }, 1);
@@ -63,17 +63,17 @@ static int Constant_init(struct onnx_node_t * n)
 						{
 							if(str[i])
 							{
-								free(str[i]);
+								onnx_free(str[i]);
 								str[i] = NULL;
 							}
 						}
 						for(size_t i = 0; i < y->ndata; i++)
 						{
-							str[i] = malloc(attr->strings[i].len + 1);
+							str[i] = onnx_malloc(attr->strings[i].len + 1);
 							if(str[i])
 							{
 								str[i][attr->strings[i].len] = 0;
-								memcpy(str[i], attr->strings[i].data, attr->strings[i].len);
+								onnx_memcpy(str[i], attr->strings[i].data, attr->strings[i].len);
 							}
 						}
 					}

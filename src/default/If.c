@@ -11,7 +11,7 @@ static int If_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput >= 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			pdat->else_branch = onnx_graph_alloc(n->ctx, onnx_attribute_read_graph(n, "else_branch", NULL));
@@ -22,7 +22,7 @@ static int If_init(struct onnx_node_t * n)
 					onnx_graph_free(pdat->else_branch);
 				if(pdat->then_branch)
 					onnx_graph_free(pdat->then_branch);
-				free(pdat);
+				onnx_free(pdat);
 				return 0;
 			}
 			n->priv = pdat;
@@ -42,7 +42,7 @@ static int If_exit(struct onnx_node_t * n)
 			onnx_graph_free(pdat->else_branch);
 		if(pdat->then_branch)
 			onnx_graph_free(pdat->then_branch);
-		free(pdat);
+		onnx_free(pdat);
 	}
 	return 1;
 }
@@ -113,13 +113,13 @@ static void If_operator(struct onnx_node_t * n)
 					for(size_t o = 0; o < b->ndata; o++)
 					{
 						if(pb[o])
-							free(pb[o]);
-						pb[o] = strdup(pa[o]);
+							onnx_free(pb[o]);
+						pb[o] = onnx_strdup(pa[o]);
 					}
 				}
 				else
 				{
-					memcpy(b->datas, a->datas, a->ndata * onnx_tensor_type_sizeof(a->type));
+					onnx_memcpy(b->datas, a->datas, a->ndata * onnx_tensor_type_sizeof(a->type));
 				}
 			}
 		}

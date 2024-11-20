@@ -17,7 +17,7 @@ static int ReduceL2_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_pdata_t));
 		if(pdat)
 		{
 			nint = onnx_attribute_read_ints(n, "axes", &ints);
@@ -25,8 +25,8 @@ static int ReduceL2_init(struct onnx_node_t * n)
 				pdat->naxes = nint;
 			else
 				pdat->naxes = n->inputs[0]->ndim;
-			pdat->axes = malloc(sizeof(int) * pdat->naxes);
-			pdat->caxes = malloc(sizeof(int) * pdat->naxes);
+			pdat->axes = onnx_malloc(sizeof(int) * pdat->naxes);
+			pdat->caxes = onnx_malloc(sizeof(int) * pdat->naxes);
 			if(pdat->axes && pdat->caxes)
 			{
 				if(nint > 0)
@@ -46,10 +46,10 @@ static int ReduceL2_init(struct onnx_node_t * n)
 			else
 			{
 				if(pdat->axes)
-					free(pdat->axes);
+					onnx_free(pdat->axes);
 				if(pdat->caxes)
-					free(pdat->caxes);
-				free(pdat);
+					onnx_free(pdat->caxes);
+				onnx_free(pdat);
 			}
 		}
 	}
@@ -63,10 +63,10 @@ static int ReduceL2_exit(struct onnx_node_t * n)
 	if(pdat)
 	{
 		if(pdat->axes)
-			free(pdat->axes);
+			onnx_free(pdat->axes);
 		if(pdat->caxes)
-			free(pdat->caxes);
-		free(pdat);
+			onnx_free(pdat->caxes);
+		onnx_free(pdat);
 	}
 	return 1;
 }
@@ -92,7 +92,7 @@ static int ReduceL2_reshape(struct onnx_node_t * n)
 	}
 	if(pdat->keepdims)
 	{
-		memcpy(dims, x->dims, sizeof(int) * ndim);
+		onnx_memcpy(dims, x->dims, sizeof(int) * ndim);
 		for(i = 0; i < pdat->naxes; i++)
 			dims[pdat->caxes[i]] = 1;
 	}
@@ -180,10 +180,10 @@ static void ReduceL2_int8(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -230,10 +230,10 @@ static void ReduceL2_int32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -280,10 +280,10 @@ static void ReduceL2_int64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -330,10 +330,10 @@ static void ReduceL2_uint8(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -380,10 +380,10 @@ static void ReduceL2_uint32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -430,10 +430,10 @@ static void ReduceL2_uint64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -479,10 +479,10 @@ static void ReduceL2_bfloat16(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -528,10 +528,10 @@ static void ReduceL2_float16(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -577,10 +577,10 @@ static void ReduceL2_float32(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do
@@ -626,10 +626,10 @@ static void ReduceL2_float64(struct onnx_node_t * n)
 		k += 1;
 	}
 	i = 0;
-	memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
+	onnx_memset(iter_not_in_axes, 0, sizeof(int) * not_in_axes_num);
 	do
 	{
-		memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
+		onnx_memset(iter_in_axes, 0, sizeof(int) * pdat->naxes);
 		o = dim_offset(not_in_axes_num, iter_not_in_axes, not_in_axes_axis_dis);
 		sum = 0;
 		do

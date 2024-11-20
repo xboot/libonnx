@@ -16,7 +16,7 @@ static int Softmax_13_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_13_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_13_pdata_t));
 		if(pdat)
 		{
 			pdat->axis = onnx_attribute_read_int(n, "axis", -1);
@@ -32,7 +32,7 @@ static int Softmax_13_exit(struct onnx_node_t * n)
 	struct operator_13_pdata_t * pdat = (struct operator_13_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
@@ -239,7 +239,7 @@ static int Softmax_1_11_init(struct onnx_node_t * n)
 
 	if((n->ninput == 1) && (n->noutput == 1))
 	{
-		pdat = malloc(sizeof(struct operator_1_11_pdata_t));
+		pdat = onnx_malloc(sizeof(struct operator_1_11_pdata_t));
 		if(pdat)
 		{
 			pdat->axis = onnx_attribute_read_int(n, "axis", 1);
@@ -255,7 +255,7 @@ static int Softmax_1_11_exit(struct onnx_node_t * n)
 	struct operator_1_11_pdata_t * pdat = (struct operator_1_11_pdata_t *)n->priv;
 
 	if(pdat)
-		free(pdat);
+		onnx_free(pdat);
 	return 1;
 }
 
