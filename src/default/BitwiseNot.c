@@ -14,7 +14,10 @@ static int BitwiseNot_exit(struct onnx_node_t * n)
 
 static int BitwiseNot_reshape(struct onnx_node_t * n)
 {
-	return 1;
+	struct onnx_tensor_t * x = n->inputs[0];
+	struct onnx_tensor_t * y = n->outputs[0];
+
+	return onnx_tensor_reshape_identity(y, x, x->type);
 }
 
 static void BitwiseNot_int8(struct onnx_node_t * n)

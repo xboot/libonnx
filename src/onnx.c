@@ -1292,7 +1292,7 @@ void onnx_graph_free(struct onnx_graph_t * g)
 
 const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
 {
-	static const char * typestr[17] = {
+	static const char * typestr[] = {
 		"undefined",
 		"float32",
 		"uint8",
@@ -1310,6 +1310,12 @@ const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
 		"complex64",
 		"complex128",
 		"bfloat16",
+		"float8e4m3fn",
+		"float8e4m3fnuz",
+		"float8e5m2",
+		"float8e5m2fnuz",
+		"uint4",
+		"int4",
 	};
 	if((type > 0) && (type < (sizeof(typestr) / sizeof((typestr)[0]))))
 		return typestr[type];
@@ -1318,7 +1324,7 @@ const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
 
 int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type)
 {
-	static const int typesz[17] = {
+	static const int typesz[] = {
 		0,
 		sizeof(float),
 		sizeof(uint8_t),
@@ -1336,6 +1342,12 @@ int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type)
 		sizeof(float) * 2,
 		sizeof(double) * 2,
 		sizeof(uint16_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
 	};
 	if((type > 0) && (type < (sizeof(typesz) / sizeof((typesz)[0]))))
 		return typesz[type];
@@ -1468,14 +1480,23 @@ int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 	switch(a->type)
 	{
 	case ONNX_TENSOR_TYPE_BOOL:
+	case ONNX_TENSOR_TYPE_INT4:
 	case ONNX_TENSOR_TYPE_INT8:
 	case ONNX_TENSOR_TYPE_INT16:
 	case ONNX_TENSOR_TYPE_INT32:
 	case ONNX_TENSOR_TYPE_INT64:
+	case ONNX_TENSOR_TYPE_UINT4:
 	case ONNX_TENSOR_TYPE_UINT8:
 	case ONNX_TENSOR_TYPE_UINT16:
 	case ONNX_TENSOR_TYPE_UINT32:
 	case ONNX_TENSOR_TYPE_UINT64:
+		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
+			return 0;
+		break;
+	case ONNX_TENSOR_TYPE_FLOAT8E4M3FN:
+	case ONNX_TENSOR_TYPE_FLOAT8E4M3FNUZ:
+	case ONNX_TENSOR_TYPE_FLOAT8E5M2:
+	case ONNX_TENSOR_TYPE_FLOAT8E5M2FNUZ:
 		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
 			return 0;
 		break;
