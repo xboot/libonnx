@@ -16,21 +16,21 @@ void   onnx__attribute_proto__init
 size_t onnx__attribute_proto__get_packed_size
                      (const Onnx__AttributeProto *message)
 {
-  assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__attribute_proto__pack
                      (const Onnx__AttributeProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__attribute_proto__pack_to_buffer
                      (const Onnx__AttributeProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__AttributeProto *
@@ -49,7 +49,7 @@ void   onnx__attribute_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__attribute_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__value_info_proto__init
@@ -61,21 +61,21 @@ void   onnx__value_info_proto__init
 size_t onnx__value_info_proto__get_packed_size
                      (const Onnx__ValueInfoProto *message)
 {
-  assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__value_info_proto__pack
                      (const Onnx__ValueInfoProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__value_info_proto__pack_to_buffer
                      (const Onnx__ValueInfoProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__ValueInfoProto *
@@ -94,7 +94,7 @@ void   onnx__value_info_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__value_info_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__node_proto__init
@@ -106,21 +106,21 @@ void   onnx__node_proto__init
 size_t onnx__node_proto__get_packed_size
                      (const Onnx__NodeProto *message)
 {
-  assert(message->base.descriptor == &onnx__node_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__node_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__node_proto__pack
                      (const Onnx__NodeProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__node_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__node_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__node_proto__pack_to_buffer
                      (const Onnx__NodeProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__node_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__node_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__NodeProto *
@@ -139,7 +139,7 @@ void   onnx__node_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__node_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__node_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__training_info_proto__init
@@ -151,21 +151,21 @@ void   onnx__training_info_proto__init
 size_t onnx__training_info_proto__get_packed_size
                      (const Onnx__TrainingInfoProto *message)
 {
-  assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__training_info_proto__pack
                      (const Onnx__TrainingInfoProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__training_info_proto__pack_to_buffer
                      (const Onnx__TrainingInfoProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__TrainingInfoProto *
@@ -184,7 +184,7 @@ void   onnx__training_info_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__training_info_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__model_proto__init
@@ -196,21 +196,21 @@ void   onnx__model_proto__init
 size_t onnx__model_proto__get_packed_size
                      (const Onnx__ModelProto *message)
 {
-  assert(message->base.descriptor == &onnx__model_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__model_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__model_proto__pack
                      (const Onnx__ModelProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__model_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__model_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__model_proto__pack_to_buffer
                      (const Onnx__ModelProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__model_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__model_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__ModelProto *
@@ -229,7 +229,7 @@ void   onnx__model_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__model_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__model_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__string_string_entry_proto__init
@@ -241,21 +241,21 @@ void   onnx__string_string_entry_proto__init
 size_t onnx__string_string_entry_proto__get_packed_size
                      (const Onnx__StringStringEntryProto *message)
 {
-  assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__string_string_entry_proto__pack
                      (const Onnx__StringStringEntryProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__string_string_entry_proto__pack_to_buffer
                      (const Onnx__StringStringEntryProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__StringStringEntryProto *
@@ -274,7 +274,7 @@ void   onnx__string_string_entry_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__string_string_entry_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__tensor_annotation__init
@@ -286,21 +286,21 @@ void   onnx__tensor_annotation__init
 size_t onnx__tensor_annotation__get_packed_size
                      (const Onnx__TensorAnnotation *message)
 {
-  assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__tensor_annotation__pack
                      (const Onnx__TensorAnnotation *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__tensor_annotation__pack_to_buffer
                      (const Onnx__TensorAnnotation *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__TensorAnnotation *
@@ -319,7 +319,7 @@ void   onnx__tensor_annotation__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_annotation__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__graph_proto__init
@@ -331,21 +331,21 @@ void   onnx__graph_proto__init
 size_t onnx__graph_proto__get_packed_size
                      (const Onnx__GraphProto *message)
 {
-  assert(message->base.descriptor == &onnx__graph_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__graph_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__graph_proto__pack
                      (const Onnx__GraphProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__graph_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__graph_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__graph_proto__pack_to_buffer
                      (const Onnx__GraphProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__graph_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__graph_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__GraphProto *
@@ -364,7 +364,7 @@ void   onnx__graph_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__graph_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__graph_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__tensor_proto__segment__init
@@ -382,21 +382,21 @@ void   onnx__tensor_proto__init
 size_t onnx__tensor_proto__get_packed_size
                      (const Onnx__TensorProto *message)
 {
-  assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__tensor_proto__pack
                      (const Onnx__TensorProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__tensor_proto__pack_to_buffer
                      (const Onnx__TensorProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__TensorProto *
@@ -415,7 +415,7 @@ void   onnx__tensor_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__sparse_tensor_proto__init
@@ -427,21 +427,21 @@ void   onnx__sparse_tensor_proto__init
 size_t onnx__sparse_tensor_proto__get_packed_size
                      (const Onnx__SparseTensorProto *message)
 {
-  assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__sparse_tensor_proto__pack
                      (const Onnx__SparseTensorProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__sparse_tensor_proto__pack_to_buffer
                      (const Onnx__SparseTensorProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__SparseTensorProto *
@@ -460,7 +460,7 @@ void   onnx__sparse_tensor_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__sparse_tensor_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__tensor_shape_proto__dimension__init
@@ -478,21 +478,21 @@ void   onnx__tensor_shape_proto__init
 size_t onnx__tensor_shape_proto__get_packed_size
                      (const Onnx__TensorShapeProto *message)
 {
-  assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__tensor_shape_proto__pack
                      (const Onnx__TensorShapeProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__tensor_shape_proto__pack_to_buffer
                      (const Onnx__TensorShapeProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__TensorShapeProto *
@@ -511,7 +511,7 @@ void   onnx__tensor_shape_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__tensor_shape_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__type_proto__tensor__init
@@ -553,21 +553,21 @@ void   onnx__type_proto__init
 size_t onnx__type_proto__get_packed_size
                      (const Onnx__TypeProto *message)
 {
-  assert(message->base.descriptor == &onnx__type_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__type_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__type_proto__pack
                      (const Onnx__TypeProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__type_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__type_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__type_proto__pack_to_buffer
                      (const Onnx__TypeProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__type_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__type_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__TypeProto *
@@ -586,7 +586,7 @@ void   onnx__type_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__type_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__type_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__operator_set_id_proto__init
@@ -598,21 +598,21 @@ void   onnx__operator_set_id_proto__init
 size_t onnx__operator_set_id_proto__get_packed_size
                      (const Onnx__OperatorSetIdProto *message)
 {
-  assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__operator_set_id_proto__pack
                      (const Onnx__OperatorSetIdProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__operator_set_id_proto__pack_to_buffer
                      (const Onnx__OperatorSetIdProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__OperatorSetIdProto *
@@ -631,7 +631,7 @@ void   onnx__operator_set_id_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__operator_set_id_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__function_proto__init
@@ -643,21 +643,21 @@ void   onnx__function_proto__init
 size_t onnx__function_proto__get_packed_size
                      (const Onnx__FunctionProto *message)
 {
-  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__function_proto__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
 size_t onnx__function_proto__pack
                      (const Onnx__FunctionProto *message,
                       uint8_t       *out)
 {
-  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__function_proto__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
 size_t onnx__function_proto__pack_to_buffer
                      (const Onnx__FunctionProto *message,
                       ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__function_proto__descriptor);
   return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
 Onnx__FunctionProto *
@@ -676,7 +676,7 @@ void   onnx__function_proto__free_unpacked
 {
   if(!message)
     return;
-  assert(message->base.descriptor == &onnx__function_proto__descriptor);
+  onnx_assert(message->base.descriptor == &onnx__function_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 static const ProtobufCEnumValue onnx__attribute_proto__attribute_type__enum_values_by_number[15] =

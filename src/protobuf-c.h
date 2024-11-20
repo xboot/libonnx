@@ -196,10 +196,7 @@ size_t foo__bar__baz_bah__pack_to_buffer
 #ifndef PROTOBUF_C_H
 #define PROTOBUF_C_H
 
-#include <assert.h>
-#include <limits.h>
-#include <stddef.h>
-#include <stdint.h>
+#include <onnxconf.h>
 
 #ifdef __cplusplus
 # define PROTOBUF_C__BEGIN_DECLS	extern "C" {
@@ -1065,7 +1062,7 @@ do {                                                                    \
 				(simp_buf)->allocator,                  \
 				(simp_buf)->data);			\
 		else                                                    \
-			free((simp_buf)->data);                         \
+			onnx_free((simp_buf)->data);                         \
 	}                                                               \
 } while (0)
 
