@@ -202,4 +202,3 @@ struct onnx_resolver_t resolver_default = {
 	.op_Swish						= resolver_default_op_Swish,
 	.op_ThresholdedRelu				= resolver_default_op_ThresholdedRelu,
 };
-
