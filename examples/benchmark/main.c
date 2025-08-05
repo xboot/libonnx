@@ -157,6 +157,7 @@ int main(int argc, char * argv[])
 	ctx = onnx_context_alloc_from_file(filename, NULL, 0);
 	if(ctx)
 	{
+		onnx_context_dump(ctx, 0);
 		onnx_run_benchmark(ctx, count);
 		onnx_context_free(ctx);
 	}
