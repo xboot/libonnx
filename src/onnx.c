@@ -1316,6 +1316,8 @@ const char * onnx_tensor_type_tostring(enum onnx_tensor_type_t type)
 		"float8e5m2fnuz",
 		"uint4",
 		"int4",
+		"float4e2m1",
+		"float8e8m0",
 	};
 	if((type > 0) && (type < (sizeof(typestr) / sizeof((typestr)[0]))))
 		return typestr[type];
@@ -1342,6 +1344,8 @@ int onnx_tensor_type_sizeof(enum onnx_tensor_type_t type)
 		sizeof(float) * 2,
 		sizeof(double) * 2,
 		sizeof(uint16_t),
+		sizeof(uint8_t),
+		sizeof(uint8_t),
 		sizeof(uint8_t),
 		sizeof(uint8_t),
 		sizeof(uint8_t),

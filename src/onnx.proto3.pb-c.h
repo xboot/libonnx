@@ -18,8 +18,14 @@ PROTOBUF_C__BEGIN_DECLS
 typedef struct Onnx__AttributeProto Onnx__AttributeProto;
 typedef struct Onnx__ValueInfoProto Onnx__ValueInfoProto;
 typedef struct Onnx__NodeProto Onnx__NodeProto;
+typedef struct Onnx__IntIntListEntryProto Onnx__IntIntListEntryProto;
+typedef struct Onnx__NodeDeviceConfigurationProto Onnx__NodeDeviceConfigurationProto;
+typedef struct Onnx__ShardingSpecProto Onnx__ShardingSpecProto;
+typedef struct Onnx__ShardedDimProto Onnx__ShardedDimProto;
+typedef struct Onnx__SimpleShardedDimProto Onnx__SimpleShardedDimProto;
 typedef struct Onnx__TrainingInfoProto Onnx__TrainingInfoProto;
 typedef struct Onnx__ModelProto Onnx__ModelProto;
+typedef struct Onnx__DeviceConfigurationProto Onnx__DeviceConfigurationProto;
 typedef struct Onnx__StringStringEntryProto Onnx__StringStringEntryProto;
 typedef struct Onnx__TensorAnnotation Onnx__TensorAnnotation;
 typedef struct Onnx__GraphProto Onnx__GraphProto;
@@ -150,7 +156,7 @@ typedef enum _Onnx__TensorProto__DataType {
    */
   ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT8E5M2FNUZ = 20,
   /*
-   * 4-bit data-types
+   * 4-bit integer data types
    */
   /*
    * Unsigned integer in range [0, 15]
@@ -159,7 +165,16 @@ typedef enum _Onnx__TensorProto__DataType {
   /*
    * Signed integer in range [-8, 7], using two's-complement representation
    */
-  ONNX__TENSOR_PROTO__DATA_TYPE__INT4 = 22
+  ONNX__TENSOR_PROTO__DATA_TYPE__INT4 = 22,
+  /*
+   * 4-bit floating point data types
+   */
+  ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT4E2M1 = 23,
+  /*
+   * E8M0 type used as the scale for microscaling (MX) formats:
+   * https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
+   */
+  ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT8E8M0 = 24
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__TENSOR_PROTO__DATA_TYPE)
 } Onnx__TensorProto__DataType;
 /*
@@ -226,7 +241,7 @@ typedef enum _Onnx__Version {
   ONNX__VERSION__IR_VERSION_2019_9_19 = 6,
   /*
    * IR VERSION 7 published on May 8, 2020
-   * - Add support to allow function body graph to rely on multiple external opreator sets.
+   * - Add support to allow function body graph to rely on multiple external operator sets.
    * - Add a list to promote inference graph's initializers to global and
    *   mutable variables. Global variables are visible in all graphs of the
    *   stored models.
@@ -251,10 +266,20 @@ typedef enum _Onnx__Version {
    */
   ONNX__VERSION__IR_VERSION_2023_5_5 = 9,
   /*
-   * IR VERSION 10 published on TBD
-   * Added UINT4, INT4.
+   * IR VERSION 10 published on March 25, 2024
+   * Added UINT4, INT4, overload field for functions and metadata_props on multiple proto definitions.
    */
-  ONNX__VERSION__IR_VERSION = 10
+  ONNX__VERSION__IR_VERSION_2024_3_25 = 10,
+  /*
+   * IR VERSION 11 published on May 12, 2025
+   * Added FLOAT4E2M1, multi-device protobuf classes.
+   */
+  ONNX__VERSION__IR_VERSION_2025_05_12 = 11,
+  /*
+   * IR VERSION 12 published on TBD
+   * Added FLOAT8E8M0.
+   */
+  ONNX__VERSION__IR_VERSION = 12
     PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__VERSION)
 } Onnx__Version;
 /*
@@ -478,10 +503,157 @@ struct  Onnx__NodeProto
    */
   size_t n_metadata_props;
   Onnx__StringStringEntryProto **metadata_props;
+  /*
+   * Configuration of multi-device annotations.
+   */
+  size_t n_device_configurations;
+  Onnx__NodeDeviceConfigurationProto **device_configurations;
 };
 #define ONNX__NODE_PROTO__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&onnx__node_proto__descriptor) \
-    , 0,NULL, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0,NULL, (char *)protobuf_c_empty_string, 0,NULL }
+    , 0,NULL, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0,NULL, (char *)protobuf_c_empty_string, 0,NULL, 0,NULL }
+
+
+/*
+ * IntIntListEntryProto follows the pattern for cross-proto-version maps.
+ * See https://developers.google.com/protocol-buffers/docs/proto3#maps
+ */
+struct  Onnx__IntIntListEntryProto
+{
+  ProtobufCMessage base;
+  int64_t key;
+  size_t n_value;
+  int64_t *value;
+};
+#define ONNX__INT_INT_LIST_ENTRY_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__int_int_list_entry_proto__descriptor) \
+    , 0, 0,NULL }
+
+
+/*
+ * Multi-device configuration proto for NodeProto.
+ */
+struct  Onnx__NodeDeviceConfigurationProto
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST be present for this version of the IR.
+   * ID of the configuration. MUST match the name of a DeviceConfigurationProto.
+   */
+  char *configuration_id;
+  /*
+   * Sharding spec for the node.
+   */
+  size_t n_sharding_spec;
+  Onnx__ShardingSpecProto **sharding_spec;
+  /*
+   * Pipeline stage of this node.
+   */
+  int32_t pipeline_stage;
+};
+#define ONNX__NODE_DEVICE_CONFIGURATION_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__node_device_configuration_proto__descriptor) \
+    , (char *)protobuf_c_empty_string, 0,NULL, 0 }
+
+
+/*
+ * ShardingSpecProto: This describes the sharding spec for a specific
+ * input or output tensor of a node.
+ */
+struct  Onnx__ShardingSpecProto
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST be present for this version of the IR.
+   * Identifies the input or output of the node that is being sharded.
+   * Required to match a name specified in the node's input or output list of ValueInfoProtos.
+   * It is called `logical tensor` in subsequent descriptions.
+   */
+  char *tensor_name;
+  /*
+   * The following is the list of devices across which the logical
+   * tensor is sharded or replicated.
+   */
+  size_t n_device;
+  int64_t *device;
+  /*
+   * Each element v in above field devices may represent either a
+   * device or a set of devices (when we want the same shard/tensor
+   * to be replicated across a subset of devices), as indicated by
+   * the following optional map. If the map contains an entry for v,
+   * then v represents a device group, and the map indicates the set
+   * of devices in that group.
+   */
+  size_t n_index_to_device_group_map;
+  Onnx__IntIntListEntryProto **index_to_device_group_map;
+  /*
+   * The following is the sharded-shape of the tensor, consisting of
+   * the sharding-spec for each axis of the tensor.
+   */
+  size_t n_sharded_dim;
+  Onnx__ShardedDimProto **sharded_dim;
+};
+#define ONNX__SHARDING_SPEC_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__sharding_spec_proto__descriptor) \
+    , (char *)protobuf_c_empty_string, 0,NULL, 0,NULL, 0,NULL }
+
+
+/*
+ * ShardedDimProto: This describes the sharding spec for a single
+ * axis of a sharded tensor.
+ */
+struct  Onnx__ShardedDimProto
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST be present for this version of the IR.
+   * The axis this sharding corresponds to. Must be in the range of
+   * [-r, r - 1], where r is the rank of the tensor. Negative axis values means
+   * counting from the back.
+   */
+  int64_t axis;
+  /*
+   * Describes how the tensor on the provided axis is sharded.
+   * The common-case is described by a single instance of SimpleShardedDimProto.
+   * Multiple instances can be used to handle cases where a sharded
+   * tensor is reshaped, fusing multiple axes into one.
+   */
+  size_t n_simple_sharding;
+  Onnx__SimpleShardedDimProto **simple_sharding;
+};
+#define ONNX__SHARDED_DIM_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__sharded_dim_proto__descriptor) \
+    , 0, 0,NULL }
+
+
+typedef enum {
+  ONNX__SIMPLE_SHARDED_DIM_PROTO__DIM__NOT_SET = 0,
+  ONNX__SIMPLE_SHARDED_DIM_PROTO__DIM_DIM_VALUE = 1,
+  ONNX__SIMPLE_SHARDED_DIM_PROTO__DIM_DIM_PARAM = 2
+    PROTOBUF_C__FORCE_ENUM_TO_BE_INT_SIZE(ONNX__SIMPLE_SHARDED_DIM_PROTO__DIM__CASE)
+} Onnx__SimpleShardedDimProto__DimCase;
+
+/*
+ * SimpleShardedDimProto: Indicates that N blocks are divided into M shards.
+ * N is allowed to be symbolic where M is required to be a constant.
+ */
+struct  Onnx__SimpleShardedDimProto
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST be present for this version of the IR.
+   * Number of shards to split dim into.
+   */
+  int64_t num_shards;
+  Onnx__SimpleShardedDimProto__DimCase dim_case;
+  union {
+    int64_t dim_value;
+    char *dim_param;
+  };
+};
+#define ONNX__SIMPLE_SHARDED_DIM_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__simple_sharded_dim_proto__descriptor) \
+    , 0, ONNX__SIMPLE_SHARDED_DIM_PROTO__DIM__NOT_SET, {0} }
 
 
 /*
@@ -680,7 +852,7 @@ struct  Onnx__ModelProto
    * A list of function protos local to the model.
    * The (domain, name, overload) tuple must be unique across the function protos in this list.
    * In case of any conflicts the behavior (whether the model local functions are given higher priority,
-   * or standard operator sets are given higher priotity or this is treated as error) is defined by
+   * or standard operator sets are given higher priority or this is treated as error) is defined by
    * the runtimes.
    * The operator sets imported by FunctionProto should be compatible with the ones
    * imported by ModelProto and other model local FunctionProtos.
@@ -693,10 +865,43 @@ struct  Onnx__ModelProto
    */
   size_t n_functions;
   Onnx__FunctionProto **functions;
+  /*
+   * Describes different target configurations for a multi-device use case.
+   * A model MAY describe multiple multi-device configurations for execution.
+   */
+  size_t n_configuration;
+  Onnx__DeviceConfigurationProto **configuration;
 };
 #define ONNX__MODEL_PROTO__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&onnx__model_proto__descriptor) \
-    , 0, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0, (char *)protobuf_c_empty_string, NULL, 0,NULL, 0,NULL, 0,NULL }
+    , 0, 0,NULL, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string, 0, (char *)protobuf_c_empty_string, NULL, 0,NULL, 0,NULL, 0,NULL, 0,NULL }
+
+
+/*
+ * DeviceConfigurationProto describes a multi-device configuration for a model.
+ */
+struct  Onnx__DeviceConfigurationProto
+{
+  ProtobufCMessage base;
+  /*
+   * This field MUST be present for this version of the IR.
+   * Name of the configuration.
+   */
+  char *name;
+  /*
+   * This field MUST be present for this version of the IR.
+   * Number of devices inside this configuration.
+   */
+  int32_t num_devices;
+  /*
+   * Optional names of the devices. MUST be length of num_devices if provided.
+   */
+  size_t n_device;
+  char **device;
+};
+#define ONNX__DEVICE_CONFIGURATION_PROTO__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&onnx__device_configuration_proto__descriptor) \
+    , (char *)protobuf_c_empty_string, 0, 0,NULL }
 
 
 /*
@@ -849,13 +1054,17 @@ struct  Onnx__TensorProto
   size_t n_float_data;
   float *float_data;
   /*
-   * For int32, uint8, int8, uint16, int16, uint4, int4, bool, float8 and float16 values
-   * float16 and float8 values must be bit-wise converted to an uint16_t prior
-   * to writing to the buffer.
-   * uint4 and int4 values must be packed to 4bitx2 prior to writing to the buffer, the first element is stored in
-   * the 4 LSB and the second element is stored in the 4 MSB.
+   * For int32, uint8, int8, uint16, int16, uint4, int4, bool, (b)float16, float8, and float4:
+   * - (b)float16 and float8 values MUST be converted bit-wise into an unsigned integer
+   *   representation before being written to the buffer.
+   * - Each pair of uint4, int4, and float4 values MUST be packed as two 4-bit elements into a single byte.
+   *   The first element is stored in the 4 least significant bits (LSB),
+   *   and the second element is stored in the 4 most significant bits (MSB).
+   * Consequently:
+   * - For data types with a bit-width of 8 or greater, each `int32_data` stores one element.
+   * - For 4-bit data types, each `int32_data` stores two elements.
    * When this field is present, the data_type field MUST be
-   * INT32, INT16, INT8, INT4, UINT16, UINT8, UINT4, BOOL, FLOAT16, BFLOAT16, FLOAT8E4M3FN, FLOAT8E4M3FNUZ, FLOAT8E5M2, FLOAT8E5M2FNUZ
+   * INT32, INT16, INT8, INT4, UINT16, UINT8, UINT4, BOOL, FLOAT16, BFLOAT16, FLOAT8E4M3FN, FLOAT8E4M3FNUZ, FLOAT8E5M2, FLOAT8E5M2FNUZ, FLOAT8E8M0, FLOAT4E2M1
    */
   size_t n_int32_data;
   int32_t *int32_data;
@@ -1326,6 +1535,101 @@ Onnx__NodeProto *
 void   onnx__node_proto__free_unpacked
                      (Onnx__NodeProto *message,
                       ProtobufCAllocator *allocator);
+/* Onnx__IntIntListEntryProto methods */
+void   onnx__int_int_list_entry_proto__init
+                     (Onnx__IntIntListEntryProto         *message);
+size_t onnx__int_int_list_entry_proto__get_packed_size
+                     (const Onnx__IntIntListEntryProto   *message);
+size_t onnx__int_int_list_entry_proto__pack
+                     (const Onnx__IntIntListEntryProto   *message,
+                      uint8_t             *out);
+size_t onnx__int_int_list_entry_proto__pack_to_buffer
+                     (const Onnx__IntIntListEntryProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__IntIntListEntryProto *
+       onnx__int_int_list_entry_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__int_int_list_entry_proto__free_unpacked
+                     (Onnx__IntIntListEntryProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__NodeDeviceConfigurationProto methods */
+void   onnx__node_device_configuration_proto__init
+                     (Onnx__NodeDeviceConfigurationProto         *message);
+size_t onnx__node_device_configuration_proto__get_packed_size
+                     (const Onnx__NodeDeviceConfigurationProto   *message);
+size_t onnx__node_device_configuration_proto__pack
+                     (const Onnx__NodeDeviceConfigurationProto   *message,
+                      uint8_t             *out);
+size_t onnx__node_device_configuration_proto__pack_to_buffer
+                     (const Onnx__NodeDeviceConfigurationProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__NodeDeviceConfigurationProto *
+       onnx__node_device_configuration_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__node_device_configuration_proto__free_unpacked
+                     (Onnx__NodeDeviceConfigurationProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__ShardingSpecProto methods */
+void   onnx__sharding_spec_proto__init
+                     (Onnx__ShardingSpecProto         *message);
+size_t onnx__sharding_spec_proto__get_packed_size
+                     (const Onnx__ShardingSpecProto   *message);
+size_t onnx__sharding_spec_proto__pack
+                     (const Onnx__ShardingSpecProto   *message,
+                      uint8_t             *out);
+size_t onnx__sharding_spec_proto__pack_to_buffer
+                     (const Onnx__ShardingSpecProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__ShardingSpecProto *
+       onnx__sharding_spec_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__sharding_spec_proto__free_unpacked
+                     (Onnx__ShardingSpecProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__ShardedDimProto methods */
+void   onnx__sharded_dim_proto__init
+                     (Onnx__ShardedDimProto         *message);
+size_t onnx__sharded_dim_proto__get_packed_size
+                     (const Onnx__ShardedDimProto   *message);
+size_t onnx__sharded_dim_proto__pack
+                     (const Onnx__ShardedDimProto   *message,
+                      uint8_t             *out);
+size_t onnx__sharded_dim_proto__pack_to_buffer
+                     (const Onnx__ShardedDimProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__ShardedDimProto *
+       onnx__sharded_dim_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__sharded_dim_proto__free_unpacked
+                     (Onnx__ShardedDimProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__SimpleShardedDimProto methods */
+void   onnx__simple_sharded_dim_proto__init
+                     (Onnx__SimpleShardedDimProto         *message);
+size_t onnx__simple_sharded_dim_proto__get_packed_size
+                     (const Onnx__SimpleShardedDimProto   *message);
+size_t onnx__simple_sharded_dim_proto__pack
+                     (const Onnx__SimpleShardedDimProto   *message,
+                      uint8_t             *out);
+size_t onnx__simple_sharded_dim_proto__pack_to_buffer
+                     (const Onnx__SimpleShardedDimProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__SimpleShardedDimProto *
+       onnx__simple_sharded_dim_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__simple_sharded_dim_proto__free_unpacked
+                     (Onnx__SimpleShardedDimProto *message,
+                      ProtobufCAllocator *allocator);
 /* Onnx__TrainingInfoProto methods */
 void   onnx__training_info_proto__init
                      (Onnx__TrainingInfoProto         *message);
@@ -1363,6 +1667,25 @@ Onnx__ModelProto *
                       const uint8_t       *data);
 void   onnx__model_proto__free_unpacked
                      (Onnx__ModelProto *message,
+                      ProtobufCAllocator *allocator);
+/* Onnx__DeviceConfigurationProto methods */
+void   onnx__device_configuration_proto__init
+                     (Onnx__DeviceConfigurationProto         *message);
+size_t onnx__device_configuration_proto__get_packed_size
+                     (const Onnx__DeviceConfigurationProto   *message);
+size_t onnx__device_configuration_proto__pack
+                     (const Onnx__DeviceConfigurationProto   *message,
+                      uint8_t             *out);
+size_t onnx__device_configuration_proto__pack_to_buffer
+                     (const Onnx__DeviceConfigurationProto   *message,
+                      ProtobufCBuffer     *buffer);
+Onnx__DeviceConfigurationProto *
+       onnx__device_configuration_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data);
+void   onnx__device_configuration_proto__free_unpacked
+                     (Onnx__DeviceConfigurationProto *message,
                       ProtobufCAllocator *allocator);
 /* Onnx__StringStringEntryProto methods */
 void   onnx__string_string_entry_proto__init
@@ -1567,11 +1890,29 @@ typedef void (*Onnx__ValueInfoProto_Closure)
 typedef void (*Onnx__NodeProto_Closure)
                  (const Onnx__NodeProto *message,
                   void *closure_data);
+typedef void (*Onnx__IntIntListEntryProto_Closure)
+                 (const Onnx__IntIntListEntryProto *message,
+                  void *closure_data);
+typedef void (*Onnx__NodeDeviceConfigurationProto_Closure)
+                 (const Onnx__NodeDeviceConfigurationProto *message,
+                  void *closure_data);
+typedef void (*Onnx__ShardingSpecProto_Closure)
+                 (const Onnx__ShardingSpecProto *message,
+                  void *closure_data);
+typedef void (*Onnx__ShardedDimProto_Closure)
+                 (const Onnx__ShardedDimProto *message,
+                  void *closure_data);
+typedef void (*Onnx__SimpleShardedDimProto_Closure)
+                 (const Onnx__SimpleShardedDimProto *message,
+                  void *closure_data);
 typedef void (*Onnx__TrainingInfoProto_Closure)
                  (const Onnx__TrainingInfoProto *message,
                   void *closure_data);
 typedef void (*Onnx__ModelProto_Closure)
                  (const Onnx__ModelProto *message,
+                  void *closure_data);
+typedef void (*Onnx__DeviceConfigurationProto_Closure)
+                 (const Onnx__DeviceConfigurationProto *message,
                   void *closure_data);
 typedef void (*Onnx__StringStringEntryProto_Closure)
                  (const Onnx__StringStringEntryProto *message,
@@ -1633,8 +1974,14 @@ extern const ProtobufCMessageDescriptor onnx__attribute_proto__descriptor;
 extern const ProtobufCEnumDescriptor    onnx__attribute_proto__attribute_type__descriptor;
 extern const ProtobufCMessageDescriptor onnx__value_info_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__node_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__int_int_list_entry_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__node_device_configuration_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__sharding_spec_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__sharded_dim_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__simple_sharded_dim_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__training_info_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__model_proto__descriptor;
+extern const ProtobufCMessageDescriptor onnx__device_configuration_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__string_string_entry_proto__descriptor;
 extern const ProtobufCMessageDescriptor onnx__tensor_annotation__descriptor;
 extern const ProtobufCMessageDescriptor onnx__graph_proto__descriptor;

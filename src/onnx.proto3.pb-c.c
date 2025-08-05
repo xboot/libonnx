@@ -142,6 +142,231 @@ void   onnx__node_proto__free_unpacked
   onnx_assert(message->base.descriptor == &onnx__node_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   onnx__int_int_list_entry_proto__init
+                     (Onnx__IntIntListEntryProto         *message)
+{
+  static const Onnx__IntIntListEntryProto init_value = ONNX__INT_INT_LIST_ENTRY_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__int_int_list_entry_proto__get_packed_size
+                     (const Onnx__IntIntListEntryProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__int_int_list_entry_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__int_int_list_entry_proto__pack
+                     (const Onnx__IntIntListEntryProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__int_int_list_entry_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__int_int_list_entry_proto__pack_to_buffer
+                     (const Onnx__IntIntListEntryProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__int_int_list_entry_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__IntIntListEntryProto *
+       onnx__int_int_list_entry_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__IntIntListEntryProto *)
+     protobuf_c_message_unpack (&onnx__int_int_list_entry_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__int_int_list_entry_proto__free_unpacked
+                     (Onnx__IntIntListEntryProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__int_int_list_entry_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   onnx__node_device_configuration_proto__init
+                     (Onnx__NodeDeviceConfigurationProto         *message)
+{
+  static const Onnx__NodeDeviceConfigurationProto init_value = ONNX__NODE_DEVICE_CONFIGURATION_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__node_device_configuration_proto__get_packed_size
+                     (const Onnx__NodeDeviceConfigurationProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__node_device_configuration_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__node_device_configuration_proto__pack
+                     (const Onnx__NodeDeviceConfigurationProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__node_device_configuration_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__node_device_configuration_proto__pack_to_buffer
+                     (const Onnx__NodeDeviceConfigurationProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__node_device_configuration_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__NodeDeviceConfigurationProto *
+       onnx__node_device_configuration_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__NodeDeviceConfigurationProto *)
+     protobuf_c_message_unpack (&onnx__node_device_configuration_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__node_device_configuration_proto__free_unpacked
+                     (Onnx__NodeDeviceConfigurationProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__node_device_configuration_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   onnx__sharding_spec_proto__init
+                     (Onnx__ShardingSpecProto         *message)
+{
+  static const Onnx__ShardingSpecProto init_value = ONNX__SHARDING_SPEC_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__sharding_spec_proto__get_packed_size
+                     (const Onnx__ShardingSpecProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharding_spec_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__sharding_spec_proto__pack
+                     (const Onnx__ShardingSpecProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharding_spec_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__sharding_spec_proto__pack_to_buffer
+                     (const Onnx__ShardingSpecProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharding_spec_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__ShardingSpecProto *
+       onnx__sharding_spec_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__ShardingSpecProto *)
+     protobuf_c_message_unpack (&onnx__sharding_spec_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__sharding_spec_proto__free_unpacked
+                     (Onnx__ShardingSpecProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__sharding_spec_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   onnx__sharded_dim_proto__init
+                     (Onnx__ShardedDimProto         *message)
+{
+  static const Onnx__ShardedDimProto init_value = ONNX__SHARDED_DIM_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__sharded_dim_proto__get_packed_size
+                     (const Onnx__ShardedDimProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharded_dim_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__sharded_dim_proto__pack
+                     (const Onnx__ShardedDimProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharded_dim_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__sharded_dim_proto__pack_to_buffer
+                     (const Onnx__ShardedDimProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__sharded_dim_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__ShardedDimProto *
+       onnx__sharded_dim_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__ShardedDimProto *)
+     protobuf_c_message_unpack (&onnx__sharded_dim_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__sharded_dim_proto__free_unpacked
+                     (Onnx__ShardedDimProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__sharded_dim_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   onnx__simple_sharded_dim_proto__init
+                     (Onnx__SimpleShardedDimProto         *message)
+{
+  static const Onnx__SimpleShardedDimProto init_value = ONNX__SIMPLE_SHARDED_DIM_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__simple_sharded_dim_proto__get_packed_size
+                     (const Onnx__SimpleShardedDimProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__simple_sharded_dim_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__simple_sharded_dim_proto__pack
+                     (const Onnx__SimpleShardedDimProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__simple_sharded_dim_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__simple_sharded_dim_proto__pack_to_buffer
+                     (const Onnx__SimpleShardedDimProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__simple_sharded_dim_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__SimpleShardedDimProto *
+       onnx__simple_sharded_dim_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__SimpleShardedDimProto *)
+     protobuf_c_message_unpack (&onnx__simple_sharded_dim_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__simple_sharded_dim_proto__free_unpacked
+                     (Onnx__SimpleShardedDimProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__simple_sharded_dim_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 void   onnx__training_info_proto__init
                      (Onnx__TrainingInfoProto         *message)
 {
@@ -230,6 +455,51 @@ void   onnx__model_proto__free_unpacked
   if(!message)
     return;
   onnx_assert(message->base.descriptor == &onnx__model_proto__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   onnx__device_configuration_proto__init
+                     (Onnx__DeviceConfigurationProto         *message)
+{
+  static const Onnx__DeviceConfigurationProto init_value = ONNX__DEVICE_CONFIGURATION_PROTO__INIT;
+  *message = init_value;
+}
+size_t onnx__device_configuration_proto__get_packed_size
+                     (const Onnx__DeviceConfigurationProto *message)
+{
+  onnx_assert(message->base.descriptor == &onnx__device_configuration_proto__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t onnx__device_configuration_proto__pack
+                     (const Onnx__DeviceConfigurationProto *message,
+                      uint8_t       *out)
+{
+  onnx_assert(message->base.descriptor == &onnx__device_configuration_proto__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t onnx__device_configuration_proto__pack_to_buffer
+                     (const Onnx__DeviceConfigurationProto *message,
+                      ProtobufCBuffer *buffer)
+{
+  onnx_assert(message->base.descriptor == &onnx__device_configuration_proto__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Onnx__DeviceConfigurationProto *
+       onnx__device_configuration_proto__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Onnx__DeviceConfigurationProto *)
+     protobuf_c_message_unpack (&onnx__device_configuration_proto__descriptor,
+                                allocator, len, data);
+}
+void   onnx__device_configuration_proto__free_unpacked
+                     (Onnx__DeviceConfigurationProto *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  onnx_assert(message->base.descriptor == &onnx__device_configuration_proto__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   onnx__string_string_entry_proto__init
@@ -1071,7 +1341,7 @@ const ProtobufCMessageDescriptor onnx__value_info_proto__descriptor =
   (ProtobufCMessageInit) onnx__value_info_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor onnx__node_proto__field_descriptors[9] =
+static const ProtobufCFieldDescriptor onnx__node_proto__field_descriptors[10] =
 {
   {
     "input",
@@ -1181,9 +1451,22 @@ static const ProtobufCFieldDescriptor onnx__node_proto__field_descriptors[9] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "device_configurations",
+    10,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__NodeProto, n_device_configurations),
+    offsetof(Onnx__NodeProto, device_configurations),
+    &onnx__node_device_configuration_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned onnx__node_proto__field_indices_by_name[] = {
   4,   /* field[4] = attribute */
+  9,   /* field[9] = device_configurations */
   5,   /* field[5] = doc_string */
   6,   /* field[6] = domain */
   0,   /* field[0] = input */
@@ -1196,7 +1479,7 @@ static const unsigned onnx__node_proto__field_indices_by_name[] = {
 static const ProtobufCIntRange onnx__node_proto__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 9 }
+  { 0, 10 }
 };
 const ProtobufCMessageDescriptor onnx__node_proto__descriptor =
 {
@@ -1206,11 +1489,318 @@ const ProtobufCMessageDescriptor onnx__node_proto__descriptor =
   "Onnx__NodeProto",
   "onnx",
   sizeof(Onnx__NodeProto),
-  9,
+  10,
   onnx__node_proto__field_descriptors,
   onnx__node_proto__field_indices_by_name,
   1,  onnx__node_proto__number_ranges,
   (ProtobufCMessageInit) onnx__node_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__int_int_list_entry_proto__field_descriptors[2] =
+{
+  {
+    "key",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT64,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__IntIntListEntryProto, key),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "value",
+    2,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_INT64,
+    offsetof(Onnx__IntIntListEntryProto, n_value),
+    offsetof(Onnx__IntIntListEntryProto, value),
+    NULL,
+    NULL,
+    PROTOBUF_C_FIELD_FLAG_PACKED,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__int_int_list_entry_proto__field_indices_by_name[] = {
+  0,   /* field[0] = key */
+  1,   /* field[1] = value */
+};
+static const ProtobufCIntRange onnx__int_int_list_entry_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor onnx__int_int_list_entry_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.IntIntListEntryProto",
+  "IntIntListEntryProto",
+  "Onnx__IntIntListEntryProto",
+  "onnx",
+  sizeof(Onnx__IntIntListEntryProto),
+  2,
+  onnx__int_int_list_entry_proto__field_descriptors,
+  onnx__int_int_list_entry_proto__field_indices_by_name,
+  1,  onnx__int_int_list_entry_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__int_int_list_entry_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__node_device_configuration_proto__field_descriptors[3] =
+{
+  {
+    "configuration_id",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__NodeDeviceConfigurationProto, configuration_id),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "sharding_spec",
+    2,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__NodeDeviceConfigurationProto, n_sharding_spec),
+    offsetof(Onnx__NodeDeviceConfigurationProto, sharding_spec),
+    &onnx__sharding_spec_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "pipeline_stage",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT32,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__NodeDeviceConfigurationProto, pipeline_stage),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__node_device_configuration_proto__field_indices_by_name[] = {
+  0,   /* field[0] = configuration_id */
+  2,   /* field[2] = pipeline_stage */
+  1,   /* field[1] = sharding_spec */
+};
+static const ProtobufCIntRange onnx__node_device_configuration_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor onnx__node_device_configuration_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.NodeDeviceConfigurationProto",
+  "NodeDeviceConfigurationProto",
+  "Onnx__NodeDeviceConfigurationProto",
+  "onnx",
+  sizeof(Onnx__NodeDeviceConfigurationProto),
+  3,
+  onnx__node_device_configuration_proto__field_descriptors,
+  onnx__node_device_configuration_proto__field_indices_by_name,
+  1,  onnx__node_device_configuration_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__node_device_configuration_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__sharding_spec_proto__field_descriptors[4] =
+{
+  {
+    "tensor_name",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__ShardingSpecProto, tensor_name),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "device",
+    2,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_INT64,
+    offsetof(Onnx__ShardingSpecProto, n_device),
+    offsetof(Onnx__ShardingSpecProto, device),
+    NULL,
+    NULL,
+    PROTOBUF_C_FIELD_FLAG_PACKED,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "index_to_device_group_map",
+    3,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__ShardingSpecProto, n_index_to_device_group_map),
+    offsetof(Onnx__ShardingSpecProto, index_to_device_group_map),
+    &onnx__int_int_list_entry_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "sharded_dim",
+    4,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__ShardingSpecProto, n_sharded_dim),
+    offsetof(Onnx__ShardingSpecProto, sharded_dim),
+    &onnx__sharded_dim_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__sharding_spec_proto__field_indices_by_name[] = {
+  1,   /* field[1] = device */
+  2,   /* field[2] = index_to_device_group_map */
+  3,   /* field[3] = sharded_dim */
+  0,   /* field[0] = tensor_name */
+};
+static const ProtobufCIntRange onnx__sharding_spec_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 4 }
+};
+const ProtobufCMessageDescriptor onnx__sharding_spec_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.ShardingSpecProto",
+  "ShardingSpecProto",
+  "Onnx__ShardingSpecProto",
+  "onnx",
+  sizeof(Onnx__ShardingSpecProto),
+  4,
+  onnx__sharding_spec_proto__field_descriptors,
+  onnx__sharding_spec_proto__field_indices_by_name,
+  1,  onnx__sharding_spec_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__sharding_spec_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__sharded_dim_proto__field_descriptors[2] =
+{
+  {
+    "axis",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT64,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__ShardedDimProto, axis),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "simple_sharding",
+    2,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__ShardedDimProto, n_simple_sharding),
+    offsetof(Onnx__ShardedDimProto, simple_sharding),
+    &onnx__simple_sharded_dim_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__sharded_dim_proto__field_indices_by_name[] = {
+  0,   /* field[0] = axis */
+  1,   /* field[1] = simple_sharding */
+};
+static const ProtobufCIntRange onnx__sharded_dim_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 2 }
+};
+const ProtobufCMessageDescriptor onnx__sharded_dim_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.ShardedDimProto",
+  "ShardedDimProto",
+  "Onnx__ShardedDimProto",
+  "onnx",
+  sizeof(Onnx__ShardedDimProto),
+  2,
+  onnx__sharded_dim_proto__field_descriptors,
+  onnx__sharded_dim_proto__field_indices_by_name,
+  1,  onnx__sharded_dim_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__sharded_dim_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__simple_sharded_dim_proto__field_descriptors[3] =
+{
+  {
+    "dim_value",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT64,
+    offsetof(Onnx__SimpleShardedDimProto, dim_case),
+    offsetof(Onnx__SimpleShardedDimProto, dim_value),
+    NULL,
+    NULL,
+    PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "dim_param",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Onnx__SimpleShardedDimProto, dim_case),
+    offsetof(Onnx__SimpleShardedDimProto, dim_param),
+    NULL,
+    &protobuf_c_empty_string,
+    PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "num_shards",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT64,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__SimpleShardedDimProto, num_shards),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__simple_sharded_dim_proto__field_indices_by_name[] = {
+  1,   /* field[1] = dim_param */
+  0,   /* field[0] = dim_value */
+  2,   /* field[2] = num_shards */
+};
+static const ProtobufCIntRange onnx__simple_sharded_dim_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor onnx__simple_sharded_dim_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.SimpleShardedDimProto",
+  "SimpleShardedDimProto",
+  "Onnx__SimpleShardedDimProto",
+  "onnx",
+  sizeof(Onnx__SimpleShardedDimProto),
+  3,
+  onnx__simple_sharded_dim_proto__field_descriptors,
+  onnx__simple_sharded_dim_proto__field_indices_by_name,
+  1,  onnx__simple_sharded_dim_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__simple_sharded_dim_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCFieldDescriptor onnx__training_info_proto__field_descriptors[4] =
@@ -1290,7 +1880,7 @@ const ProtobufCMessageDescriptor onnx__training_info_proto__descriptor =
   (ProtobufCMessageInit) onnx__training_info_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[11] =
+static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[12] =
 {
   {
     "ir_version",
@@ -1424,8 +2014,21 @@ static const ProtobufCFieldDescriptor onnx__model_proto__field_descriptors[11] =
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "configuration",
+    26,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(Onnx__ModelProto, n_configuration),
+    offsetof(Onnx__ModelProto, configuration),
+    &onnx__device_configuration_proto__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned onnx__model_proto__field_indices_by_name[] = {
+  11,   /* field[11] = configuration */
   5,   /* field[5] = doc_string */
   3,   /* field[3] = domain */
   10,   /* field[10] = functions */
@@ -1444,7 +2047,7 @@ static const ProtobufCIntRange onnx__model_proto__number_ranges[4 + 1] =
   { 14, 8 },
   { 20, 9 },
   { 25, 10 },
-  { 0, 11 }
+  { 0, 12 }
 };
 const ProtobufCMessageDescriptor onnx__model_proto__descriptor =
 {
@@ -1454,11 +2057,75 @@ const ProtobufCMessageDescriptor onnx__model_proto__descriptor =
   "Onnx__ModelProto",
   "onnx",
   sizeof(Onnx__ModelProto),
-  11,
+  12,
   onnx__model_proto__field_descriptors,
   onnx__model_proto__field_indices_by_name,
   4,  onnx__model_proto__number_ranges,
   (ProtobufCMessageInit) onnx__model_proto__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor onnx__device_configuration_proto__field_descriptors[3] =
+{
+  {
+    "name",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__DeviceConfigurationProto, name),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "num_devices",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_INT32,
+    0,   /* quantifier_offset */
+    offsetof(Onnx__DeviceConfigurationProto, num_devices),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "device",
+    3,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_STRING,
+    offsetof(Onnx__DeviceConfigurationProto, n_device),
+    offsetof(Onnx__DeviceConfigurationProto, device),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned onnx__device_configuration_proto__field_indices_by_name[] = {
+  2,   /* field[2] = device */
+  0,   /* field[0] = name */
+  1,   /* field[1] = num_devices */
+};
+static const ProtobufCIntRange onnx__device_configuration_proto__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor onnx__device_configuration_proto__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "onnx.DeviceConfigurationProto",
+  "DeviceConfigurationProto",
+  "Onnx__DeviceConfigurationProto",
+  "onnx",
+  sizeof(Onnx__DeviceConfigurationProto),
+  3,
+  onnx__device_configuration_proto__field_descriptors,
+  onnx__device_configuration_proto__field_indices_by_name,
+  1,  onnx__device_configuration_proto__number_ranges,
+  (ProtobufCMessageInit) onnx__device_configuration_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 static const ProtobufCFieldDescriptor onnx__string_string_entry_proto__field_descriptors[2] =
@@ -1771,7 +2438,7 @@ const ProtobufCMessageDescriptor onnx__tensor_proto__segment__descriptor =
   (ProtobufCMessageInit) onnx__tensor_proto__segment__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCEnumValue onnx__tensor_proto__data_type__enum_values_by_number[23] =
+static const ProtobufCEnumValue onnx__tensor_proto__data_type__enum_values_by_number[25] =
 {
   { "UNDEFINED", "ONNX__TENSOR_PROTO__DATA_TYPE__UNDEFINED", 0 },
   { "FLOAT", "ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT", 1 },
@@ -1796,11 +2463,13 @@ static const ProtobufCEnumValue onnx__tensor_proto__data_type__enum_values_by_nu
   { "FLOAT8E5M2FNUZ", "ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT8E5M2FNUZ", 20 },
   { "UINT4", "ONNX__TENSOR_PROTO__DATA_TYPE__UINT4", 21 },
   { "INT4", "ONNX__TENSOR_PROTO__DATA_TYPE__INT4", 22 },
+  { "FLOAT4E2M1", "ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT4E2M1", 23 },
+  { "FLOAT8E8M0", "ONNX__TENSOR_PROTO__DATA_TYPE__FLOAT8E8M0", 24 },
 };
 static const ProtobufCIntRange onnx__tensor_proto__data_type__value_ranges[] = {
-{0, 0},{0, 23}
+{0, 0},{0, 25}
 };
-static const ProtobufCEnumValueIndex onnx__tensor_proto__data_type__enum_values_by_name[23] =
+static const ProtobufCEnumValueIndex onnx__tensor_proto__data_type__enum_values_by_name[25] =
 {
   { "BFLOAT16", 16 },
   { "BOOL", 9 },
@@ -1809,10 +2478,12 @@ static const ProtobufCEnumValueIndex onnx__tensor_proto__data_type__enum_values_
   { "DOUBLE", 11 },
   { "FLOAT", 1 },
   { "FLOAT16", 10 },
+  { "FLOAT4E2M1", 23 },
   { "FLOAT8E4M3FN", 17 },
   { "FLOAT8E4M3FNUZ", 18 },
   { "FLOAT8E5M2", 19 },
   { "FLOAT8E5M2FNUZ", 20 },
+  { "FLOAT8E8M0", 24 },
   { "INT16", 5 },
   { "INT32", 6 },
   { "INT4", 22 },
@@ -1833,9 +2504,9 @@ const ProtobufCEnumDescriptor onnx__tensor_proto__data_type__descriptor =
   "DataType",
   "Onnx__TensorProto__DataType",
   "onnx",
-  23,
+  25,
   onnx__tensor_proto__data_type__enum_values_by_number,
-  23,
+  25,
   onnx__tensor_proto__data_type__enum_values_by_name,
   1,
   onnx__tensor_proto__data_type__value_ranges,
@@ -2823,7 +3494,7 @@ const ProtobufCMessageDescriptor onnx__function_proto__descriptor =
   (ProtobufCMessageInit) onnx__function_proto__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCEnumValue onnx__version__enum_values_by_number[11] =
+static const ProtobufCEnumValue onnx__version__enum_values_by_number[13] =
 {
   { "_START_VERSION", "ONNX__VERSION___START_VERSION", 0 },
   { "IR_VERSION_2017_10_10", "ONNX__VERSION__IR_VERSION_2017_10_10", 1 },
@@ -2835,14 +3506,16 @@ static const ProtobufCEnumValue onnx__version__enum_values_by_number[11] =
   { "IR_VERSION_2020_5_8", "ONNX__VERSION__IR_VERSION_2020_5_8", 7 },
   { "IR_VERSION_2021_7_30", "ONNX__VERSION__IR_VERSION_2021_7_30", 8 },
   { "IR_VERSION_2023_5_5", "ONNX__VERSION__IR_VERSION_2023_5_5", 9 },
-  { "IR_VERSION", "ONNX__VERSION__IR_VERSION", 10 },
+  { "IR_VERSION_2024_3_25", "ONNX__VERSION__IR_VERSION_2024_3_25", 10 },
+  { "IR_VERSION_2025_05_12", "ONNX__VERSION__IR_VERSION_2025_05_12", 11 },
+  { "IR_VERSION", "ONNX__VERSION__IR_VERSION", 12 },
 };
 static const ProtobufCIntRange onnx__version__value_ranges[] = {
-{0, 0},{0, 11}
+{0, 0},{0, 13}
 };
-static const ProtobufCEnumValueIndex onnx__version__enum_values_by_name[11] =
+static const ProtobufCEnumValueIndex onnx__version__enum_values_by_name[13] =
 {
-  { "IR_VERSION", 10 },
+  { "IR_VERSION", 12 },
   { "IR_VERSION_2017_10_10", 1 },
   { "IR_VERSION_2017_10_30", 2 },
   { "IR_VERSION_2017_11_3", 3 },
@@ -2852,6 +3525,8 @@ static const ProtobufCEnumValueIndex onnx__version__enum_values_by_name[11] =
   { "IR_VERSION_2020_5_8", 7 },
   { "IR_VERSION_2021_7_30", 8 },
   { "IR_VERSION_2023_5_5", 9 },
+  { "IR_VERSION_2024_3_25", 10 },
+  { "IR_VERSION_2025_05_12", 11 },
   { "_START_VERSION", 0 },
 };
 const ProtobufCEnumDescriptor onnx__version__descriptor =
@@ -2861,9 +3536,9 @@ const ProtobufCEnumDescriptor onnx__version__descriptor =
   "Version",
   "Onnx__Version",
   "onnx",
-  11,
+  13,
   onnx__version__enum_values_by_number,
-  11,
+  13,
   onnx__version__enum_values_by_name,
   1,
   onnx__version__value_ranges,

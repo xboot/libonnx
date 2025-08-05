@@ -100,14 +100,14 @@ Note that running the test on the other folders may not succeed. Some operators 
 
 ## Notes
 
-- This library based on the onnx version [v1.17.0](https://github.com/onnx/onnx/tree/v1.17.0) with the newest `opset 23` support. [The supported operator table](documents/the-supported-operator-table.md) in the [documents](documents) directory.
+- This library based on the onnx version [v1.17.0](https://github.com/onnx/onnx/tree/v1.19.0) with the newest `opset 24` support. [The supported operator table](documents/the-supported-operator-table.md) in the [documents](documents) directory.
 - Checkout the `tools` folder for help with ONNX model files.
 - You can use `xxd -i <filename.onnx>` (on Linux) to convert your onnx model into a `unsigned char array` and then use the function `onnx_context_alloc` to use it. This is how the models are loaded in the examples - `hello` and `mnist`.
 
 ## Links
 
 * [The chinese discussion posts](https://whycan.com/t_5440.html)
-* [The onnx operators documentation](https://github.com/onnx/onnx/blob/master/docs/Operators.md)
+* [The onnx operators documentation](https://github.com/onnx/onnx/blob/main/docs/Operators.md)
 * [The tutorials for creating ONNX models](https://github.com/onnx/tutorials)
 * [The pre-trained onnx models](https://github.com/onnx/models)
 
