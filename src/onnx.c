@@ -1474,7 +1474,7 @@ int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 		return 0;
 	if(a->ndim > 0)
 	{
-		if(memcmp(a->dims, b->dims, sizeof(int) * a->ndim) != 0)
+		if(onnx_memcmp(a->dims, b->dims, sizeof(int) * a->ndim) != 0)
 			return 0;
 	}
 	switch(a->type)
@@ -1490,14 +1490,14 @@ int onnx_tensor_equal(struct onnx_tensor_t * a, struct onnx_tensor_t * b)
 	case ONNX_TENSOR_TYPE_UINT16:
 	case ONNX_TENSOR_TYPE_UINT32:
 	case ONNX_TENSOR_TYPE_UINT64:
-		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
+		if(onnx_memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
 			return 0;
 		break;
 	case ONNX_TENSOR_TYPE_FLOAT8E4M3FN:
 	case ONNX_TENSOR_TYPE_FLOAT8E4M3FNUZ:
 	case ONNX_TENSOR_TYPE_FLOAT8E5M2:
 	case ONNX_TENSOR_TYPE_FLOAT8E5M2FNUZ:
-		if(memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
+		if(onnx_memcmp(a->datas, b->datas, a->ndata * onnx_tensor_type_sizeof(a->type)) != 0)
 			return 0;
 		break;
 	case ONNX_TENSOR_TYPE_BFLOAT16:
@@ -1820,7 +1820,7 @@ int onnx_attribute_read_tensor(struct onnx_node_t * n, const char * name, struct
 					ndim = attr->t->n_dims;
 				}
 			}
-			if((t->ndim != ndim) || (memcmp(t->dims, dims, sizeof(int) * ndim) != 0) || (t->type != (enum onnx_tensor_type_t)attr->t->data_type))
+			if((t->ndim != ndim) || (onnx_memcmp(t->dims, dims, sizeof(int) * ndim) != 0) || (t->type != (enum onnx_tensor_type_t)attr->t->data_type))
 				onnx_tensor_reinit(t, (enum onnx_tensor_type_t)attr->t->data_type, dims, ndim);
 			if((ndim > 0) && dims)
 				onnx_free(dims);

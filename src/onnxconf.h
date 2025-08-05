@@ -38,6 +38,10 @@ extern "C" {
 #define onnx_memmove		memmove
 #endif
 
+#ifndef onnx_memcmp
+#define onnx_memcmp			memcmp
+#endif
+
 #ifndef onnx_strdup
 #define onnx_strdup			strdup
 #endif
