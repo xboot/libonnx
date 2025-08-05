@@ -985,6 +985,9 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x7c8cca90: /* "Tanh" */
 			rop = r->op_Tanh;
 			break;
+		case 0x813672b6: /* "TensorScatter" */
+			rop = r->op_TensorScatter;
+			break;
 		case 0x46fbf3df: /* "TfIdfVectorizer" */
 			rop = r->op_TfIdfVectorizer;
 			break;

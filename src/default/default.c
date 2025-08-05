@@ -161,6 +161,7 @@ struct onnx_resolver_t resolver_default = {
 	.op_Sum							= resolver_default_op_Sum,
 	.op_Tan							= resolver_default_op_Tan,
 	.op_Tanh						= resolver_default_op_Tanh,
+	.op_TensorScatter				= resolver_default_op_TensorScatter,
 	.op_TfIdfVectorizer				= resolver_default_op_TfIdfVectorizer,
 	.op_ThresholdedRelu				= resolver_default_op_ThresholdedRelu,
 	.op_Tile						= resolver_default_op_Tile,

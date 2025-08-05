@@ -241,6 +241,7 @@ struct onnx_resolver_t {
 	void (*op_Sum)(struct onnx_node_t * n);
 	void (*op_Tan)(struct onnx_node_t * n);
 	void (*op_Tanh)(struct onnx_node_t * n);
+	void (*op_TensorScatter)(struct onnx_node_t * n);
 	void (*op_TfIdfVectorizer)(struct onnx_node_t * n);
 	void (*op_ThresholdedRelu)(struct onnx_node_t * n);
 	void (*op_Tile)(struct onnx_node_t * n);

@@ -156,6 +156,7 @@ void resolver_default_op_Sub(struct onnx_node_t * n);
 void resolver_default_op_Sum(struct onnx_node_t * n);
 void resolver_default_op_Tan(struct onnx_node_t * n);
 void resolver_default_op_Tanh(struct onnx_node_t * n);
+void resolver_default_op_TensorScatter(struct onnx_node_t * n);
 void resolver_default_op_TfIdfVectorizer(struct onnx_node_t * n);
 void resolver_default_op_ThresholdedRelu(struct onnx_node_t * n);
 void resolver_default_op_Tile(struct onnx_node_t * n);

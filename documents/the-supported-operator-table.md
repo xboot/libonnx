@@ -366,6 +366,7 @@
 |Tanh-13|√|
 |Tanh-6|√|
 |Tanh-1|√|
+|TensorScatter-24||
 |TfIdfVectorizer-9||
 |ThresholdedRelu-10| √ |
 |Tile-13|√|
