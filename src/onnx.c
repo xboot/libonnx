@@ -1,7 +1,5 @@
 /*
- * onnx.c
- *
- * Copyright(c) 2007-2020 Jianjun Jiang <8192542@qq.com>
+ * Copyright(c) Jianjun Jiang <8192542@qq.com>
  * Mobile phone: +86-18665388956
  * QQ: 8192542
  *
@@ -22,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 #include <onnx.h>

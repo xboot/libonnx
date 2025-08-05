@@ -1,7 +1,5 @@
 /*
- * hmap.c
- *
- * Copyright(c) 2007-2020 Jianjun Jiang <8192542@qq.com>
+ * Copyright(c) Jianjun Jiang <8192542@qq.com>
  * Mobile phone: +86-18665388956
  * QQ: 8192542
  *
@@ -22,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 #include <hmap.h>
@@ -62,7 +59,7 @@ struct hmap_t * hmap_alloc(int size, void (*cb)(struct hmap_t *, struct hmap_ent
 	if(!m)
 		return NULL;
 
-	m->hash = onnx_malloc(sizeof(struct hlist_head) * size);
+	m->hash = onnx_malloc(sizeof(struct hlist_head_t) * size);
 	if(!m->hash)
 	{
 		onnx_free(m);
@@ -110,7 +107,7 @@ void hmap_clear(struct hmap_t * m)
 static void hmap_resize(struct hmap_t * m, unsigned int size)
 {
 	struct hmap_entry_t * pos, * n;
-	struct hlist_head * hash;
+	struct hlist_head_t * hash;
 	int i;
 
 	if(!m)
@@ -121,7 +118,7 @@ static void hmap_resize(struct hmap_t * m, unsigned int size)
 	if(size & (size - 1))
 		size = roundup_pow_of_two(size);
 
-	hash = onnx_malloc(sizeof(struct hlist_head) * size);
+	hash = onnx_malloc(sizeof(struct hlist_head_t) * size);
 	if(!hash)
 		return;
 	for(i = 0; i < size; i++)
@@ -144,7 +141,7 @@ static void hmap_resize(struct hmap_t * m, unsigned int size)
 void hmap_add(struct hmap_t * m, const char * key, void * value)
 {
 	struct hmap_entry_t * pos;
-	struct hlist_node * n;
+	struct hlist_node_t * n;
 
 	if(!m || !key)
 		return;
@@ -178,7 +175,7 @@ void hmap_add(struct hmap_t * m, const char * key, void * value)
 void hmap_remove(struct hmap_t * m, const char * key)
 {
 	struct hmap_entry_t * pos;
-	struct hlist_node * n;
+	struct hlist_node_t * n;
 
 	if(!m || !key)
 		return;
@@ -200,9 +197,9 @@ void hmap_remove(struct hmap_t * m, const char * key)
 	}
 }
 
-static struct list_head * merge(void * priv, int (*cmp)(void * priv, struct list_head * a, struct list_head * b), struct list_head * a, struct list_head * b)
+static struct list_head_t * merge(void * priv, int (*cmp)(void * priv, struct list_head_t * a, struct list_head_t * b), struct list_head_t * a, struct list_head_t * b)
 {
-	struct list_head head, * tail = &head;
+	struct list_head_t head, * tail = &head;
 
 	while(a && b)
 	{
@@ -222,9 +219,9 @@ static struct list_head * merge(void * priv, int (*cmp)(void * priv, struct list
 	return head.next;
 }
 
-static void merge_and_restore_back_links(void * priv, int (*cmp)(void * priv, struct list_head * a, struct list_head * b), struct list_head * head, struct list_head * a, struct list_head * b)
+static void merge_and_restore_back_links(void * priv, int (*cmp)(void * priv, struct list_head_t * a, struct list_head_t * b), struct list_head_t * head, struct list_head_t * a, struct list_head_t * b)
 {
-	struct list_head * tail = head;
+	struct list_head_t * tail = head;
 	unsigned char count = 0;
 
 	while(a && b)
@@ -256,10 +253,10 @@ static void merge_and_restore_back_links(void * priv, int (*cmp)(void * priv, st
 	head->prev = tail;
 }
 
-static void lsort(void * priv, struct list_head * head, int (*cmp)(void * priv, struct list_head * a, struct list_head * b))
+static void lsort(void * priv, struct list_head_t * head, int (*cmp)(void * priv, struct list_head_t * a, struct list_head_t * b))
 {
-	struct list_head * part[20 + 1];
-	struct list_head * list;
+	struct list_head_t * part[20 + 1];
+	struct list_head_t * list;
 	int maxlev = 0;
 	int lev;
 
@@ -272,7 +269,7 @@ static void lsort(void * priv, struct list_head * head, int (*cmp)(void * priv, 
 
 	while(list)
 	{
-		struct list_head * cur = list;
+		struct list_head_t * cur = list;
 		list = list->next;
 		cur->next = NULL;
 
@@ -297,7 +294,7 @@ static void lsort(void * priv, struct list_head * head, int (*cmp)(void * priv, 
 	merge_and_restore_back_links(priv, cmp, head, part[maxlev], list);
 }
 
-static int hmap_compare(void * priv, struct list_head * a, struct list_head * b)
+static int hmap_compare(void * priv, struct list_head_t * a, struct list_head_t * b)
 {
 	char * keya = (char *)list_entry(a, struct hmap_entry_t, head)->key;
 	char * keyb = (char *)list_entry(b, struct hmap_entry_t, head)->key;
@@ -313,7 +310,7 @@ void hmap_sort(struct hmap_t * m)
 void * hmap_search(struct hmap_t * m, const char * key)
 {
 	struct hmap_entry_t * pos;
-	struct hlist_node * n;
+	struct hlist_node_t * n;
 
 	if(!m || !key)
 		return NULL;

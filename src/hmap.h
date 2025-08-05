@@ -8,15 +8,15 @@ extern "C" {
 #include <onnxconf.h>
 
 struct hmap_entry_t {
-	struct hlist_node node;
-	struct list_head head;
+	struct hlist_node_t node;
+	struct list_head_t head;
 	char * key;
 	void * value;
 };
 
 struct hmap_t {
-	struct hlist_head * hash;
-	struct list_head list;
+	struct hlist_head_t * hash;
+	struct list_head_t list;
 	unsigned int size;
 	unsigned int n;
 	void (*callback)(struct hmap_t * m, struct hmap_entry_t * e);
