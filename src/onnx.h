@@ -95,6 +95,7 @@ struct onnx_resolver_t {
 	void * (*create)(void);
 	void (*destroy)(void * rctx);
 
+	/* Operator */
 	void (*op_Abs)(struct onnx_node_t * n);
 	void (*op_Acos)(struct onnx_node_t * n);
 	void (*op_Acosh)(struct onnx_node_t * n);
@@ -115,7 +116,6 @@ struct onnx_resolver_t {
 	void (*op_BitwiseXor)(struct onnx_node_t * n);
 	void (*op_Cast)(struct onnx_node_t * n);
 	void (*op_Ceil)(struct onnx_node_t * n);
-	void (*op_Clip)(struct onnx_node_t * n);
 	void (*op_Compress)(struct onnx_node_t * n);
 	void (*op_Concat)(struct onnx_node_t * n);
 	void (*op_ConcatFromSequence)(struct onnx_node_t * n);
@@ -133,7 +133,6 @@ struct onnx_resolver_t {
 	void (*op_Div)(struct onnx_node_t * n);
 	void (*op_Dropout)(struct onnx_node_t * n);
 	void (*op_Einsum)(struct onnx_node_t * n);
-	void (*op_Elu)(struct onnx_node_t * n);
 	void (*op_Equal)(struct onnx_node_t * n);
 	void (*op_Erf)(struct onnx_node_t * n);
 	void (*op_Exp)(struct onnx_node_t * n);
@@ -150,7 +149,6 @@ struct onnx_resolver_t {
 	void (*op_GlobalLpPool)(struct onnx_node_t * n);
 	void (*op_GlobalMaxPool)(struct onnx_node_t * n);
 	void (*op_Greater)(struct onnx_node_t * n);
-	void (*op_HardSigmoid)(struct onnx_node_t * n);
 	void (*op_Hardmax)(struct onnx_node_t * n);
 	void (*op_Identity)(struct onnx_node_t * n);
 	void (*op_If)(struct onnx_node_t * n);
@@ -159,7 +157,6 @@ struct onnx_resolver_t {
 	void (*op_IsNaN)(struct onnx_node_t * n);
 	void (*op_LRN)(struct onnx_node_t * n);
 	void (*op_LSTM)(struct onnx_node_t * n);
-	void (*op_LeakyRelu)(struct onnx_node_t * n);
 	void (*op_Less)(struct onnx_node_t * n);
 	void (*op_Log)(struct onnx_node_t * n);
 	void (*op_Loop)(struct onnx_node_t * n);
@@ -182,7 +179,6 @@ struct onnx_resolver_t {
 	void (*op_Not)(struct onnx_node_t * n);
 	void (*op_OneHot)(struct onnx_node_t * n);
 	void (*op_Or)(struct onnx_node_t * n);
-	void (*op_PRelu)(struct onnx_node_t * n);
 	void (*op_Pad)(struct onnx_node_t * n);
 	void (*op_Pow)(struct onnx_node_t * n);
 	void (*op_QLinearConv)(struct onnx_node_t * n);
@@ -194,17 +190,11 @@ struct onnx_resolver_t {
 	void (*op_RandomUniform)(struct onnx_node_t * n);
 	void (*op_RandomUniformLike)(struct onnx_node_t * n);
 	void (*op_Reciprocal)(struct onnx_node_t * n);
-	void (*op_ReduceL1)(struct onnx_node_t * n);
-	void (*op_ReduceL2)(struct onnx_node_t * n);
-	void (*op_ReduceLogSum)(struct onnx_node_t * n);
-	void (*op_ReduceLogSumExp)(struct onnx_node_t * n);
 	void (*op_ReduceMax)(struct onnx_node_t * n);
 	void (*op_ReduceMean)(struct onnx_node_t * n);
 	void (*op_ReduceMin)(struct onnx_node_t * n);
 	void (*op_ReduceProd)(struct onnx_node_t * n);
 	void (*op_ReduceSum)(struct onnx_node_t * n);
-	void (*op_ReduceSumSquare)(struct onnx_node_t * n);
-	void (*op_Relu)(struct onnx_node_t * n);
 	void (*op_Reshape)(struct onnx_node_t * n);
 	void (*op_Resize)(struct onnx_node_t * n);
 	void (*op_ReverseSequence)(struct onnx_node_t * n);
@@ -214,7 +204,6 @@ struct onnx_resolver_t {
 	void (*op_Scatter)(struct onnx_node_t * n);
 	void (*op_ScatterElements)(struct onnx_node_t * n);
 	void (*op_ScatterND)(struct onnx_node_t * n);
-	void (*op_Selu)(struct onnx_node_t * n);
 	void (*op_SequenceAt)(struct onnx_node_t * n);
 	void (*op_SequenceConstruct)(struct onnx_node_t * n);
 	void (*op_SequenceEmpty)(struct onnx_node_t * n);
@@ -222,15 +211,12 @@ struct onnx_resolver_t {
 	void (*op_SequenceInsert)(struct onnx_node_t * n);
 	void (*op_SequenceLength)(struct onnx_node_t * n);
 	void (*op_Shape)(struct onnx_node_t * n);
-	void (*op_Shrink)(struct onnx_node_t * n);
 	void (*op_Sigmoid)(struct onnx_node_t * n);
 	void (*op_Sign)(struct onnx_node_t * n);
 	void (*op_Sin)(struct onnx_node_t * n);
 	void (*op_Sinh)(struct onnx_node_t * n);
 	void (*op_Size)(struct onnx_node_t * n);
 	void (*op_Slice)(struct onnx_node_t * n);
-	void (*op_Softplus)(struct onnx_node_t * n);
-	void (*op_Softsign)(struct onnx_node_t * n);
 	void (*op_SpaceToDepth)(struct onnx_node_t * n);
 	void (*op_Split)(struct onnx_node_t * n);
 	void (*op_SplitToSequence)(struct onnx_node_t * n);
@@ -243,7 +229,6 @@ struct onnx_resolver_t {
 	void (*op_Tanh)(struct onnx_node_t * n);
 	void (*op_TensorScatter)(struct onnx_node_t * n);
 	void (*op_TfIdfVectorizer)(struct onnx_node_t * n);
-	void (*op_ThresholdedRelu)(struct onnx_node_t * n);
 	void (*op_Tile)(struct onnx_node_t * n);
 	void (*op_TopK)(struct onnx_node_t * n);
 	void (*op_Transpose)(struct onnx_node_t * n);
@@ -254,17 +239,50 @@ struct onnx_resolver_t {
 	void (*op_Where)(struct onnx_node_t * n);
 	void (*op_Xor)(struct onnx_node_t * n);
 
+	/* Function */
+	void (*op_AffineGrid)(struct onnx_node_t * n);
+	void (*op_Attention)(struct onnx_node_t * n);
+	void (*op_Bernoulli)(struct onnx_node_t * n);
+	void (*op_BlackmanWindow)(struct onnx_node_t * n);
+	void (*op_CastLike)(struct onnx_node_t * n);
 	void (*op_Celu)(struct onnx_node_t * n);
+	void (*op_CenterCropPad)(struct onnx_node_t * n);
+	void (*op_Clip)(struct onnx_node_t * n);
 	void (*op_DynamicQuantizeLinear)(struct onnx_node_t * n);
+	void (*op_Elu)(struct onnx_node_t * n);
+	void (*op_Gelu)(struct onnx_node_t * n);
 	void (*op_GreaterOrEqual)(struct onnx_node_t * n);
+	void (*op_GroupNormalization)(struct onnx_node_t * n);
+	void (*op_HammingWindow)(struct onnx_node_t * n);
+	void (*op_HannWindow)(struct onnx_node_t * n);
+	void (*op_HardSigmoid)(struct onnx_node_t * n);
 	void (*op_HardSwish)(struct onnx_node_t * n);
+	void (*op_LayerNormalization)(struct onnx_node_t * n);
+	void (*op_LeakyRelu)(struct onnx_node_t * n);
 	void (*op_LessOrEqual)(struct onnx_node_t * n);
 	void (*op_LogSoftmax)(struct onnx_node_t * n);
 	void (*op_MeanVarianceNormalization)(struct onnx_node_t * n);
+	void (*op_Mish)(struct onnx_node_t * n);
 	void (*op_NegativeLogLikelihoodLoss)(struct onnx_node_t * n);
+	void (*op_PRelu)(struct onnx_node_t * n);
+	void (*op_RMSNormalization)(struct onnx_node_t * n);
 	void (*op_Range)(struct onnx_node_t * n);
+	void (*op_ReduceL1)(struct onnx_node_t * n);
+	void (*op_ReduceL2)(struct onnx_node_t * n);
+	void (*op_ReduceLogSum)(struct onnx_node_t * n);
+	void (*op_ReduceLogSumExp)(struct onnx_node_t * n);
+	void (*op_ReduceSumSquare)(struct onnx_node_t * n);
+	void (*op_Relu)(struct onnx_node_t * n);
+	void (*op_RotaryEmbedding)(struct onnx_node_t * n);
+	void (*op_Selu)(struct onnx_node_t * n);
+	void (*op_SequenceMap)(struct onnx_node_t * n);
+	void (*op_Shrink)(struct onnx_node_t * n);
 	void (*op_Softmax)(struct onnx_node_t * n);
 	void (*op_SoftmaxCrossEntropyLoss)(struct onnx_node_t * n);
+	void (*op_Softplus)(struct onnx_node_t * n);
+	void (*op_Softsign)(struct onnx_node_t * n);
+	void (*op_Swish)(struct onnx_node_t * n);
+	void (*op_ThresholdedRelu)(struct onnx_node_t * n);
 };
 
 struct onnx_context_t * onnx_context_alloc(const void * buf, size_t len, struct onnx_resolver_t ** r, int rlen);

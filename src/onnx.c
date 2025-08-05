@@ -607,9 +607,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x7c838882: /* "Ceil" */
 			rop = r->op_Ceil;
 			break;
-		case 0x7c83a64d: /* "Clip" */
-			rop = r->op_Clip;
-			break;
 		case 0xb7db9db1: /* "Compress" */
 			rop = r->op_Compress;
 			break;
@@ -661,9 +658,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0xb07d4f76: /* "Einsum" */
 			rop = r->op_Einsum;
 			break;
-		case 0x0b87e6cb: /* "Elu" */
-			rop = r->op_Elu;
-			break;
 		case 0x0d1f905d: /* "Equal" */
 			rop = r->op_Equal;
 			break;
@@ -712,9 +706,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x6e6d652f: /* "Greater" */
 			rop = r->op_Greater;
 			break;
-		case 0x10341df0: /* "HardSigmoid" */
-			rop = r->op_HardSigmoid;
-			break;
 		case 0x94acb4aa: /* "Hardmax" */
 			rop = r->op_Hardmax;
 			break;
@@ -738,9 +729,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 			break;
 		case 0x7c882885: /* "LSTM" */
 			rop = r->op_LSTM;
-			break;
-		case 0xea2c5c33: /* "LeakyRelu" */
-			rop = r->op_LeakyRelu;
 			break;
 		case 0x7c88793c: /* "Less" */
 			rop = r->op_Less;
@@ -808,9 +796,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x005974e6: /* "Or" */
 			rop = r->op_Or;
 			break;
-		case 0x0dd55b8d: /* "PRelu" */
-			rop = r->op_PRelu;
-			break;
 		case 0x0b88141a: /* "Pad" */
 			rop = r->op_Pad;
 			break;
@@ -844,18 +829,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x73d06f69: /* "Reciprocal" */
 			rop = r->op_Reciprocal;
 			break;
-		case 0x7944853a: /* "ReduceL1" */
-			rop = r->op_ReduceL1;
-			break;
-		case 0x7944853b: /* "ReduceL2" */
-			rop = r->op_ReduceL2;
-			break;
-		case 0xeab46d14: /* "ReduceLogSum" */
-			rop = r->op_ReduceLogSum;
-			break;
-		case 0x9a057a01: /* "ReduceLogSumExp" */
-			rop = r->op_ReduceLogSumExp;
-			break;
 		case 0xa1d53763: /* "ReduceMax" */
 			rop = r->op_ReduceMax;
 			break;
@@ -870,12 +843,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 			break;
 		case 0xa1d55372: /* "ReduceSum" */
 			rop = r->op_ReduceSum;
-			break;
-		case 0x20917223: /* "ReduceSumSquare" */
-			rop = r->op_ReduceSumSquare;
-			break;
-		case 0x7c8bc29d: /* "Relu" */
-			rop = r->op_Relu;
 			break;
 		case 0x9fdbcf8d: /* "Reshape" */
 			rop = r->op_Reshape;
@@ -904,9 +871,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x55be5b0d: /* "ScatterND" */
 			rop = r->op_ScatterND;
 			break;
-		case 0x7c8c4efe: /* "Selu" */
-			rop = r->op_Selu;
-			break;
 		case 0xe537ccd3: /* "SequenceAt" */
 			rop = r->op_SequenceAt;
 			break;
@@ -928,9 +892,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x0e17a4d6: /* "Shape" */
 			rop = r->op_Shape;
 			break;
-		case 0xd11575d4: /* "Shrink" */
-			rop = r->op_Shrink;
-			break;
 		case 0xf5548151: /* "Sigmoid" */
 			rop = r->op_Sigmoid;
 			break;
@@ -948,12 +909,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 			break;
 		case 0x0e19f6b5: /* "Slice" */
 			rop = r->op_Slice;
-			break;
-		case 0x6bec36a5: /* "Softplus" */
-			rop = r->op_Softplus;
-			break;
-		case 0x6bedcd32: /* "Softsign" */
-			rop = r->op_Softsign;
 			break;
 		case 0xa4436289: /* "SpaceToDepth" */
 			rop = r->op_SpaceToDepth;
@@ -991,9 +946,6 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0x46fbf3df: /* "TfIdfVectorizer" */
 			rop = r->op_TfIdfVectorizer;
 			break;
-		case 0xa646ea33: /* "ThresholdedRelu" */
-			rop = r->op_ThresholdedRelu;
-			break;
 		case 0x7c8cec53: /* "Tile" */
 			rop = r->op_Tile;
 			break;
@@ -1019,14 +971,62 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 			rop = r->op_Xor;
 			break;
 
+		case 0x62b37db4: /* "AffineGrid" */
+			rop = r->op_AffineGrid;
+			break;
+		case 0x688e319b: /* "Attention" */
+			rop = r->op_Attention;
+			break;
+		case 0x804bced1: /* "Bernoulli" */
+			rop = r->op_Bernoulli;
+			break;
+		case 0xa296c176: /* "BlackmanWindow" */
+			rop = r->op_BlackmanWindow;
+			break;
+		case 0x905eda75: /* "CastLike" */
+			rop = r->op_CastLike;
+			break;
 		case 0x7c8388ee: /* "Celu" */
 			rop = r->op_Celu;
+			break;
+		case 0x0769196f: /* "CenterCropPad" */
+			rop = r->op_CenterCropPad;
+			break;
+		case 0x7c83a64d: /* "Clip" */
+			rop = r->op_Clip;
 			break;
 		case 0x718dbc56: /* "DynamicQuantizeLinear" */
 			rop = r->op_DynamicQuantizeLinear;
 			break;
+		case 0x0b87e6cb: /* "Elu" */
+			rop = r->op_Elu;
+			break;
+		case 0x7c85ba72: /* "Gelu" */
+			rop = r->op_Gelu;
+			break;
 		case 0x7b2541c8: /* "GreaterOrEqual" */
 			rop = r->op_GreaterOrEqual;
+			break;
+		case 0xac1fbad9: /* "GroupNormalization" */
+			rop = r->op_GroupNormalization;
+			break;
+		case 0xe382841e: /* "HammingWindow" */
+			rop = r->op_HammingWindow;
+			break;
+		case 0xe637fb02: /* "HannWindow" */
+			rop = r->op_HannWindow;
+			break;
+		case 0x10341df0: /* "HardSigmoid" */
+			rop = r->op_HardSigmoid;
+			break;
+		case 0x70e1e9d2: /* "HardSwish" */
+			rop = r->op_HardSwish;
+			break;
+		case 0x4e337569: /* "LayerNormalization" */
+			rop = r->op_LayerNormalization;
+			break;
+		case 0xea2c5c33: /* "LeakyRelu" */
+			rop = r->op_LeakyRelu;
 			break;
 		case 0x60d9a535: /* "LessOrEqual" */
 			rop = r->op_LessOrEqual;
@@ -1037,17 +1037,68 @@ static void resolver_solve_operator(struct onnx_resolver_t * r, struct onnx_node
 		case 0xbb8f2396: /* "MeanVarianceNormalization" */
 			rop = r->op_MeanVarianceNormalization;
 			break;
+		case 0x7c891696: /* "Mish" */
+			rop = r->op_Mish;
+			break;
 		case 0x6ed111df: /* "NegativeLogLikelihoodLoss" */
 			rop = r->op_NegativeLogLikelihoodLoss;
 			break;
+		case 0x0dd55b8d: /* "PRelu" */
+			rop = r->op_PRelu;
+			break;
+		case 0x02a4d21e: /* "RMSNormalization" */
+			rop = r->op_RMSNormalization;
+			break;
 		case 0x0e01ebd2: /* "Range" */
 			rop = r->op_Range;
+			break;
+		case 0x7944853a: /* "ReduceL1" */
+			rop = r->op_ReduceL1;
+			break;
+		case 0x7944853b: /* "ReduceL2" */
+			rop = r->op_ReduceL2;
+			break;
+		case 0xeab46d14: /* "ReduceLogSum" */
+			rop = r->op_ReduceLogSum;
+			break;
+		case 0x9a057a01: /* "ReduceLogSumExp" */
+			rop = r->op_ReduceLogSumExp;
+			break;
+		case 0x20917223: /* "ReduceSumSquare" */
+			rop = r->op_ReduceSumSquare;
+			break;
+		case 0x7c8bc29d: /* "Relu" */
+			rop = r->op_Relu;
+			break;
+		case 0xceadeec5: /* "RotaryEmbedding" */
+			rop = r->op_RotaryEmbedding;
+			break;
+		case 0x7c8c4efe: /* "Selu" */
+			rop = r->op_Selu;
+			break;
+		case 0x8c31983c: /* "SequenceMap" */
+			rop = r->op_SequenceMap;
+			break;
+		case 0xd11575d4: /* "Shrink" */
+			rop = r->op_Shrink;
 			break;
 		case 0x034529c7: /* "Softmax" */
 			rop = r->op_Softmax;
 			break;
 		case 0x522154a3: /* "SoftmaxCrossEntropyLoss" */
 			rop = r->op_SoftmaxCrossEntropyLoss;
+			break;
+		case 0x6bec36a5: /* "Softplus" */
+			rop = r->op_Softplus;
+			break;
+		case 0x6bedcd32: /* "Softsign" */
+			rop = r->op_Softsign;
+			break;
+		case 0x0e2000f3: /* "Swish" */
+			rop = r->op_Swish;
+			break;
+		case 0xa646ea33: /* "ThresholdedRelu" */
+			rop = r->op_ThresholdedRelu;
 			break;
 
 		default:
