@@ -107,6 +107,7 @@ Note that running the test on the other folders may not succeed. Some operators 
 ## Links
 
 * [The chinese discussion posts](https://whycan.com/t_5440.html)
+* [The onnx documentation](https://onnx.ai/onnx/operators)
 * [The onnx operators documentation](https://github.com/onnx/onnx/blob/main/docs/Operators.md)
 * [The tutorials for creating ONNX models](https://github.com/onnx/tutorials)
 * [The pre-trained onnx models](https://github.com/onnx/models)
