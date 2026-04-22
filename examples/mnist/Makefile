@@ -32,7 +32,7 @@ SRCDIRS		:=	.
 CFLAGS		+= $(shell sdl2-config --cflags)
 CXXFLAGS	+= $(shell sdl2-config --cflags)
 LIBDIRS		+=
-LIBS		+= $(shell sdl2-config --libs) -lm -lSDL2_gfx
+LIBS		+= $(shell sdl2-config --libs) -lSDL2_gfx -lm
 sinclude	../../src/onnx.mk
 
 OUTPUT		:=	output
